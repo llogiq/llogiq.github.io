@@ -19,9 +19,9 @@ I fear there may be false positives).
 
 To make this post actually useful, let's look at a specific example, 
 similar to issue 
-[#19](https://github.com/Manishearth/rust-clippy/issues/19): We want to 
+[#19](https://github.com/Manishearth/rust-clippy/issues/19): I want to 
 match uses of `Option::and_then(..)` where the closure only ever 
-returns `Some(..)` and suggest to use `Option::map(..)` instead. So we 
+returns `Some(..)` and suggest to use `Option::map(..)` instead. So I 
 write up the most easy example (and one counter-example) in 
 `tests/compile-fail/options.rs`:
 
@@ -48,12 +48,12 @@ fn main() {
 }
 ```
 
-There are two things at play here: First we actually deny our (yet
-unwritten) lint, then we mark the line where the lint will show the 
+There are two things at play here: First I actually deny our (yet
+unwritten) lint, then I mark the line where the lint will show the 
 error with "`//~ERROR`" and the start of the error message.
 
-Next, we actually define the lint. I'm going to create a new file,
-because I think we'll be adding more variations of this in the future.
+Next, I actually define the lint. I'm going to create a new file,
+because I think I'll be adding more variations of this in the future.
 
 I usually use `syntax::ast::*` directly. Though it has bitten me once 
 when writing the 
@@ -63,7 +63,7 @@ one in `rustc::middle::ty` which I actually wanted to use), I find that
 littering my code with `ast::this` and `ast::that` makes it so noisy 
 that the blanket import is warranted here.
 
-So without further ado, we declare a lint (in `src/options.rs`):
+So without further ado, I declare a lint (in `src/options.rs`):
 
 ```rust
 use syntax::ast::*
@@ -78,7 +78,7 @@ declare_lint! {
 
 And create a `struct` and `impl` to actually implement the `LintPass`.
 Again, I'm going to name it `Options`, because I suspect we will add more 
-lints like this in the future. Also note that we want to check 
+lints like this in the future. Also note that I want to check 
 method calls, which are `Expr`s, so we implement the `check_expr`
 method:
 
@@ -97,7 +97,7 @@ impl LintPass for Options {
 }
 ```
 
-Now before we actually write the check, we want to introduce it in 
+Now before I actually write the check, I want to introduce it in 
 [`src/lib.rs`](https://github.com/Manishearth/rust-clippy/blob/master/src/lib.rs):
 
 ```rust
@@ -116,14 +116,30 @@ pub mod options;
 ```
 
 Now it is time to run `cargo test` so I can see that (a) my code
-compiles (it does) and (b) my test fails (it does -- we get 
+compiles (it does) and (b) my test fails (it does -- I get 
 `error: compile-fail test compiled successfully!`). I will also get a
 few warnings about unused arguments in `check_expr`, which I ignore
 for now.
 
+Actually, I don't need to run the whole test suite (though it's nice
+to do now and then, especially after a rust update), I can specify
+which test to run. The command line to do so is:
+
+```
+TESTNAME=foo cargo test --name compile-test
+```
+
+rust-clippy uses the very clever 
+[compiletest_rs](https://crates.io/crates/compiletest_rs) crate written
+by Thomas Bracht Laumann Jespersen and Manish Goregaokar, among others
+to allow us to check that rustc really fails at the correct lines of
+code. The test file to start it is `tests/compile-test.rs` (therefore
+the `--name`) and the compile_test machinery actually looks for the
+`TESTNAME` environment variable to figure out which file to run.
+
 Next, I want to actually implement the lint. But before I do this,
 wouldn't it be great to be able to see how to match the expression?
-Luckily, all `syntax::ast` types implement Debug, so we can use this
+Luckily, all `syntax::ast` types implement Debug, so I can use this
 to have a look at them. Note that our `fn ...`s are `syntax::ast::Item`s
 and can be checked using `check_item`. So I add this function, match
 our tested `fn`s by name, and `note` their Debug representation:
@@ -139,7 +155,19 @@ fn check_item(&mut self, cx: &Context, item: &Item) {
 Now I am presented with two walls of text that represent the two `fn`s
 in my compile-test. The bad thing is that it's very easy to get lost in
 the maze of different brackets, but the good thing is that this is an
-exact representation of the thing we're trying to (not) match.
+exact representation of the thing I'm trying to (not) match.
+
+Note: After I had written the above, 
+[Manish Goregaokar](http://manishearth.github.io/) made a suggestion 
+that makes this `check_item` business pretty moot: You can just comment
+out the plugin lines (because else rustc will hiccup) and run the 
+following command to get a complete JSON representation of the abstract
+syntax tree:
+
+`rustc tests/compile-fail/options.rs -Z ast-json`
+
+If this looks fairly unreadable, you may want to pipe it through some
+JSON pretty printer. I use `aeson-pretty -i 2` to that effect.
 
 (Aside: Perhaps one day, we can create a program that takes a few 
 examples and counter-examples creates a lint stub that matches the 
@@ -172,12 +200,12 @@ fn check_expr(&mut self, cx: &Context, expr: &Expr) {
 ```
 
 Now `cargo test` shows that we match on both instances of `and_then`,
-which is to be expected, considering we have not yet checked the
+which is to be expected, considering I have not yet checked the
 arguments of the call if None is ever returned. To complete the lint, 
-we have to actually check the arguments.
+I have to actually check the arguments.
 
 Note that there are two arguments: The first one is a self argument and
-should be of type `Option` -- we better check that this is the case, in
+should be of type `Option` -- I better check that this is the case, in
 order get rid of false positives should other types define an `and_then`
 method.
 
@@ -192,7 +220,7 @@ AngleBracketedParameters(AngleBracketedParameterData { lifetimes: [],
 types: [], bindings: [] }) }] }), span: Span { lo: BytePos(161), hi: 
 BytePos(165), expn_id: ExpnId(4294967295) } }`
 
-Yes, this is a very wordy representation, but the gist is that we
+Yes, this is a very wordy representation, but the gist is that I
 have an `ExprPath` whose `Path` evaluates to `Some`.
 
 Add both checks and our `check_item` becomes:
@@ -211,13 +239,13 @@ fn check_expr(&mut self, cx: &Context, expr: &Expr) {
 }
 ```
 
-Now we need to implement our additional checks (after our `impl`), but
-we'll first use our debug output trick again:
+Now I need to implement our additional checks (after our `impl`), but
+I'll first use our debug output trick again:
 
 ```rust
 fn is_option(cx: &Context, expr: &Expr) -> bool {
 	let ty = &walk_ty(&ty::expr_ty(cx.tcx, expr));
-	// here we just output our type:
+	// here I just output our type:
 	cx.sess().span_note(expr.span, &format!("{:?}", ty));
 	true
 }
@@ -227,7 +255,15 @@ fn is_some(expr: &Expr) -> bool {
 }
 ```
 
-From that, we learn what our type is:
+Now there is something I need to explain: `expr_ty` is a function in 
+`rustc::middle::ty` I just imported which returns the type of a given 
+expression as `rustc::middle::ty::Ty`. The `walk_ty` function is part 
+of rust-clippy, and resides in 
+[`types.rs`](https://github.com/Manishearth/rust-clippy/blob/master/src/misc.rs#L13).
+This function is used to get rid of all `&`-references the type may
+have and gets us to the concrete type definition. 
+
+From that, I learn what our type is:
 
 `tests/compile-fail/options.rs:13:2: 13:3 note: TyS { sty: ty_enum(DefId 
 { krate: 2, node: 117199 }, Substs { types: VecPerParamSpace 
@@ -236,7 +272,22 @@ SelfSpace: [], FnSpace: [], }, regions:
 NonerasedRegions(VecPerParamSpace {TypeSpace: [], SelfSpace: [], 
 FnSpace: [], }) }), flags: 0, region_depth: 0 }`
 
-Now we can match `ty.sty` as `ty_enum`, retrieve the `DefId` and from
+Now I can match `ty.sty` as `ty_enum`, retrieve the `DefId` and from
 there (somehow) get the type definition.
+
+Before I do that, I'm going to give a broad overview over the services
+rustc affords us lint writers:
+
+* the `Context`: It is given to all `check_*` functions and besides
+having methods to actually report a finding, it has two members of
+interest: the `tcx` (which is of type `ctx` – go figure), which has 
+just about all context information the compiler is using available, and
+the Session, which can be retrieved by the `cx.sess()` method, and
+which has other methods to make our lives easier
+* the `rustc::middle::ty` crate has an awesome lot of functions to 
+slice, dice and do everything nice to types as the type checker sees
+or infers them. Notable uses within rust-clippy are: 
+* finally, the AST itself contains many helpful and valuable functions
+one can use.
 
 Stay tuned, I'm going to extend this post once I get around to it.
