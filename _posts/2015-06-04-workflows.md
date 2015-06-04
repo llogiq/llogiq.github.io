@@ -283,10 +283,26 @@ having methods to actually report a finding, it has two members of
 interest: the `tcx` (which is of type `ctx` – go figure), which has 
 just about all context information the compiler is using available, and
 the Session, which can be retrieved by the `cx.sess()` method, and
-which has other methods to make our lives easier
+which has other methods to make our lives easier, notably the 
+`codemap()`, which has a `span_to_snippet(span: Span) -> Option<&str>`
+method to get the actual code marked by a `Span`, which is available on
+many AST types. The codemap also has a 
+`with_expn_info(id: ExpnId, fn: F) -> T where F: FnOnce(Option<&ExpnInfo>) -> T`
+method that can be used with the `expn_id` of a `Span` to find out if
+the macro that expanded to this piece of code, if any. The 
+[`in_macro`](https://github.com/Manishearth/rust-clippy/blob/master/src/utils.rs)
+function can take this `Option<&ExpnInfo>` to determine if the macro
+that expanded the code was in the current crate. We use that in some
+lints to reduce false positives.
 * the `rustc::middle::ty` crate has an awesome lot of functions to 
 slice, dice and do everything nice to types as the type checker sees
 or infers them. Notable uses within rust-clippy are: 
+[`len_zero`](https://github.com/Manishearth/rust-clippy/blob/master/src/len_zero.rs)
+uses it to actually look up methods in a type of an expression, 
+[`mut_mut`](https://github.com/Manishearth/rust-clippy/blob/master/src/mut_mut.rs)
+uses the same `expr_ty` function we use above to find mutable
+references to mutable references which can be matched as `ty_ptr` or
+`ty_rptr` depending on whether there's a lifetime bound, 
 * finally, the AST itself contains many helpful and valuable functions
 one can use.
 
