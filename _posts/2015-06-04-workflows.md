@@ -22,10 +22,12 @@ will also include at least one example (and possibly counterexamples if
 I fear there may be false positives).
 
 To make this post actually useful, let's look at a specific example, 
-similar to issue #19: We want to match uses of `Option::and_then(..)` 
-where the closure only ever returns `Some(..)` and suggest to use 
-`Option::map(..)` instead. So we write up the most easy example (and
-one counter-example) in `tests/compile-fail/options.rs`:
+similar to issue 
+[#19](https://github.com/Manishearth/rust-clippy/issues/19): We want to 
+match uses of `Option::and_then(..)` where the closure only ever 
+returns `Some(..)` and suggest to use `Option::map(..)` instead. So we 
+write up the most easy example (and one counter-example) in 
+`tests/compile-fail/options.rs`:
 
 	#![feature(plugin)]
 	#![plugin(clippy)]
@@ -56,11 +58,12 @@ Next, we actually define the lint. I'm going to create a new file,
 because I think we'll be adding more variations of this in the future.
 
 I usually use `syntax::ast::*` directly. Though it has bitten me once 
-when writing the `len_zero` lint and I inadvertantly used a function 
-that was named the same as the one in `rustc::middle::ty` I actually 
-wanted to use, I find that littering my code with `ast::this` and 
-`ast::that` makes it so noisy that the blanket import is warranted 
-here.
+when writing the 
+[`len_zero`](https://github.com/Manishearth/rust-clippy/blob/master/src/len_zero.rs) 
+lint and I inadvertantly used a function that was named the same as the 
+one in `rustc::middle::ty` I actually wanted to use, I find that 
+littering my code with `ast::this` and `ast::that` makes it so noisy 
+that the blanket import is warranted here.
 
 So without further ado, we declare a lint (in `src/options.rs`:
 
@@ -93,7 +96,7 @@ method:
 	}
 
 Now before we actually write the check, we want to introduce it in 
-`src/lib.rs`:
+[`src/lib.rs`](https://github.com/Manishearth/rust-clippy/blob/master/src/lib.rs):
 
 	// declare that we use the module
 	pub mod options;
