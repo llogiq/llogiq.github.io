@@ -7,7 +7,7 @@ Recently, I wrote a good number of lints for
 organize my thoughts and to share my findings, I'm going to write a bit 
 about my workflow (or how I'd like it to be; reality is more often than 
 not more messy than theory). I hope that this will be useful to 
-someone, perhaps even as a guide for people who wish to contribute to 
+someone; perhaps even as a guide for people who wish to contribute to 
 clippy.
 
 So let's go through the motions of creating a lint: It all starts out 
@@ -29,14 +29,14 @@ write up the most easy example (and one counter-example) in
 #![feature(plugin)]
 #![plugin(clippy)]
 
+#![deny(option_and_then_some)]
+
 // the easiest case
-#[deny(option_and_then_some)]
 fn and_then_should_be_map(x: Option<i32>) -> Option<i32> {
     x.and_then(Some) //~ERROR Consider using _.map(_)
 }
 
 // and an easy counter-example
-#[deny(option_and_then_some)]
 fn really_needs_and_then(x: Option<i32>) -> Option<i32> {
     x.and_then(|o| if o < 32 { Some(o) } else { None })
 }
@@ -58,12 +58,12 @@ because I think we'll be adding more variations of this in the future.
 I usually use `syntax::ast::*` directly. Though it has bitten me once 
 when writing the 
 [`len_zero`](https://github.com/Manishearth/rust-clippy/blob/master/src/len_zero.rs) 
-lint and I inadvertantly used a function that was named the same as the 
-one in `rustc::middle::ty` I actually wanted to use, I find that 
+lint (where I inadvertantly used a function that was named the same as the 
+one in `rustc::middle::ty` which I actually wanted to use), I find that 
 littering my code with `ast::this` and `ast::that` makes it so noisy 
 that the blanket import is warranted here.
 
-So without further ado, we declare a lint (in `src/options.rs`:
+So without further ado, we declare a lint (in `src/options.rs`):
 
 ```rust
 use syntax::ast::*
@@ -77,7 +77,7 @@ declare_lint! {
 ```
 
 And create a `struct` and `impl` to actually implement the `LintPass`.
-Again, I'm going to name it Options, because I suspect we will add more 
+Again, I'm going to name it `Options`, because I suspect we will add more 
 lints like this in the future. Also note that we want to check 
 method calls, which are `Expr`s, so we implement the `check_expr`
 method:
@@ -101,7 +101,7 @@ Now before we actually write the check, we want to introduce it in
 [`src/lib.rs`](https://github.com/Manishearth/rust-clippy/blob/master/src/lib.rs):
 
 ```rust
-// declare that we use the module
+// declare the module
 pub mod options;
 
 // first, register the Lint
@@ -115,8 +115,8 @@ pub mod options;
 ]);
 ```
 
-Now it is time to run `cargo test` so I can see that a) my code
-compiles (it does) and b) my test fails (it does -- we get 
+Now it is time to run `cargo test` so I can see that (a) my code
+compiles (it does) and (b) my test fails (it does -- we get 
 `error: compile-fail test compiled successfully!`). I will also get a
 few warnings about unused arguments in `check_expr`, which I ignore
 for now.
@@ -124,9 +124,9 @@ for now.
 Next, I want to actually implement the lint. But before I do this,
 wouldn't it be great to be able to see how to match the expression?
 Luckily, all `syntax::ast` types implement Debug, so we can use this
-to have a look at them. Note that our `fn ...` are `syntax::ast::Item`s
+to have a look at them. Note that our `fn ...`s are `syntax::ast::Item`s
 and can be checked using `check_item`. So I add this function, match
-our tested `fn`s by name and `note` their Debug representation:
+our tested `fn`s by name, and `note` their Debug representation:
 
 ```rust
 fn check_item(&mut self, cx: &Context, item: &Item) {
@@ -146,8 +146,8 @@ examples and counter-examples creates a lint stub that matches the
 former and ignores the latter. But until then, we have the joy and 
 frustration of doing it by hand)
 
-Both our `Item` have a node of `ItemFn(..)`, and contain a `Block` with 
-empty `stmts` and a `expr: Some(Expr {..})`. This is the expression I 
+Both our `Item`s have a node of `ItemFn(..)`, and contain a `Block` with 
+empty `stmt`s and an `expr: Some(Expr {..})`. This is the expression I 
 want to match. So I retire my `check_item` for now (to be resurrected 
 when writing another lint) and focus my attention on the `check_expr` 
 function. I also copy the output into a random text file for later 
@@ -177,7 +177,7 @@ arguments of the call if None is ever returned. To complete the lint,
 we have to actually check the arguments.
 
 Note that there are two arguments: The first one is a self argument and
-should be of type Option -- we better check that this is the case, in
+should be of type `Option` -- we better check that this is the case, in
 order get rid of false positives should other types define an `and_then`
 method.
 
