@@ -1,13 +1,14 @@
 ---
 title: My lint-writing workflow
 ---
+
 Recently, I wrote a good number of lints for 
 [rust-clippy](https://github.com/Manishearth/rust-clippy). In order to 
 organize my thoughts and to share my findings, I'm going to write a bit 
 about my workflow (or how I'd like it to be; reality is more often than 
-not unaligned more messy than theory). I hope that this will be useful 
-to someone, perhaps even as a guide for people who wish to contribute 
-to clippy.
+not more messy than theory). I hope that this will be useful to 
+someone, perhaps even as a guide for people who wish to contribute to 
+clippy.
 
 So let's go through the motions of creating a lint: It all starts out 
 with an idea *("Hey, we could warn when someone does this thing...")*. 
@@ -168,7 +169,66 @@ matching this. The `and_then` is actually an Ident, by the way. Now my
 
 Now `cargo test` shows that we match on both instances of `and_then`,
 which is to be expected, considering we have not yet checked the
-arguments of the call if None is ever returned.
+arguments of the call if None is ever returned. To complete the lint, 
+we have to actually check the arguments.
 
-That's it for now. Stay tuned for the second part where we remove the
-false positive and make the lint actually useful.
+Note that there are two arguments: The first one is a self argument and
+should be of type Option -- we better check that this is the case, in
+order get rid of false positives should other types define an `and_then`
+method.
+
+The second argument is our function or closure. For our first test
+example, the Debug output reduced to the representation of the second
+argument was:
+
+`Expr { id: 15, node: ExprPath(None, Path { span: Span { lo: 
+BytePos(161), hi: BytePos(165), expn_id: ExpnId(4294967295) }, global: 
+false, segments: [PathSegment { identifier: Some#2, parameters: 
+AngleBracketedParameters(AngleBracketedParameterData { lifetimes: [], 
+types: [], bindings: [] }) }] }), span: Span { lo: BytePos(161), hi: 
+BytePos(165), expn_id: ExpnId(4294967295) } }`
+
+Yes, this is a very wordy representation, but the gist is that we
+have an `ExprPath` whose `Path` evaluates to `Some`.
+
+Add both checks and our `check_item` becomes:
+
+	fn check_expr(&mut self, cx: &Context, expr: &Expr) {
+		if let ExprMethodCall(Spanned { node: ref ident, .. }, _, 
+				ref args) = expr.node {
+			if ident.as_str() == "and_then" && args.len() == 2 &&
+					is_option(&args[0]) && is_some(&args[1]) {
+				cx.span_lint(OPTION_AND_THEN_SOME, expr.span,
+					"Consider using _.map(_) instead of _.and_then(_) \
+					 if the argument only ever returns Some(_)")
+			}
+		}
+	}
+
+Now we need to implement our additional checks (after our `impl`), but
+we'll first use our debug output trick again:
+
+	fn is_option(cx: &Context, expr: &Expr) -> bool {
+		let ty = &walk_ty(&ty::expr_ty(cx.tcx, expr));
+		// here we just output our type:
+		cx.sess().span_note(expr.span, &format!("{:?}", ty));
+		true
+	}
+
+	fn is_some(expr: &Expr) -> bool {
+		true // just return true for the moment
+	}
+
+From that, we learn what our type is:
+
+`tests/compile-fail/options.rs:13:2: 13:3 note: TyS { sty: ty_enum(DefId 
+{ krate: 2, node: 117199 }, Substs { types: VecPerParamSpace 
+{TypeSpace: [TyS { sty: ty_int(i32), flags: 0, region_depth: 0 }], 
+SelfSpace: [], FnSpace: [], }, regions: 
+NonerasedRegions(VecPerParamSpace {TypeSpace: [], SelfSpace: [], 
+FnSpace: [], }) }), flags: 0, region_depth: 0 }`
+
+Now we can match `ty.sty` as `ty_enum`, retrieve the `DefId` and from
+there (somehow) get the type definition.
+
+Stay tuned, I'm going to extend this post once I get around to it.
