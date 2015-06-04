@@ -3,6 +3,9 @@ title: My lint-writing workflow
 date: 2015-06-03
 ---
 
+My lint-writing workflow
+========================
+
 Recently, I wrote a good number of lints for 
 [rust-clippy](https://github.com/Manishearth/rust-clippy). In order to 
 organize my thoughts and to share my findings, I'm going to write a bit 
