@@ -32,19 +32,19 @@ write up the most easy example (and one counter-example) in
 // the easiest case
 #[deny(option_and_then_some)]
 fn and_then_should_be_map(x: Option<i32>) -> Option<i32> {
-	x.and_then(Some) //~ERROR Consider using _.map(_)
+    x.and_then(Some) //~ERROR Consider using _.map(_)
 }
 
 // and an easy counter-example
 #[deny(option_and_then_some)]
 fn really_needs_and_then(x: Option<i32>) -> Option<i32> {
-	x.and_then(|o| if o < 32 { Some(o) } else { None })
+    x.and_then(|o| if o < 32 { Some(o) } else { None })
 }
 
 // need a main anyway, use it get rid of unused warnings too
 fn main() {
-	assert!(and_then_should_be_map(None).is_none());
-	assert!(really_needs_and_then(Some(32)).is_none());
+    assert!(and_then_should_be_map(None).is_none());
+    assert!(really_needs_and_then(Some(32)).is_none());
 }
 ```
 
@@ -70,9 +70,9 @@ use syntax::ast::*
 use rustc::lint::{Context, LintArray, LintPass};
 
 declare_lint! { 
-	pub OPTION_AND_THEN_SOME, Warn,
-	"Warn on uses of '_.and_then(..)' where the contained closure is \
-	 guaranteed to return Some(_)"
+    pub OPTION_AND_THEN_SOME, Warn,
+    "Warn on uses of '_.and_then(..)' where the contained closure is \
+     guaranteed to return Some(_)"
 }
 ```
 
@@ -87,13 +87,13 @@ method:
 pub struct Options;
 
 impl LintPass for Options {
-	fn get_lints(&self) -> LintArray {
-		lint_array!(OPTION_AND_THEN_SOME)
-	}
+    fn get_lints(&self) -> LintArray {
+        lint_array!(OPTION_AND_THEN_SOME)
+    }
 
-	fn check_expr(&mut self, cx: &Context, expr: &Expr) {
-		// insert check here.
-	}
+    fn check_expr(&mut self, cx: &Context, expr: &Expr) {
+        // insert check here.
+    }
 }
 ```
 
@@ -110,7 +110,7 @@ pub mod options;
     // also add it to the clippy lint group:
     reg.register_lint_group("clippy", vec![
     //...
-	options::OPTION_AND_THEN_SOME,
+    options::OPTION_AND_THEN_SOME,
 //...
 ]);
 ```
@@ -128,11 +128,13 @@ to have a look at them. Note that our `fn ...` are `syntax::ast::Item`s
 and can be checked using `check_item`. So I add this function, match
 our tested `fn`s by name and `note` their Debug representation:
 
-	fn check_item(&mut self, cx: &Context, item: &Item) {
-		if item.ident.as_str().contains("and_then") {
-			cx.sess().note(&format!("{:?}", item))
-		}
-	}
+```rust
+fn check_item(&mut self, cx: &Context, item: &Item) {
+    if item.ident.as_str().contains("and_then") {
+        cx.sess().note(&format!("{:?}", item))
+    }
+}
+```
 
 Now I am presented with two walls of text that represent the two `fn`s
 in my compile-test. The bad thing is that it's very easy to get lost in
@@ -156,16 +158,18 @@ Our expression has a node of
 matching this. The `and_then` is actually an Ident, by the way. Now my
 `check_expr` function looks like this:
 
-	fn check_expr(&mut self, cx: &Context, expr: &Expr) {
-		if let ExprMethodCall(Spanned { node: ref ident, .. }, _, 
-				ref args) = expr.node {
-			if ident.as_str() == "and_then" {
-				cx.span_lint(OPTION_AND_THEN_SOME, expr.span,
-					"Consider using _.map(_) instead of _.and_then(_) \
-					 if the argument only ever returns Some(_)")
-			}
-		}
-	}
+```rust
+fn check_expr(&mut self, cx: &Context, expr: &Expr) {
+    if let ExprMethodCall(Spanned { node: ref ident, .. }, _, 
+            ref args) = expr.node {
+        if ident.as_str() == "and_then" {
+            cx.span_lint(OPTION_AND_THEN_SOME, expr.span,
+                "Consider using _.map(_) instead of _.and_then(_) \
+                 if the argument only ever returns Some(_)")
+        }
+    }
+}
+```
 
 Now `cargo test` shows that we match on both instances of `and_then`,
 which is to be expected, considering we have not yet checked the
@@ -193,31 +197,35 @@ have an `ExprPath` whose `Path` evaluates to `Some`.
 
 Add both checks and our `check_item` becomes:
 
-	fn check_expr(&mut self, cx: &Context, expr: &Expr) {
-		if let ExprMethodCall(Spanned { node: ref ident, .. }, _, 
-				ref args) = expr.node {
-			if ident.as_str() == "and_then" && args.len() == 2 &&
-					is_option(&args[0]) && is_some(&args[1]) {
-				cx.span_lint(OPTION_AND_THEN_SOME, expr.span,
-					"Consider using _.map(_) instead of _.and_then(_) \
-					 if the argument only ever returns Some(_)")
-			}
-		}
-	}
+```rust
+fn check_expr(&mut self, cx: &Context, expr: &Expr) {
+    if let ExprMethodCall(Spanned { node: ref ident, .. }, _, 
+            ref args) = expr.node {
+        if ident.as_str() == "and_then" && args.len() == 2 &&
+                is_option(&args[0]) && is_some(&args[1]) {
+            cx.span_lint(OPTION_AND_THEN_SOME, expr.span,
+                "Consider using _.map(_) instead of _.and_then(_) \
+                 if the argument only ever returns Some(_)")
+        }
+    }
+}
+```
 
 Now we need to implement our additional checks (after our `impl`), but
 we'll first use our debug output trick again:
 
-	fn is_option(cx: &Context, expr: &Expr) -> bool {
-		let ty = &walk_ty(&ty::expr_ty(cx.tcx, expr));
-		// here we just output our type:
-		cx.sess().span_note(expr.span, &format!("{:?}", ty));
-		true
-	}
+```rust
+fn is_option(cx: &Context, expr: &Expr) -> bool {
+	let ty = &walk_ty(&ty::expr_ty(cx.tcx, expr));
+	// here we just output our type:
+	cx.sess().span_note(expr.span, &format!("{:?}", ty));
+	true
+}
 
-	fn is_some(expr: &Expr) -> bool {
-		true // just return true for the moment
-	}
+fn is_some(expr: &Expr) -> bool {
+	true // just return true for the moment
+}
+```
 
 From that, we learn what our type is:
 
