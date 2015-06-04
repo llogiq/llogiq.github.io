@@ -1,0 +1,29 @@
+# Site level variables
+title: "Llogiq on stuff"
+subtitle: "Stuff is...complicated"
+author:
+  name: "Llogiq"
+  github: "https://github.com/llogiq"
+
+# Jekyll config
+future: false
+timezone: "UTC"
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Set defaults for pages and posts
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

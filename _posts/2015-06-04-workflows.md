@@ -1,11 +1,6 @@
 ---
 title: My lint-writing workflow
-date: 2015-06-03
 ---
-
-My lint-writing workflow
-========================
-
 Recently, I wrote a good number of lints for 
 [rust-clippy](https://github.com/Manishearth/rust-clippy). In order to 
 organize my thoughts and to share my findings, I'm going to write a bit 
@@ -29,26 +24,28 @@ returns `Some(..)` and suggest to use `Option::map(..)` instead. So we
 write up the most easy example (and one counter-example) in 
 `tests/compile-fail/options.rs`:
 
-	#![feature(plugin)]
-	#![plugin(clippy)]
-	
-	// the easiest case
-	#[deny(option_and_then_some)]
-	fn and_then_should_be_map(x: Option<i32>) -> Option<i32> {
-		x.and_then(Some) //~ERROR Consider using _.map(_)
-	}
-	
-	// and an easy counter-example
-	#[deny(option_and_then_some)]
-	fn really_needs_and_then(x: Option<i32>) -> Option<i32> {
-		x.and_then(|o| if o < 32 { Some(o) } else { None })
-	}
-	
-	// need a main anyway, use it get rid of unused warnings too
-	fn main() {
-		assert!(and_then_should_be_map(None).is_none());
-		assert!(really_needs_and_then(Some(32)).is_none());
-	}
+```rust
+#![feature(plugin)]
+#![plugin(clippy)]
+
+// the easiest case
+#[deny(option_and_then_some)]
+fn and_then_should_be_map(x: Option<i32>) -> Option<i32> {
+	x.and_then(Some) //~ERROR Consider using _.map(_)
+}
+
+// and an easy counter-example
+#[deny(option_and_then_some)]
+fn really_needs_and_then(x: Option<i32>) -> Option<i32> {
+	x.and_then(|o| if o < 32 { Some(o) } else { None })
+}
+
+// need a main anyway, use it get rid of unused warnings too
+fn main() {
+	assert!(and_then_should_be_map(None).is_none());
+	assert!(really_needs_and_then(Some(32)).is_none());
+}
+```
 
 There are two things at play here: First we actually deny our (yet
 unwritten) lint, then we mark the line where the lint will show the 
@@ -67,14 +64,16 @@ that the blanket import is warranted here.
 
 So without further ado, we declare a lint (in `src/options.rs`:
 
-	use syntax::ast::*
-	use rustc::lint::{Context, LintArray, LintPass};
-	
-	declare_lint! { 
-		pub OPTION_AND_THEN_SOME, Warn,
-		"Warn on uses of '_.and_then(..)' where the contained closure is \
-		 guaranteed to return Some(_)"
-	}
+```rust
+use syntax::ast::*
+use rustc::lint::{Context, LintArray, LintPass};
+
+declare_lint! { 
+	pub OPTION_AND_THEN_SOME, Warn,
+	"Warn on uses of '_.and_then(..)' where the contained closure is \
+	 guaranteed to return Some(_)"
+}
+```
 
 And create a `struct` and `impl` to actually implement the `LintPass`.
 Again, I'm going to name it Options, because I suspect we will add more 
@@ -82,34 +81,38 @@ lints like this in the future. Also note that we want to check
 method calls, which are `Expr`s, so we implement the `check_expr`
 method:
 
-	#[derive(Copy,Clone)]
-	pub struct Options;
+```rust
+#[derive(Copy,Clone)]
+pub struct Options;
 
-	impl LintPass for Options {
-		fn get_lints(&self) -> LintArray {
-			lint_array!(OPTION_AND_THEN_SOME)
-		}
-
-		fn check_expr(&mut self, cx: &Context, expr: &Expr) {
-			// insert check here.
-		}
+impl LintPass for Options {
+	fn get_lints(&self) -> LintArray {
+		lint_array!(OPTION_AND_THEN_SOME)
 	}
+
+	fn check_expr(&mut self, cx: &Context, expr: &Expr) {
+		// insert check here.
+	}
+}
+```
 
 Now before we actually write the check, we want to introduce it in 
 [`src/lib.rs`](https://github.com/Manishearth/rust-clippy/blob/master/src/lib.rs):
 
-	// declare that we use the module
-	pub mod options;
+```rust
+// declare that we use the module
+pub mod options;
 
-	// first, register the Lint
+// first, register the Lint
     reg.register_lint_pass(box options::Options as LintPassObject);
     
     // also add it to the clippy lint group:
     reg.register_lint_group("clippy", vec![
     //...
-		options::OPTION_AND_THEN_SOME,
-	//...
-	]);
+	options::OPTION_AND_THEN_SOME,
+//...
+]);
+```
 
 Now it is time to run `cargo test` so I can see that a) my code
 compiles (it does) and b) my test fails (it does -- we get 

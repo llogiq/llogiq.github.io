@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<article>
+  <h1>
+    {{page.title}}
+  </h1>
+  <p>
+    <time datetime="{{page.date}}">
+      {{page.date | date_to_long_string }}
+    </time>
+  </p>
+
+  {{content}}
+</article>
