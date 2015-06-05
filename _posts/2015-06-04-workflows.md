@@ -416,7 +416,46 @@ that is currently not caught:
 x.and_then(|o| if o < 0 { Some(-o) } else { Some(o) }); //~ERROR Consider using _map(_)
 ```
 
-Now here is where it gets tricky. We have to make sure that everything
-the closure returns is a `Some(_)`.
+Now here is where it gets tricky. I have to make sure that everything
+the closure returns is a `Some(_)`. This means I have to care about
+
+* Blocks – check their statements for early returns, and their final 
+expressions for a result
+* If-Expressions – check both paths
+* Nested Closures – this means we need to use something akin to a 
+*depth*, because return statements will only return from the deepest
+closure
+
+I'm going to tackle this one by one. First, I need to check a block. So 
+I replace the `false` in the second `match` arm with `is_block_some(cx, 
+block)` and create a function that iterates over the statements and
+also checks the final expression of the block:
+
+```rust
+fn is_block_some(cx: &Context, block: &Block) -> bool {
+	block.stmts.iter().all(|stmt| is_statement_some(cx, stmt)) &&
+		block.expr.map_or(true, |expr| is_expr_some(cx, expr))
+}
+```
+
+Now `is_statement_some(..)` must check for early returns, returning 
+`false` only if an early return of `None` is detected, while 
+`is_expr_some(..)` needs to be much more involved because of closures,
+returns, branches and loops.
+
+```rust
+
+fn is_statement_some(cx: &Context, stmt: &Statement) -> bool {
+	match stmt.node {
+	StmtDecl(ref decl, _) => {
+		if let DeclLocal(ref local) = decl.node {
+			local.init.map_or(true, |expr| is_expr_some(cx, expr))
+		} else { true }
+	},
+	StmtExpr(ref expr, _) | StmtSemi(ref expr, _) => 
+		is_expr_some(cx, expr),
+	StmtMac(_, _) => false // abort when matching on macros
+	}
+}
 
 Stay tuned, I'm going to extend this post once I get around to it.
