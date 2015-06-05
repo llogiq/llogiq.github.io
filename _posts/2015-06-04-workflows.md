@@ -331,6 +331,17 @@ Iterator over single path elements, uses `map` to fetch their names,
 each `(Name, &str)` tuple, the first `name.as_str()` equals the  second
 `&str`. Did I tell you I love iterators and closures?
 
+My `is_option` test then becomes:
+
+```rust
+fn is_option(cx: &Context, expr: &Expr) -> bool {
+	let ty = &walk_ty(&ty::expr_ty(cx.tcx, expr));
+	if let ty::ty_enum(def_id, _) = ty.sty {
+		match_def_path(cx, def_id, &["core", "option", "Option"])	
+	} else { false }
+}
+```
+
 To be sure that this is doing the right thing, I'm going to use a
 different type. Searching the docs for and_then yields, among others,
 core::result::Result, which is easy enough to create:
@@ -344,6 +355,23 @@ fn result_and_then_is_ok(x: Result<i32, ()>) -> Result<i32, ()> {
 Testing this again, the lint doesn't catches it, despite the method 
 name being "`and_then`". Cool.
 
-Next up, check the second argument.
+Next up, check the second argument. This can only ever be a function
+reference (e.g. `Some`) which shows up as an `ExprPath` or a closure,
+which shows up as an `ExprClosure`. As there are a lot of possibilities
+here, the matching code will need to take them all into account, which
+means I'll have to add a lot of tests. Remember our `is_some`-Method?
+I'm going to add a match over the expression type:
+
+```rust
+fn is_some(cx: &Context, expr: &Expr) -> bool {
+	match expr.node {
+	ExprPath(_, ref path) => true,
+	ExprClosure(_, _, ref block) => false,
+	_ => false
+	}
+}
+```
+
+This is still stupid, but makes the test pass. Time for more tests.
 
 Stay tuned, I'm going to extend this post once I get around to it.
