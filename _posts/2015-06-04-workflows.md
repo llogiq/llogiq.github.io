@@ -373,5 +373,50 @@ fn is_some(cx: &Context, expr: &Expr) -> bool {
 ```
 
 This is still stupid, but makes the test pass. Time for more tests.
+First, I'm going to tackle the ExprPath one with a false positive, so I
+add the following lines to my test's main function:
+
+```rust
+let x : Option<i32> = Some(42);
+x.and_then(to_none); // nonsense, but no error either
+```
+
+Where the to_none function is defined as:
+
+```rust
+fn to_none(x: i32) -> Option<i32> { None }
+```
+
+Now I get a failing test. So we will have to look into the path. Since
+we don't have the full path segments, we can either go the easy route
+and check if the last ones are equal to `core::option::Option::Some`.
+This has some precedent in 
+[types.rs](https://github.com/Manishearth/rust-clippy/blob/master/src/types.rs)
+where we use a similar scheme to match a `syntax::ast::Ty`s path:
+
+```rust
+fn match_segments(path: &Path, segments: &[&str]) -> bool {
+	path.segments.iter().rev().zip(segments.iter().rev()).all(
+		|(a,b)| a.identifier.as_str() == *b)
+}
+```
+
+Now I can replace the `true` in our `match` case with 
+`match_segments(path, &["core", "option", "Option", "Some"])` and no
+longer have the failing test. Note that this could still introduce
+false positives, if someone creates an enum with a `Some` variant, as
+well as false negatives, as someone could introduce a function 
+reference, which the lint would need to look up. I will have to deal 
+with this later.
+
+Since I no longer have a failing test, I need to introduce an error
+that is currently not caught:
+
+```rust
+x.and_then(|o| if o < 0 { Some(-o) } else { Some(o) }); //~ERROR Consider using _map(_)
+```
+
+Now here is where it gets tricky. We have to make sure that everything
+the closure returns is a `Some(_)`.
 
 Stay tuned, I'm going to extend this post once I get around to it.
