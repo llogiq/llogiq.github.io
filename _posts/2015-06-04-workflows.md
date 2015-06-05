@@ -433,7 +433,7 @@ also checks the final expression of the block:
 
 ```rust
 fn is_block_some(cx: &Context, block: &Block) -> bool {
-	block.stmts.iter().all(|stmt| is_statement_some(cx, stmt)) &&
+	block.stmts.iter().all(|stmt| is_expr_not_ret(cx, stmt, false)) &&
 		block.expr.map_or(true, |expr| is_expr_some(cx, expr))
 }
 ```
@@ -441,21 +441,68 @@ fn is_block_some(cx: &Context, block: &Block) -> bool {
 Now `is_statement_some(..)` must check for early returns, returning 
 `false` only if an early return of `None` is detected, while 
 `is_expr_some(..)` needs to be much more involved because of closures,
-returns, branches and loops.
+returns, branches and loops. 
 
 ```rust
-
-fn is_statement_some(cx: &Context, stmt: &Statement) -> bool {
+fn is_statement_some(cx: &Context, stmt: &Stmt) -> bool {
 	match stmt.node {
-	StmtDecl(ref decl, _) => {
-		if let DeclLocal(ref local) = decl.node {
-			local.init.map_or(true, |expr| is_expr_some(cx, expr))
-		} else { true }
-	},
-	StmtExpr(ref expr, _) | StmtSemi(ref expr, _) => 
-		is_expr_some(cx, expr),
-	StmtMac(_, _) => false // abort when matching on macros
+		StmtDecl(ref decl, _) => {
+			if let DeclLocal(ref local) = decl.node {
+				local.init.as_ref().map_or(true, 
+					|expr| is_expr_not_ret(cx, &*expr, false))
+			} else { true }
+		},
+		StmtExpr(ref expr, _) | StmtSemi(ref expr, _) => 
+			is_expr_not_ret(cx, &*expr, false),
+		StmtMac(_, _) => false // abort when matching on macros
 	}
 }
 
-Stay tuned, I'm going to extend this post once I get around to it.
+fn is_expr_some(cx: &Context, expr: &Expr) -> bool {
+	match expr.node {
+		ExprPath(_, ref path) =>
+			match_segments(path, &["core", "option", "Option", "Some"]),
+		ExprCall(ref path, ref args) => is_expr_some(cx, path) && 
+			args.iter().by_ref().all(|e| is_expr_not_ret_none(cx, &*e)),
+		ExprBlock(ref block) | ExprClosure(_, _, ref block) => 
+			is_block_some(cx, block),
+		ExprIf(_, ref block, ref else_expr) =>
+			is_block_some(cx, block) && else_expr.as_ref().map_or(false, 
+				|e| is_expr_some(cx, &*e)),
+		ExprRet(ref ret) => 
+			ret.as_ref().map_or(false, |e| is_expr_some(cx, &*e)),
+		_ => {
+			cx.sess().note(&format!("is_expr_some: no match: {:?}",
+				expr));
+			false
+		}
+	}
+}
+```
+
+While writing is_statement_some I noticed that I need to check if a 
+contained expression could `return None` or `return Some(..)`, so I 
+created a method to that effect. 
+
+```rust
+fn is_expr_not_ret_none(cx: &Context, expr: &Expr) -> bool {
+	if let ExprRet(ref ret) = expr.node {
+		ret.as_ref().map_or(false, |e| is_expr_some(cx, &*e))
+	} else { true }
+}
+```
+
+Now I'm pretty sure that there are still some false positives or
+negatives to be taken care of. At least I can now replace my primitive
+`is_some` function by `is_expr_some` and it still works for my tests.
+
+I hope this post has given you a bit of insight into lint development 
+in [Rust](https://rust-lang.org). While my techniques may be naive -- 
+after all, I have but a few weeks of experience in that language -- 
+they certainly yield results, as I have written some 15 lints now, many 
+of them useful.
+
+If you have suggestions on how to improve either my lints, my workflow 
+or my writing, I'll be glad to hear them. And if I have whetted your 
+appetite for writing Rust lints, join us at 
+[rust-clippy](https://github.com/Manishearth/rust-clippy).
