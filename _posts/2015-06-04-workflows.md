@@ -126,7 +126,7 @@ to do now and then, especially after a rust update), I can specify
 which test to run. The command line to do so is:
 
 ```
-TESTNAME=foo cargo test --name compile-test
+TESTNAME=options cargo test --test compile-test
 ```
 
 rust-clippy uses the very clever 
@@ -303,7 +303,47 @@ uses it to actually look up methods in a type of an expression,
 uses the same `expr_ty` function we use above to find mutable
 references to mutable references which can be matched as `ty_ptr` or
 `ty_rptr` depending on whether there's a lifetime bound, 
-* finally, the AST itself contains many helpful and valuable functions
-one can use.
+* finally, the AST itself contains many helpful and valuable functions 
+one can use. The `syntax::ast_util` crate has some more functions that 
+make writing lints easy. 
+
+Back to our lint: Expanding the DefId to match the type requires
+using the `rustc::middle::ty::with_path<T, F>(cx: &ctxt, id: DefId, f: F) -> T where F: FnOnce(PathElems) -> T`
+function, which I will use to match the path. Since I suspect this
+is something we intend to do in other lints, too, I'm going to put this
+matching function in
+[utils.rs](https://github.com/Manishearth/rust-clippy/blob/master/src/utils.rs)
+as `fn match_def_path(cx: Context, def_id: DefId, path: &[&str]) -> bool`
+where I get the `Name` out of each `PathElem`, zip with the supplied
+`path` argument and ask if all are equal:
+
+```rust
+pub fn match_def_path(cx: &Context, def_id: DefId, path: &[&str]) -> bool {
+	ty::with_path(cx.tcx, def_id, |iter| iter.map(|elem| elem.name())
+		.zip(path.iter()).all(|(nm, p)| &nm.as_str() == p))
+}
+``` 
+
+Now that is some seriously dense code, but it perfectly captures what I
+try to do: the first closure gets the `PathElems`, which is really an
+Iterator over single path elements, uses `map` to fetch their names,
+`zip`s them up with the `path` slice we want to match and check if for
+each `(Name, &str)` tuple, the first `name.as_str()` equals the  second
+`&str`. Did I tell you I love iterators and closures?
+
+To be sure that this is doing the right thing, I'm going to use a
+different type. Searching the docs for and_then yields, among others,
+core::result::Result, which is easy enough to create:
+
+```rust
+fn result_and_then_is_ok(x: Result<i32, ()>) -> Result<i32, ()> {
+	x.and_then(Ok)
+}
+```
+
+Testing this again, the lint doesn't catches it, despite the method 
+name being "`and_then`". Cool.
+
+Next up, check the second argument.
 
 Stay tuned, I'm going to extend this post once I get around to it.
