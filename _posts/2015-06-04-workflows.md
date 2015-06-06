@@ -130,12 +130,13 @@ TESTNAME=options cargo test --test compile-test
 ```
 
 rust-clippy uses the very clever 
-[compiletest_rs](https://crates.io/crates/compiletest_rs) crate written
-by Thomas Bracht Laumann Jespersen and Manish Goregaokar, among others
-to allow us to check that rustc really fails at the correct lines of
-code. The test file to start it is `tests/compile-test.rs` (therefore
-the `--name`) and the compile_test machinery actually looks for the
-`TESTNAME` environment variable to figure out which file to run.
+[compiletest_rs](https://crates.io/crates/compiletest_rs) crate written 
+by Thomas Bracht Laumann Jespersen and Manish Goregaokar, among others 
+to allow us to check that rustc really fails at the correct lines of 
+code. The test file to start it is [`tests/compile-test.rs`](https://github.com/Manishearth/rust-clippy/blob/master/tests/compile-test.rs) (therefore 
+the `--name`) and the contained code actually looks for the `TESTNAME` 
+environment variable to figure out which file to run (by default it 
+runs all compile tests).
 
 Next, I want to actually implement the lint. But before I do this,
 wouldn't it be great to be able to see how to match the expression?
@@ -164,7 +165,7 @@ out the plugin lines (because else rustc will hiccup) and run the
 following command to get a complete JSON representation of the abstract
 syntax tree:
 
-`rustc tests/compile-fail/options.rs -Z ast-json`
+`rustc tests/compile-fail/options.rs -L target/debug -Z ast-json`
 
 If this looks fairly unreadable, you may want to pipe it through some
 JSON pretty printer. I use `aeson-pretty -i 2` to that effect.
