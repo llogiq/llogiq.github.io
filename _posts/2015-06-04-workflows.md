@@ -135,8 +135,9 @@ by Thomas Bracht Laumann Jespersen and Manish Goregaokar, among others
 to allow us to check that rustc really fails at the correct lines of 
 code. The test file to start it is [`tests/compile-test.rs`](https://github.com/Manishearth/rust-clippy/blob/master/tests/compile-test.rs) (therefore 
 the `--name`) and the contained code actually looks for the `TESTNAME` 
-environment variable to figure out which file to run (by default it 
-runs all compile tests).
+environment variable to figure out which file to run. By default it 
+runs all `compile-fail` tests. As an aside, I just implemented the test
+filter capability while writing this blog post.
 
 Next, I want to actually implement the lint. But before I do this,
 wouldn't it be great to be able to see how to match the expression?
@@ -442,7 +443,11 @@ fn is_block_some(cx: &Context, block: &Block) -> bool {
 Now `is_statement_some(..)` must check for early returns, returning 
 `false` only if an early return of `None` is detected, while 
 `is_expr_some(..)` needs to be much more involved because of closures,
-returns, branches and loops. 
+returns, branches and loops.
+
+For statements, we just check if there is an early return that is not 
+`Some(_)`. We also abort on encountering macros. Lints are invoked 
+before and after macro expansion, so this is a sensible thing to do.
 
 ```rust
 fn is_statement_some(cx: &Context, stmt: &Stmt) -> bool {
@@ -450,15 +455,20 @@ fn is_statement_some(cx: &Context, stmt: &Stmt) -> bool {
 		StmtDecl(ref decl, _) => {
 			if let DeclLocal(ref local) = decl.node {
 				local.init.as_ref().map_or(true, 
-					|expr| is_expr_not_ret(cx, &*expr, false))
+					|expr| is_expr_not_ret_none(cx, &*expr))
 			} else { true }
 		},
 		StmtExpr(ref expr, _) | StmtSemi(ref expr, _) => 
-			is_expr_not_ret(cx, &*expr, false),
-		StmtMac(_, _) => false // abort when matching on macros
+			is_expr_not_ret_none(cx, &*expr),
+		StmtMac(_, _) => true // abort when matching on macros
 	}
 }
+```
 
+This needs an `is_expr_not_ret_none(..)` function, which I will write
+later. First come expressions, which are much more varied:
+
+```rust
 fn is_expr_some(cx: &Context, expr: &Expr) -> bool {
 	match expr.node {
 		ExprPath(_, ref path) =>
@@ -481,9 +491,8 @@ fn is_expr_some(cx: &Context, expr: &Expr) -> bool {
 }
 ```
 
-While writing is_statement_some I noticed that I need to check if a 
-contained expression could `return None` or `return Some(..)`, so I 
-created a method to that effect. 
+Finally, here is my naive method to check if an expression is an early
+return:
 
 ```rust
 fn is_expr_not_ret_none(cx: &Context, expr: &Expr) -> bool {
@@ -496,6 +505,12 @@ fn is_expr_not_ret_none(cx: &Context, expr: &Expr) -> bool {
 Now I'm pretty sure that there are still some false positives or
 negatives to be taken care of. At least I can now replace my primitive
 `is_some` function by `is_expr_some` and it still works for my tests.
+
+I will need to match more `Expr` variants both in `is_expr_some(..)`
+as well as `is_expr_not_ret_none(..)` to catch inner early returns. It
+may well be that I need to introduce more machinery to the code to
+catch corner cases. However, this has dragged on for long enough, so
+I'm going to flesh out the code later.
 
 I hope this post has given you a bit of insight into lint development 
 in [Rust](https://rust-lang.org). While my techniques may be naive -- 
