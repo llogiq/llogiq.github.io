@@ -2,7 +2,7 @@
 
 body {
   padding:50px;
-  font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font:14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#111;
   font-weight:300;
 }
@@ -58,9 +58,9 @@ blockquote {
 }
 
 code, pre {
-  font-family:Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
+  font-family:Source Code Pro, Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
   color:#222;
-  font-size:12px;
+  font-size:13px;
 }
 
 pre {
