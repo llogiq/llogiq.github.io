@@ -157,8 +157,8 @@ header ul a strong {
 }
 
 section {
+  width:75%;
   float:right;
-  margin-top:20em;
   padding-bottom:50px;
 }
 
@@ -187,10 +187,14 @@ footer {
     margin:0;
   }
   
-  header, footer {
-    float:right;
+  header, section, footer {
+    float:none;
     position:static;
     width:auto;
+  }
+  
+  header {
+    padding-right:320px;
   }
   
   section {
