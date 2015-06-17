@@ -98,6 +98,11 @@ header {
   position:fixed;
 }
 
+header h1, header p {
+   display:inline;
+   margin:10px;
+}
+
 header ul {
   list-style:none;
   height:40px;
