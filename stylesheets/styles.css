@@ -156,7 +156,8 @@ header ul a strong {
   color:#222;
 }
 
-section
+section {
+  float:right;
   margin-top:20em;
   padding-bottom:50px;
 }
