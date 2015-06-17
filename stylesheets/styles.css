@@ -1,10 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
-
 body {
   padding:50px;
-  font:14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font:16px "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#111;
-  font-weight:300;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -60,7 +57,7 @@ blockquote {
 code, pre {
   font-family:Source Code Pro, Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
   color:#222;
-  font-size:13px;
+  font-size:90%;
 }
 
 pre {
@@ -154,14 +151,12 @@ header ul li + li + li {
 }
 
 header ul a strong {
-  font-size:14px;
+  font-size:16px;
   display:block;
   color:#222;
 }
 
 section {
-  width:500px;
-  float:right;
   padding-bottom:50px;
 }
 
