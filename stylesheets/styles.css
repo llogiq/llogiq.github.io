@@ -61,6 +61,10 @@ code, pre {
   font-size:90%;
 }
 
+del {
+  text-decoration:line-through;
+}
+
 pre {
   padding:8px 15px;
   background: #f8f8f8;  
