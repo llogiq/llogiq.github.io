@@ -61,6 +61,10 @@ code, pre {
   font-size:90%;
 }
 
+del {
+  text-decoration:line-through;
+}
+
 pre {
   padding:8px 15px;
   background: #f8f8f8;  
@@ -95,14 +99,14 @@ img {
 
 header {
   position: fixed;
-  background: #FFFFFF; 
+  top: 0px;
   width: 100%;
-  padding: 20px 0px; 
-  margin-top: -20px;
+  background: #fff;
 }
 
 header > * {
-  display: inline-block; margin-right: 50px;
+  display: inline-block;
+  margin-right: 50px;
 }
 
 header ul {
@@ -178,29 +182,11 @@ hr {
   margin:0 0 20px;
 }
 
-
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
     width:auto;
     margin:0;
-  }
-  
-  header, section {
-    float:none;
-    position:static;
-    width:auto;
-  }
-  
-  header {
-    padding-right:320px;
-  }
-  
-  section {
-    border:1px solid #e5e5e5;
-    border-width:1px 0;
-    padding:20px 0;
-    margin:0 0 20px;
   }
   
   header a small {
@@ -217,14 +203,6 @@ hr {
 @media print, screen and (max-width: 720px) {
   body {
     word-wrap:break-word;
-  }
-  
-  header {
-    padding:0;
-  }
-  
-  header ul, header p.view {
-    position:static;
   }
   
   pre, code {
