@@ -1,4 +1,3 @@
-
 ---
 title: A Java Inheritance Puzzler
 ---
