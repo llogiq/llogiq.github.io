@@ -46,6 +46,7 @@ So my PC is a bit faster than the benchmark server. Nice!
 Next, let's have a look at the Rust version. I'm using the nightly channel and
 compile with `-O`:
 
+```
 $ rustc -O nbody_rs.rs
 $ time ./nbody_rs 50000000
 -0.169075164
@@ -130,7 +131,7 @@ inner loop of our `advance()` function is the hottest code), let's have a look
 at `oprofile`.
 
 Using oprofile
--------------------
+--------------
 
 To install oprofile, I simply typed:
 
