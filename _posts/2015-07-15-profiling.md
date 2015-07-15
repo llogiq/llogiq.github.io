@@ -1,5 +1,5 @@
 ---
-title: Profiling Rust applications
+title: Profiling Rust applications on Linux
 ---
 
 What's measured gets optimized. So if we want high-performance Rust code, we
