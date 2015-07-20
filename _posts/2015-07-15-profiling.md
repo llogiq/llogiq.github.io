@@ -278,3 +278,14 @@ outside the scope of this post.
 
 For now you have a good way to CPU-profile your program with very little 
 overhead and with the option of collecting other very useful statistics.
+
+Bonus: There is another, newer way to profile applications in linux:
+`perf`. It looks and works very much like oprofile (and in my test 
+produced very similar results), but requires root access. On the plus
+side, you get a ncurses- or gtk-based viewer for the annotated source,
+which is quite nice.
+
+`perf` was written at a time where oprofile was using an 
+interrupt-based collecting solution. In the meantime, oprofile was
+updated to use the same performance counter collection behavior as 
+perf, so there is quite little difference between both packages.
