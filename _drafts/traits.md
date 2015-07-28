@@ -234,7 +234,47 @@ mileage may vary.
 
 ### From, Into and Various Variations
 
-TODO
+I said it before, whoever designed the `From` and `Into` traits is a genius.
+They abstract over *conversions* between types (which are used quite often) and
+allow libary authors to make their libraries much more interoperable, e.g. by
+using `Into<T>` instead of `T` as arguments.
+
+For obvious reasons, those traits cannot be auto-derived, but writing them
+should be trivial in most cases. If you choose to implement them – and you 
+should wherever you find a worthwile conversion! – implement `From` wherever
+possible, and failing that implement `Into`.
+
+Why? There is a blanket implementation of `Into<U>` for `T` where `U: From<T>`.
+This means if you have implemented `From`, yuo get an `Into` delivered to your
+home free of charge.
+
+Why not implement `From` everywhere? The orphan rule unfortunately forbids 
+implementing `From` for types not defined in other crates. For example, I have
+an `Optioned<T>` type, that I may want to convert into an `Option<T>`. Trying
+to implement `From`:
+
+```rust
+impl<T: Noned + Copy> From<Optioned<T>> for Option<T> {
+	#[inline]
+	fn from(self) -> Option<T> { self.map_or_else(|| none(), wrap) }
+}
+```
+
+I get an error: type parameter `T` must be used as the type parameter for some 
+local type (e.g. `MyStruct<T>`); only traits defined in the current crate can 
+be implemented for a type parameter `[E0210]`
+
+Note that you can implement `From` and `Into` with multiple classes, you can
+have a `From<Foo>` and a `From<Bar>` for the same type.
+
+There are a good number of traits starting with `Into` – `IntoIterator`, which
+is stable and which we already have discussed above, just being one of them.
+There also is `FromIterator`, which does the reverse, namely constructing a
+value of your type from an iterator of items.
+
+Then there is `FromStr` for any types that can be parsed from a string, which 
+is very useful for types that you want read from any textual source, e.g. 
+configuration or user input.
 
 ### De- and Encodable
 
@@ -244,7 +284,7 @@ TODO
 
 TODO
 
-### Deref(Mut), AsRef, Borrow(Mut) and ToOwned
+### Deref(Mut), AsRef/AsMut, Borrow(Mut) and ToOwned
 
 Those all have to do with references and borrowing, so I grouped them into one
 section.
@@ -299,7 +339,7 @@ The relation between `Borrow`, `AsRef` and `ToOwned` is as follows:
 
 From↓ / To→|Reference      |Owned
 -----------|---------------|-----
-Reference  |`AsRef`        |`ToOwned`
+Reference  |`AsRef`/`AsMut`|`ToOwned`
 Owned      |`Borrow`(`Mut`)|(perhaps `Copy` or `Clone`?)
 
 For an example where this applies, look no further than my earlier
