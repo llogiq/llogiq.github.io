@@ -189,11 +189,48 @@ section of the Rust book for further information.
 
 ### Hash
 
-TODO
+Hashing is the process of reducing a bag of data into a single value that still
+distinguishes different data items while returning the same value for equal 
+items without requiring as much bits as the processed data.
+
+In Rust, the `Hash` trait denotes values to which this process can be applied.
+Note that this trait does not relate any information about the hash *algorithm*
+used, it basically just orders the bits to be hashed.
+
+Aside: This is also the reason why `HashMap` does not implement `Hash` itself, 
+because two equal hash maps could still store their contents in different 
+order, resulting in different hashes, which would break the hashing contract.
+
+Unless you have some very specific constraints regarding equality, you can 
+safely auto-derive `Hash`. Should you choose to implement it manually, beware
+not to break its contract.
 
 ### Iterator and Friends
 
-TODO
+Rust's `for` loops work can iterate over everything that implements 
+`IntoIterator`. Yes, that includes `Iterator` itself. Apart from that, the
+`Iterator` trait has a lot of cool methods for working with the iterated
+values, like `filter`, `map`, `enumerate`, `fold`, `any`, `all`, `sum`, `min`
+and much more.
+
+Did I tell you I love iterators? If your type contains more than one value of
+something, and it makes sense to do the same thing to all of them, consider
+providing an `Iterator` over them just in case. :-)
+
+Implementing `Iterator` is actually pretty easy – you just need to declare the
+`Item` type and write the `next(&mut self) -> Option<Self::Item>` method. This
+method should return `Some(value)` as long as you have values, then return 
+`None` to stop the iteration.
+
+Note that if you have a *slice* of values (or an array or vec, from which you
+can *borrow* a slice), you can get its iterator directly, so you don't even
+need to implement it yourself. This may not be as cool as auto-deriving, but
+it's nice nonetheless.
+
+While writing [optional](https://github.com/llogiq/optional), I found that 
+using a const slice's iterator is faster in the boolean case, but creating a 
+slice of the value is still slower than copying it for most values. Your 
+mileage may vary.
 
 ### From, Into and Various Variations
 
