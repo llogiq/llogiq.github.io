@@ -14,23 +14,23 @@ overloading to the very subtle like `Send` and `Sync`. Some traits can be
 magically appearing implementation that usually does the right thing (with
 Send and Sync, you actually have to actively opt out of implementing them).
 
-Aside: If you find the strange abbreviation *OIBIT* in some text about Rust,
-don't be afraid, it's just an *Opt-In Buit-In Trait*.
-
 So I'll try to go from the obvious and specific to the nebulous and (perhaps) 
 surprising:
 
 ### (Partial)–Eq/Ord
 
-`PartialEq` defines partial equality, `Eq` is used as a marker to declare 
-that `PartialEq` is actually reflexive (that means `a == a` for all `a` of the 
+`PartialEq` defines partial equality, `Eq` is used as a marker to declare that 
+`PartialEq` is actually reflexive (that means `a == a` for all `a` of the 
 respective type). It is useful to implement them, for a good number of `std`'s 
 types use them as trait bounds for one thing or another, e.g. `Vec`'s `dedup()` 
 function. Auto-deriving PartialEq will make the `eq`-method check equality of 
 all parts of your type (e.g. for `struct`s, all parts will be checked, while 
-for `enum` types, the variant along with all its contents is checked). Since
-`Eq` is basically empty (apart from a pre-defined marker method), auto-deriving
-has no chance of doing something interesting, so it won't.
+for `enum` types, the variant along with all its contents is checked).
+
+Since `Eq` is basically empty (apart from a pre-defined marker method that is 
+used by the auto-deriving logic to ensure that it actually worked and probably 
+shouldn't be used anywhere else), auto-deriving has no chance of doing 
+something interesting, so it won't.
 
 `PartialOrd` defines a partial Order, and extends the equality of `PartialEq` 
 by the `Ordering` relation. `Ord` requires a full order relation. In contrast 
@@ -93,9 +93,10 @@ have specific reason to, e.g. it may make sense to define some of them on
 
 ### Index and IndexMut
 
-The `Index` and `IndexMut` traits specify the indexing operation, e.g. `x[y]`
-and `x[y] = z`, respectively (well the latter is a lie, `IndexMut` does not
-actually *assign* the value, but returns an *lvalue* ready for assigning).
+The `Index` and `IndexMut` traits specify the indexing operation with immutable
+and mutable results. The former is read-only, while the latter allows both
+assigning and mutating the value, that is calling a function that takes 
+a `&mut` argument (note that this may, but need not be self).
 
 You will most likely want to implement them with any sort of collection 
 classes. Apart from those, use of those traits would be a footgun anyway.
@@ -104,7 +105,7 @@ classes. Apart from those, use of those traits would be a footgun anyway.
 
 the `Fn*`-traits abstract the act of calling something. The difference between
 those traits is simply how the `self` is taken: `Fn` takes it by reference,
-`FnMut` by mutable reference and `FnOnce` consumes it directly (which is after
+`FnMut` by mutable reference and `FnOnce` consumes it by value (which is after
 all why it can only be called once, as there is no `self` to call afterwards).
 
 Note that this distinction is just about `self`, not any of the other 
@@ -112,28 +113,36 @@ arguments. It is perfectly fine to call a `Fn` with mutably referenced or even
 owned/moved arguments.
 
 The traits are auto-derived for functions and closures and I have yet to see
-a different case where they are useful.
+a different case where they are useful. stebalien also points out that they
+actually *cannot* be implemented in stable Rust.
 
 ### Display and Debug
 
-`Display` and `Debug` are used for formatting values, respectively. The 
-former is meant to produce user-facing output and as such cannot be 
-auto-derived, while the latter will usually produce a JSON-like representation
-of your type and can safely be auto-derived for most types.
+`Display` and `Debug` are used for formatting values. The former is meant to 
+produce user-facing output and as such cannot be auto-derived, while the latter 
+will usually produce a JSON-like representation of your type and can safely be 
+auto-derived for most types.
 
 Should you decide to implement `Debug` manually, you may want to distinguish
 between the normal `{:?}` format specifier and the pretty-printing `{:#?}` one.
-You can do this by querying the `Formatter::flags()` method, which will have
-the `4` bit set (which I found out by 
-[experiment](https://play.rust-lang.org/?gist=f9024a36b7e0e61c1ce7&version=stable)).
-Thus, if `(f.flags() & 4) == 4` is `true`, the caller asked you to produce
+The easiest way to do this is to use the Debug Builder method. The 
+[`Formatter`](http://doc.rust-lang.org/std/fmt/struct.Formatter.html) type has
+some (unfortunately unstable as of yet, but soon to be stabilized) very helpful
+methods, look for `debug_struct(&mut self, &str)`, 
+`debug_tuple(&mut self, &str)`, etc.
+
+Otherwise you can do this by querying the `Formatter::flags()` method, which 
+will have the `4` bit set (which I found out by 
+[experiment](https://play.rust-lang.org/?gist=f9024a36b7e0e61c1ce7&version=stable)). 
+Thus, if `(f.flags() & 4) == 4` is `true`, the caller asked you to produce 
 pretty-printed output. Note that this is expressly *not* a public part of 
-`Debug`/`Formatter`'s interface, so the Rust gods could change this the moment
-I write this.
+`Debug`/`Formatter`'s interface, so the Rust gods could change this the moment 
+I write this. Seriously, if you can help it, use auto-derived Debug or 
+builders.
 
 ### Copy and Clone
 
-Those two traits take care of getting another object from one you already have.
+Those two traits take care of duplicating objects.
 
 `Copy` declares that your type can be safely copied. This means that if you 
 copy the memory a value of your type resides in, you get a new valid value that 
@@ -141,15 +150,30 @@ has no references to data of the original. It can be auto-derived (and requires
 `Clone`, because all `Copy`able types are also `Clone`able by definition). In 
 fact there is no use in implementing it manually anywhere.
 
-There are exactly two reasons not to implement `Copy`: *Either* your type 
-cannot be `Copy`able, because it contains references, *or* your type is so big
-that copying it would be prohibitively expensive (e.g. it could contain an
-`[f64; 65536]`).
+There are exactly three reasons *not* to implement `Copy`: 
+
+1. Your type cannot be `Copy`able, because it contains mutable references
+   or implements `Drop`.
+2. Your type is so big that copying it would be prohibitively expensive (e.g. 
+   it could contain an `[f64; 65536]`)
+3. You actually want *move-semantics* for your type
+
+The third reason is something that should be explained. By default, Rust (like
+C++) has *move* semantics – if you assign a value from `a` to `b`, `a` no
+longer holds the value. However, for types that have a `Copy` implementation,
+the value is actually copied (unless the original value is no longer used, in 
+which case LLVM *may* elide the copy to improve performance). The 
+[docs](http://doc.rust-lang.org/std/marker/trait.Copy.html) for `Copy` go into
+more detail.
 
 `Clone` is a more generic solution that will take care of any references. You
 will probably want to auto-derive it in most cases (as being able to clone
 values is rather useful), and only implement it manually for things like custom
 refcounting schemes, garbage collection or something similar.
+
+In contrast to `Copy` which actually alters assignment semantics, `Clone` is 
+explicit: It defines the `.clone()` method which you have to call manually to 
+clone something.
 
 ### Drop
 
@@ -173,6 +197,16 @@ implementations.
 It is implemented for a great many types in the standard libraries, and also
 used in a surprising number of places. So if your type has a value that can
 be construed as being "default", it is a good idea to implement this trait.
+
+A great thing with `struct`s that have a `Default` implementation, is you can
+instantiate them with only the non-default values like:
+
+```Rust
+let x = Foo { bar: baz, ..Default::default() }
+```
+
+and have all other fourtytwo fields of Foo be filled with default values. How
+cool is that?
 
 ### Error
 
@@ -200,6 +234,8 @@ used, it basically just orders the bits to be hashed.
 Aside: This is also the reason why `HashMap` does not implement `Hash` itself, 
 because two equal hash maps could still store their contents in different 
 order, resulting in different hashes, which would break the hashing contract.
+Even if the items were ordered (see `Ord` above), hashing them would require
+sorting, which would be too expensive to be useful.
 
 Unless you have some very specific constraints regarding equality, you can 
 safely auto-derive `Hash`. Should you choose to implement it manually, beware
@@ -276,10 +312,6 @@ Then there is `FromStr` for any types that can be parsed from a string, which
 is very useful for types that you want read from any textual source, e.g. 
 configuration or user input.
 
-### De- and Encodable
-
-TODO
-
 ### Send and Sync
 
 TODO
@@ -289,10 +321,10 @@ TODO
 Those all have to do with references and borrowing, so I grouped them into one
 section.
 
-The prefix-`*`-operator *dereferences* a reference, producing the value. This
-is directly represented by the `Deref` trait; if we try to use it as an 
-*lvalue* (that is, assign it some value, as in `*a = c`), we invoke the 
-`DerefMut` trait.
+The prefix-`*`-operator *dereferences* a reference, producing the value. This 
+is directly represented by the `Deref` trait; if we require a mutable value 
+(e.g. to assign somehing or call a mutating function), we invoke the `DerefMut` 
+trait.
 
 Note that this does not necessarily mean *consuming* the value – maybe we take 
 a reference to it in the same expression, e.g. `&*x` (which you will likely 
@@ -335,7 +367,7 @@ to borrow a slice of them). As such, they fall into the same category as the
 `From`/`Into` traits – they don't get invoked behind the scenes, but exist to
 make some interfaces more adaptible.
 
-The relation between `Borrow`, `AsRef` and `ToOwned` is as follows:
+The relation between `Borrow`, `AsRef`/`AsMut` and `ToOwned` is as follows:
 
 From↓ / To→|Reference      |Owned
 -----------|---------------|-----
@@ -354,10 +386,14 @@ In fact, unless your type does something interesting with ownership (like
 probably leave `Borrow`, `BorrowMut` and `ToOwned` alone and use a `Cow` if
 you want to abstract over owned/borrowed values.
 
-I have not yet divined in what cases AsRef may be useful unless you count the
-predefined `impl`s that `std` already provides.
+I have not yet divined in what cases `AsRef`/`AsMut` may be useful unless you 
+count the predefined `impl`s that `std` already provides.
 
 ----
+
+Thanks go out to stebalien and carols10cents for (proof)reading a draft
+of this and donating their time, effort and awesome comments! This post
+wouldn't have been half as good without them.
 
 Have I missed, or worse, misunderstood a trait (or a facet of one)? Please 
 write your extension requests on [/r/rust](https://reddit.com/r/rust) or 
