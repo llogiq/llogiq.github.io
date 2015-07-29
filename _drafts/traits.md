@@ -236,16 +236,16 @@ mileage may vary.
 
 I said it before, whoever designed the `From` and `Into` traits is a genius.
 They abstract over *conversions* between types (which are used quite often) and
-allow libary authors to make their libraries much more interoperable, e.g. by
+allow library authors to make their libraries much more interoperable, e.g. by
 using `Into<T>` instead of `T` as arguments.
 
 For obvious reasons, those traits cannot be auto-derived, but writing them
 should be trivial in most cases. If you choose to implement them – and you 
-should wherever you find a worthwile conversion! – implement `From` wherever
+should wherever you find a worthwhile conversion! – implement `From` wherever
 possible, and failing that implement `Into`.
 
 Why? There is a blanket implementation of `Into<U>` for `T` where `U: From<T>`.
-This means if you have implemented `From`, yuo get an `Into` delivered to your
+This means if you have implemented `From`, you get an `Into` delivered to your
 home free of charge.
 
 Why not implement `From` everywhere? The orphan rule unfortunately forbids 
@@ -333,7 +333,7 @@ As for the other traits, they exist mainly to abstract away the act of
 borrowing / referencing for some types (because e.g. with `Vec`s it is possible 
 to borrow a slice of them). As such, they fall into the same category as the
 `From`/`Into` traits – they don't get invoked behind the scenes, but exist to
-make some interfaces more adaptible.
+make some interfaces more adaptable.
 
 The relation between `Borrow`, `AsRef` and `ToOwned` is as follows:
 
