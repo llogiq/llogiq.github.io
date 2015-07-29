@@ -99,7 +99,8 @@ assigning and mutating the value, that is calling a function that takes
 a `&mut` argument (note that this may, but need not be self).
 
 You will most likely want to implement them with any sort of collection 
-classes. Apart from those, use of those traits would be a footgun anyway.
+classes. Apart from those, use of those traits would be a 
+[footgun](http://www.urbandictionary.com/define.php?term=footgun) anyway.
 
 ### Fn, FnMut and FnOnce
 
@@ -312,10 +313,6 @@ Then there is `FromStr` for any types that can be parsed from a string, which
 is very useful for types that you want read from any textual source, e.g. 
 configuration or user input.
 
-### Send and Sync
-
-TODO
-
 ### Deref(Mut), AsRef/AsMut, Borrow(Mut) and ToOwned
 
 Those all have to do with references and borrowing, so I grouped them into one
@@ -388,6 +385,44 @@ you want to abstract over owned/borrowed values.
 
 I have not yet divined in what cases `AsRef`/`AsMut` may be useful unless you 
 count the predefined `impl`s that `std` already provides.
+
+### Send and Sync
+
+Those two traits testify that the types transfer trouble-free 'tween threads.
+
+You will never need to implement them – in fact Rust will do it for you by
+default unless you explicitly opt out (or your type contains a non-threadsafe 
+part). You can opt out by saying:
+
+```Rust
+impl !Send for MyType {} // this type cannot be sent to other threads
+impl !Sync for MyType {} // nor can it be used by two of them
+```
+
+`Send` says that you can *move* your type between thread barriers, while `Sync`
+allows *sharing* a value between threads. Let's take a step back and look at
+what that means, probably best with an example.
+
+Say we have some problem that we intend to solve by calculating some values in
+parallel (because concurrency is the way, baby!). For that we need some
+immutable data that will be the same in all threads – we want *shared* data.
+This data needs to be `Sync`able.
+
+Next, we want to give some part of the problem to each thread. To do this, we
+need to `Send` it to them. But wait! How do we get the shared data to each
+thread? Easy: We `Send` a reference to it – this works because of the following
+blanket definition in the standard library:
+
+```Rust
+impl<'a, T> Send for &'a T where T: Sync + ?Sized
+```
+
+This means if something can be `Sync`ed, you can `Send` a reference to it 
+between threads. Cool.
+
+For a more thorough treatment, see Manish Goregaokar's 
+[How Rust Achieves Thread Safety](http://manishearth.github.io/blog/2015/05/30/how-rust-achieves-thread-safety/)
+or the [`Sync` docs](http://doc.rust-lang.org/std/marker/trait.Sync.html).
 
 ----
 
