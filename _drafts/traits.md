@@ -19,26 +19,31 @@ surprising:
 
 ### (Partial)–Eq/Ord
 
-`PartialEq` defines partial equality, `Eq` is used as a marker to declare that 
-`PartialEq` is actually reflexive (that means `a == a` for all `a` of the 
-respective type). It is useful to implement them, for a good number of `std`'s 
-types use them as trait bounds for one thing or another, e.g. `Vec`'s `dedup()` 
-function. Auto-deriving PartialEq will make the `eq`-method check equality of 
-all parts of your type (e.g. for `struct`s, all parts will be checked, while 
-for `enum` types, the variant along with all its contents is checked).
+[`PartialEq`](http://doc.rust-lang.org/std/cmp/trait.PartialEq.html) defines 
+partial equality, [`Eq`](http://doc.rust-lang.org/std/cmp/trait.Eq.html) is 
+used as a marker to declare that `PartialEq` is actually reflexive (that means 
+`a == a` for all `a` of the respective type). It is useful to implement them, 
+for a good number of `std`'s types use them as trait bounds for one thing or 
+another, e.g. `Vec`'s `dedup()` function. Auto-deriving PartialEq will make the 
+`eq`-method check equality of all parts of your type (e.g. for `struct`s, all 
+parts will be checked, while for `enum` types, the variant along with all its 
+contents is checked).
 
 Since `Eq` is basically empty (apart from a pre-defined marker method that is 
 used by the auto-deriving logic to ensure that it actually worked and probably 
 shouldn't be used anywhere else), auto-deriving has no chance of doing 
 something interesting, so it won't.
 
-`PartialOrd` defines a partial Order, and extends the equality of `PartialEq` 
-by the `Ordering` relation. `Ord` requires a full order relation. In contrast 
-to `PartialEq`/`Eq`, those two traits actually have a different interface (the 
-`partial_cmp(…)` method returns `Option<Ordering>`, while `Ord`'s `cmp(…)` 
-returns the `Ordering` directly), and their only relation is that if you wish 
-to implement `Ord`, you have to implement `PartialOrd` as well, for the latter 
-is a trait bound for the former. Auto-deriving both will order structs 
+[`PartialOrd`](http://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) defines 
+a partial Order, and extends the equality of `PartialEq` by the 
+[`Ordering`](http://doc.rust-lang.org/std/cmp/enum.Ordering.html) relation. 
+[`Ord`](http://doc.rust-lang.org/std/cmp/trait.Ord.html) requires a full order 
+relation. In contrast to `PartialEq`/`Eq`, those two traits actually have a 
+different interface (the `partial_cmp(…)` method returns `Option<Ordering>`, 
+while `Ord`'s `cmp(…)` returns the `Ordering` directly), and their only 
+relation is that if you wish to implement `Ord`, you have to implement 
+`PartialOrd` as well, for the latter is a trait bound for the former. 
+Auto-deriving both will order structs 
 [lexicographically](https://en.wikipedia.org/wiki/Lexicographical_order), enums 
 by the appearance of the variant in the definition (unless you define values 
 for the variants).
@@ -52,24 +57,26 @@ The following table shows the relation between arithmetic operators and traits:
 
 Operator|Trait
 --------|-----
-`a + b` |`Add`
-`a - b` |`Sub`
-`-a`    |`Neg`
-`a * b` |`Mul`
-`a / b` |`Div`
-`a % b` |`Rem`
+`a + b` |[`Add`](http://doc.rust-lang.org/std/ops/trait.Add.html)
+`a - b` |[`Sub`](http://doc.rust-lang.org/std/ops/trait.Sub.html)
+`-a`    |[`Neg`](http://doc.rust-lang.org/std/ops/trait.Neg.html)
+`a * b` |[`Mul`](http://doc.rust-lang.org/std/ops/trait.Mul.html)
+`a / b` |[`Div`](http://doc.rust-lang.org/std/ops/trait.Div.html)
+`a % b` |[`Rem`](http://doc.rust-lang.org/std/ops/trait.Rem.html)
 
-Apart from `Rem`, which is an abbreviation for *Remainder*, also  known as 
-`mod` in some other languages, those are pretty obvious. The binary operator
-traits all have a `RHS` (=right-hand-side) generic type bound which defaults to 
-`Self`, as well as an associated `Output` type that the implementation has to
-declare.
+Apart from [`Rem`](http://doc.rust-lang.org/std/ops/trait.Rem.html), which is 
+an abbreviation for *Remainder*, also  known as `mod` in some other languages, 
+those are pretty obvious. The binary operator traits all have a `RHS` 
+(=right-hand-side) generic type bound which defaults to `Self`, as well as an 
+associated `Output` type that the implementation has to declare.
 
 This means you can implement e.g. addition of a `Foo` and a `Bar` to return a 
-`Baz` if you so desire. Note that while the operations do not constrain their
-semantics in any way, it is strongly advisable not to make them mean something
-entirely different than their arithmetical counterparts shown above, lest your
-implementation become a footgun for other developers.
+`Baz` if you so desire. Note that while the operations do not constrain their 
+semantics in any way, it is strongly advisable not to make them mean something 
+entirely different than their arithmetical counterparts shown above, lest your 
+implementation become a 
+[footgun](http://www.urbandictionary.com/define.php?term=footgun) for other 
+developers.
 
 ### Bit-Operators
 
@@ -80,23 +87,26 @@ isn't possible in Rust.
 
 Operator|Trait
 --------|-----
-`!a`    |`Not`
-`a & b` |`BitAnd`
-`a | b` |`BitOr`
-`a ^ b` |`BitXor`
-`a << b`|`Shl`
-`a >> b`|`Shr`
+`!a`    |[`Not`](http://doc.rust-lang.org/std/ops/trait.Not.html)
+`a & b` |[`BitAnd`](http://doc.rust-lang.org/std/ops/trait.BitAnd.html)
+`a | b` |[`BitOr`](http://doc.rust-lang.org/std/ops/trait.BitOr.html)
+`a ^ b` |[`BitXor`](http://doc.rust-lang.org/std/ops/trait.BitXor.html)
+`a << b`|[`Shl`](http://doc.rust-lang.org/std/ops/trait.Shl.html)
+`a >> b`|[`Shr`](http://doc.rust-lang.org/std/ops/trait.Shr.html)
 
 Like with all operators, be wary of implementing those for your type unless you 
 have specific reason to, e.g. it may make sense to define some of them on 
-`BitSet`s.
+`BitSet`s (which by the way are no longer part of the standard library as of 
+Rust 1.3.0).
 
 ### Index and IndexMut
 
-The `Index` and `IndexMut` traits specify the indexing operation with immutable
-and mutable results. The former is read-only, while the latter allows both
-assigning and mutating the value, that is calling a function that takes 
-a `&mut` argument (note that this may, but need not be self).
+The [`Index`](http://doc.rust-lang.org/std/ops/trait.Index.html) and 
+[`IndexMut`](http://doc.rust-lang.org/std/ops/trait.IndexMut.html) traits 
+specify the indexing operation with immutable and mutable results. The former 
+is read-only, while the latter allows both assigning and mutating the value, 
+that is calling a function that takes a `&mut` argument (note that this may, 
+but need not be self).
 
 You will most likely want to implement them with any sort of collection 
 classes. Apart from those, use of those traits would be a 
@@ -104,10 +114,13 @@ classes. Apart from those, use of those traits would be a
 
 ### Fn, FnMut and FnOnce
 
-the `Fn*`-traits abstract the act of calling something. The difference between
-those traits is simply how the `self` is taken: `Fn` takes it by reference,
-`FnMut` by mutable reference and `FnOnce` consumes it by value (which is after
-all why it can only be called once, as there is no `self` to call afterwards).
+the `Fn*`-traits abstract the act of calling something. The difference between 
+those traits is simply how the `self` is taken: 
+[`Fn`](http://doc.rust-lang.org/std/ops/trait.Fn.html) takes it by reference, 
+[`FnMut`](http://doc.rust-lang.org/std/ops/trait.FnMut.html) by mutable 
+reference and [`FnOnce`](http://doc.rust-lang.org/std/ops/trait.FnOnce.html) 
+consumes it by value (which is after all why it can only be called once, as 
+there is no `self` to call afterwards).
 
 Note that this distinction is just about `self`, not any of the other 
 arguments. It is perfectly fine to call a `Fn` with mutably referenced or even
@@ -119,10 +132,11 @@ actually *cannot* be implemented in stable Rust.
 
 ### Display and Debug
 
-`Display` and `Debug` are used for formatting values. The former is meant to 
-produce user-facing output and as such cannot be auto-derived, while the latter 
-will usually produce a JSON-like representation of your type and can safely be 
-auto-derived for most types.
+[`Display`](http://doc.rust-lang.org/std/fmt/trait.Display.html) and 
+[`Debug`](http://doc.rust-lang.org/std/fmt/trait.Debug.html) are used for 
+formatting values. The former is meant to produce user-facing output and as 
+such cannot be auto-derived, while the latter will usually produce a JSON-like 
+representation of your type and can safely be auto-derived for most types.
 
 Should you decide to implement `Debug` manually, you may want to distinguish
 between the normal `{:?}` format specifier and the pretty-printing `{:#?}` one.
@@ -138,18 +152,21 @@ will have the `4` bit set (which I found out by
 Thus, if `(f.flags() & 4) == 4` is `true`, the caller asked you to produce 
 pretty-printed output. Note that this is expressly *not* a public part of 
 `Debug`/`Formatter`'s interface, so the Rust gods could change this the moment 
-I write this. Seriously, if you can help it, use auto-derived Debug or 
-builders.
+I write this. 
+
+Seriously, if you can help it, use auto-derived Debug or builders.
 
 ### Copy and Clone
 
 Those two traits take care of duplicating objects.
 
-`Copy` declares that your type can be safely copied. This means that if you 
-copy the memory a value of your type resides in, you get a new valid value that 
-has no references to data of the original. It can be auto-derived (and requires 
-`Clone`, because all `Copy`able types are also `Clone`able by definition). In 
-fact there is no use in implementing it manually anywhere.
+[`Copy`](http://doc.rust-lang.org/std/marker/trait.Copy.html) declares that 
+your type can be safely copied. This means that if you copy the memory a value 
+of your type resides in, you get a new valid value that has no references to 
+data of the original. It can be auto-derived (and requires 
+[`Clone`](http://doc.rust-lang.org/std/clone/trait.Clone.html), because all 
+`Copy`able types are also `Clone`able by definition). In fact there is no use 
+in implementing it manually anywhere.
 
 There are exactly three reasons *not* to implement `Copy`: 
 
@@ -167,10 +184,11 @@ which case LLVM *may* elide the copy to improve performance). The
 [docs](http://doc.rust-lang.org/std/marker/trait.Copy.html) for `Copy` go into
 more detail.
 
-`Clone` is a more generic solution that will take care of any references. You
-will probably want to auto-derive it in most cases (as being able to clone
-values is rather useful), and only implement it manually for things like custom
-refcounting schemes, garbage collection or something similar.
+[`Clone`](http://doc.rust-lang.org/std/clone/trait.Clone.html) is a more 
+generic solution that will take care of any references. You will probably want 
+to auto-derive it in most cases (as being able to clone values is rather 
+useful), and only implement it manually for things like custom refcounting 
+schemes, garbage collection or something similar.
 
 In contrast to `Copy` which actually alters assignment semantics, `Clone` is 
 explicit: It defines the `.clone()` method which you have to call manually to 
@@ -178,11 +196,12 @@ clone something.
 
 ### Drop
 
-The `Drop` trait is about giving back resources when things go out of scope.
-Much has been written about it, and how you shouldn't rely on it being called
-should something go wrong. Still, it's very nice especially for wrapping FFI
-constructs that have to somehow be reclaimed later, also it's used on files,
-sockets, database handles and the kitchen sink.
+The [`Drop`](http://doc.rust-lang.org/std/ops/trait.Drop.html) trait is about 
+giving back resources when things go out of scope. Much has been written about 
+it, and how you shouldn't rely on it being called should something go wrong. 
+Still, it's very nice especially for wrapping FFI constructs that have to 
+somehow be reclaimed later, also it's used on files, sockets, database handles 
+and the kitchen sink.
 
 Unless you have an instance where this applies, you should refrain from 
 implementing `Drop` at all – your values will be `Drop`ped correctly even if 
@@ -191,9 +210,9 @@ when a specific value has been dropped.
 
 ### Default
 
-`Default` is a trait to declare a default value for your type. It can be
-auto-derived, but *only* for `struct`s whose members all have a `Default` 
-implementations.
+[`Default`](http://doc.rust-lang.org/std/default/trait.Default.html) is a trait 
+to declare a default value for your type. It can be auto-derived, but *only* 
+for `struct`s whose members all have a `Default` implementations.
 
 It is implemented for a great many types in the standard libraries, and also
 used in a surprising number of places. So if your type has a value that can
@@ -211,15 +230,20 @@ cool is that?
 
 ### Error
 
-`Error` is a base trait for all values representing an error in Rust. For those
-coming from Java, it is akin to `Throwable` – and behaves similarly (apart from
-the fact that we neither `catch` nor `throw` them).
+[`Error`](http://doc.rust-lang.org/std/error/trait.Error.html) is a base trait 
+for all values representing an error in Rust. For those coming from Java, it is 
+akin to `Throwable` – and behaves similarly (apart from the fact that we 
+neither `catch` nor `throw` them).
 
-It is a *very* good idea to implement `Error` for any type you intend to use in
-the latter part of `Result`. Doing so will make your functions *much* more
-composable, especially when you can simply `Box` the Error as a trait object.
+It is a *very* good idea to implement `Error` for any type you intend to use in 
+the latter part of 
+[`Result`](http://doc.rust-lang.org/std/result/enum.Result.html). Doing so will 
+make your functions *much* more composable, especially when you can simply 
+[`Box`](http://doc.rust-lang.org/std/boxed/struct.Box.html) the Error as a 
+trait object.
 
-Look at the [Using `try!`](http://doc.rust-lang.org/nightly/book/error-handling.html#using-try!)
+Look at the 
+[Using `try!`](http://doc.rust-lang.org/nightly/book/error-handling.html#using-try!) 
 section of the Rust book for further information.
 
 ### Hash
@@ -228,15 +252,19 @@ Hashing is the process of reducing a bag of data into a single value that still
 distinguishes different data items while returning the same value for equal 
 items without requiring as much bits as the processed data.
 
-In Rust, the `Hash` trait denotes values to which this process can be applied.
-Note that this trait does not relate any information about the hash *algorithm*
-used, it basically just orders the bits to be hashed.
+In Rust, the [`Hash`](http://doc.rust-lang.org/std/hash/trait.Hash.html) trait 
+denotes values to which this process can be applied. Note that this trait does 
+not relate any information about the hash *algorithm* used (this is 
+encapsulated within the 
+[`Hasher`](http://doc.rust-lang.org/std/hash/trait.Hasher.html) trait), it 
+basically just orders the bits to be hashed.
 
-Aside: This is also the reason why `HashMap` does not implement `Hash` itself, 
-because two equal hash maps could still store their contents in different 
-order, resulting in different hashes, which would break the hashing contract.
-Even if the items were ordered (see `Ord` above), hashing them would require
-sorting, which would be too expensive to be useful.
+Aside: This is also the reason why 
+[`HashMap`](http://doc.rust-lang.org/std/collections/struct.HashMap.html) does 
+not implement `Hash` itself, because two equal hash maps could still store 
+their contents in different order, resulting in different hashes, which would 
+break the hashing contract. Even if the items were ordered (see `Ord` above), 
+hashing them would require sorting, which would be too expensive to be useful.
 
 Unless you have some very specific constraints regarding equality, you can 
 safely auto-derive `Hash`. Should you choose to implement it manually, beware
@@ -245,10 +273,12 @@ not to break its contract.
 ### Iterator and Friends
 
 Rust's `for` loops work can iterate over everything that implements 
-`IntoIterator`. Yes, that includes `Iterator` itself. Apart from that, the
-`Iterator` trait has a lot of cool methods for working with the iterated
-values, like `filter`, `map`, `enumerate`, `fold`, `any`, `all`, `sum`, `min`
-and much more.
+[`IntoIterator`](http://doc.rust-lang.org/std/iter/trait.IntoIterator.html). 
+Yes, that includes 
+[`Iterator`](http://doc.rust-lang.org/std/iter/trait.Iterator.html) itself. 
+Apart from that, the `Iterator` trait has a lot of cool methods for working 
+with the iterated values, like `filter`, `map`, `enumerate`, `fold`, `any`, 
+`all`, `sum`, `min` and much more.
 
 Did I tell you I love iterators? If your type contains more than one value of
 something, and it makes sense to do the same thing to all of them, consider
@@ -271,10 +301,12 @@ mileage may vary.
 
 ### From, Into and Various Variations
 
-I said it before, whoever designed the `From` and `Into` traits is a genius.
-They abstract over *conversions* between types (which are used quite often) and
-allow library authors to make their libraries much more interoperable, e.g. by
-using `Into<T>` instead of `T` as arguments.
+I said it before, whoever designed the 
+[`From`](http://doc.rust-lang.org/std/convert/trait.From.html) and 
+[`Into`](http://doc.rust-lang.org/std/convert/trait.Into.html) traits is a 
+genius. They abstract over *conversions* between types (which are used quite 
+often) and allow library authors to make their libraries much more 
+interoperable, e.g. by using `Into<T>` instead of `T` as arguments.
 
 For obvious reasons, those traits cannot be auto-derived, but writing them
 should be trivial in most cases. If you choose to implement them – and you 
@@ -287,8 +319,9 @@ home free of charge.
 
 Why not implement `From` everywhere? The orphan rule unfortunately forbids 
 implementing `From` for types not defined in other crates. For example, I have
-an `Optioned<T>` type, that I may want to convert into an `Option<T>`. Trying
-to implement `From`:
+an `Optioned<T>` type, that I may want to convert into an 
+[`Option<T>`](http://doc.rust-lang.org/std/option/enum.Option.html). Trying to 
+implement `From`:
 
 ```rust
 impl<T: Noned + Copy> From<Optioned<T>> for Option<T> {
@@ -304,14 +337,18 @@ be implemented for a type parameter `[E0210]`
 Note that you can implement `From` and `Into` with multiple classes, you can
 have a `From<Foo>` and a `From<Bar>` for the same type.
 
-There are a good number of traits starting with `Into` – `IntoIterator`, which
-is stable and which we already have discussed above, just being one of them.
-There also is `FromIterator`, which does the reverse, namely constructing a
-value of your type from an iterator of items.
+There are a good number of traits starting with `Into` – `IntoIterator`, which 
+is stable and which we already have discussed above, just being one of them. 
+There also is 
+[`FromIterator`](http://doc.rust-lang.org/std/iter/trait.FromIterator.html), 
+which does the reverse, namely constructing a value of your type from an 
+iterator of items.
 
-Then there is `FromStr` for any types that can be parsed from a string, which 
-is very useful for types that you want read from any textual source, e.g. 
-configuration or user input.
+Then there is [`FromStr`](http://doc.rust-lang.org/std/str/trait.FromStr.html) 
+for any types that can be parsed from a string, which is very useful for types 
+that you want read from any textual source, e.g. configuration or user input. 
+Note that its interface differs from `From<&str>` in that it returns a 
+`Result`, and thus allows to relate parsing errors to the caller.
 
 ### Deref(Mut), AsRef/AsMut, Borrow(Mut) and ToOwned
 
@@ -319,9 +356,11 @@ Those all have to do with references and borrowing, so I grouped them into one
 section.
 
 The prefix-`*`-operator *dereferences* a reference, producing the value. This 
-is directly represented by the `Deref` trait; if we require a mutable value 
-(e.g. to assign somehing or call a mutating function), we invoke the `DerefMut` 
-trait.
+is directly represented by the 
+[`Deref`](http://doc.rust-lang.org/std/ops/trait.Deref.html) trait; if we 
+require a mutable value (e.g. to assign somehing or call a mutating function), 
+we invoke the 
+[`DerefMut`](http://doc.rust-lang.org/std/ops/trait.DerefMut.html) trait.
 
 Note that this does not necessarily mean *consuming* the value – maybe we take 
 a reference to it in the same expression, e.g. `&*x` (which you will likely 
@@ -346,11 +385,13 @@ which is the default with Rust's lifetime elision.
 in optional to have `OptionBool` dereference to a const `Option<bool>`. This 
 works because the result is guaranteed to outlive our value, because it is 
 alive for the rest of the program. This is only useful if you have a finite 
-value domain. Even then, it is probably clearer to use `Into` instead of 
+value domain. Even then, it is probably clearer to use 
+[`Into`](http://doc.rust-lang.org/std/convert/trait.Into.html) instead of 
 `Deref`. I doubt that we will see this too often.
 
-`DerefMut` only has the former strategy. Its usefulness is limited to 
-implementing special kinds of pointers.
+[`DerefMut`](http://doc.rust-lang.org/std/ops/trait.DerefMut.html) only has the 
+former strategy. Its usefulness is limited to implementing special kinds of 
+pointers.
 
 To see why no other implementation can be possible, let's make a thought
 experiment: If we had a return value that is neither static, nor bound to the
@@ -364,7 +405,11 @@ to borrow a slice of them). As such, they fall into the same category as the
 `From`/`Into` traits – they don't get invoked behind the scenes, but exist to
 make some interfaces more adaptable.
 
-The relation between `Borrow`, `AsRef`/`AsMut` and `ToOwned` is as follows:
+The relation between 
+[`Borrow`](http://doc.rust-lang.org/std/borrow/trait.Borrow.html), 
+[`AsRef`](http://doc.rust-lang.org/std/convert/trait.AsRef.html)/[`AsMut`](http://doc.rust-lang.org/std/convert/trait.AsMut.html) 
+and [`ToOwned`](http://doc.rust-lang.org/std/borrow/trait.ToOwned.html) is as 
+follows:
 
 From↓ / To→|Reference      |Owned
 -----------|---------------|-----
@@ -399,9 +444,11 @@ impl !Send for MyType {} // this type cannot be sent to other threads
 impl !Sync for MyType {} // nor can it be used by two of them
 ```
 
-`Send` says that you can *move* your type between thread barriers, while `Sync`
-allows *sharing* a value between threads. Let's take a step back and look at
-what that means, probably best with an example.
+[`Send`](http://doc.rust-lang.org/std/marker/trait.Send.html) says that you can 
+*move* your type between thread barriers, while 
+[`Sync`](http://doc.rust-lang.org/std/marker/trait.Send.html) allows *sharing* 
+a value between threads. Let's take a step back and look at what that means, 
+probably best with an example.
 
 Say we have some problem that we intend to solve by calculating some values in
 parallel (because concurrency is the way, baby!). For that we need some
