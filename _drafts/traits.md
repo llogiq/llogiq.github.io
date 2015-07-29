@@ -11,8 +11,8 @@ Rust uses traits for a good number of things, from the quite obvious operator
 overloading to the very subtle like `Send` and `Sync`. Some traits can be
 *auto-derived* (which means you can just write 
 `#[derive(Copy, Clone, PartialEq, Eq, Debug, Default, Hash, …)]` and get a
-magically appearing implementation that usually does the right thing (with
-Send and Sync, you actually have to actively opt out of implementing them).
+magically appearing implementation that usually does the right thing. with
+Send and Sync, you actually have to actively opt out of implementing them.
 
 So I'll try to go from the obvious and specific to the nebulous and (perhaps) 
 surprising:
@@ -20,14 +20,20 @@ surprising:
 ### (Partial)–Eq/Ord
 
 [`PartialEq`](http://doc.rust-lang.org/std/cmp/trait.PartialEq.html) defines 
-partial equality, [`Eq`](http://doc.rust-lang.org/std/cmp/trait.Eq.html) is 
-used as a marker to declare that `PartialEq` is actually reflexive (that means 
-`a == a` for all `a` of the respective type). It is useful to implement them, 
-for a good number of `std`'s types use them as trait bounds for one thing or 
-another, e.g. `Vec`'s `dedup()` function. Auto-deriving PartialEq will make the 
-`eq`-method check equality of all parts of your type (e.g. for `struct`s, all 
-parts will be checked, while for `enum` types, the variant along with all its 
-contents is checked).
+partial equality. This means the relation is symmetric (`a == b` → `b == a` for
+all `a` and `b` of the respective type) and transitive (`a == b` ∧ `b == c` → 
+`a == c` for all `a`, `b` and `c` of the type).
+
+[`Eq`](http://doc.rust-lang.org/std/cmp/trait.Eq.html) is used as a marker to 
+declare that `PartialEq` is also reflexive (`a == a` for all `a` of the 
+respective type). Counter-Example: The `f32` and `f64` types implement 
+`PartialEq`, but not `Eq`, because the `NAN` value does not equal itself.
+
+It is useful to implement both traits, for a good number of `std`'s types use 
+them as trait bounds for one thing or another, e.g. `Vec`'s `dedup()` function. 
+Auto-deriving `PartialEq` will make the `eq`-method check equality of all parts 
+of your type (e.g. for `struct`s, all parts will be checked, while for `enum` 
+types, the variant along with all its contents is checked).
 
 Since `Eq` is basically empty (apart from a pre-defined marker method that is 
 used by the auto-deriving logic to ensure that it actually worked and probably 
@@ -35,8 +41,9 @@ shouldn't be used anywhere else), auto-deriving has no chance of doing
 something interesting, so it won't.
 
 [`PartialOrd`](http://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) defines 
-a partial Order, and extends the equality of `PartialEq` by the 
-[`Ordering`](http://doc.rust-lang.org/std/cmp/enum.Ordering.html) relation. 
+a partial order, and extends the equality of `PartialEq` by the 
+[`Ordering`](http://doc.rust-lang.org/std/cmp/enum.Ordering.html) relation.
+ 
 [`Ord`](http://doc.rust-lang.org/std/cmp/trait.Ord.html) requires a full order 
 relation. In contrast to `PartialEq`/`Eq`, those two traits actually have a 
 different interface (the `partial_cmp(…)` method returns `Option<Ordering>`, 
@@ -78,12 +85,17 @@ implementation become a
 [footgun](http://www.urbandictionary.com/define.php?term=footgun) for other 
 developers.
 
+Aside: Just before Rust 1.0.0, someone actually implemented `Add` for `String` 
+to mean concatenation. It took yours truly (among others) a heartrending plea 
+to the Rust gods until they mended this particular error.
+
 ### Bit-Operators
 
 The following operators are defined to be used bitwise. Note that unlike the 
-`!`-Operator, the short-circuiting `&&` and `||` cannot be overloaded – because
+`!`-Operator, the short-circuiting `&&` and `||` cannot be overloaded – because 
 this would require them to avoid eagerly evaluating their arguments, which 
-isn't possible in Rust.
+isn't possible in Rust – and even if it were possible, e.g. using closures as a 
+workaround, it would just be confusing other developers.
 
 Operator|Trait
 --------|-----
@@ -473,9 +485,9 @@ or the [`Sync` docs](http://doc.rust-lang.org/std/marker/trait.Sync.html).
 
 ----
 
-Thanks go out to stebalien and carols10cents for (proof)reading a draft
-of this and donating their time, effort and awesome comments! This post
-wouldn't have been half as good without them.
+Thanks go to stebalien and carols10cents for (proof)reading a draft of this and 
+donating their time, effort and awesome comments! This post wouldn't have been 
+half as good without them.
 
 Have I missed, or worse, misunderstood a trait (or a facet of one)? Please 
 write your extension requests on [/r/rust](https://reddit.com/r/rust) or 
