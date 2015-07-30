@@ -176,9 +176,16 @@ will have the `4` bit set (which I found out by
 Thus, if `(f.flags() & 4) == 4` is `true`, the caller asked you to produce 
 pretty-printed output. Note that this is expressly *not* a public part of 
 `Debug`/`Formatter`'s interface, so the Rust gods could change this the moment 
-I write this. 
+I write this.
 
-Seriously, if you can help it, use auto-derived Debug or builders.
+Seriously, if you can help it, use auto-derived `Debug` or debug builders.
+
+Aside: It's not very common, but there may be cyclic object graphs in Rust, 
+which would send the debug logic into infinite recursion (well, usually the 
+application will crash with a stack overflow). In most cases, this is 
+acceptable, because cycles *are* quite uncommon. In case you suspect your 
+type to form cycles more often than average, you may want to do something 
+about it.
 
 ### Copy and Clone
 
@@ -198,13 +205,13 @@ There are exactly three reasons *not* to implement `Copy`:
    or implements `Drop`.
 2. Your type is so big that copying it would be prohibitively expensive (e.g. 
    it could contain an `[f64; 65536]`)
-3. You actually want *move-semantics* for your type
+3. You actually want *move semantics* for your type
 
-The third reason is something that should be explained. By default, Rust (like
-C++) has *move* semantics – if you assign a value from `a` to `b`, `a` no
-longer holds the value. However, for types that have a `Copy` implementation,
-the value is actually copied (unless the original value is no longer used, in 
-which case LLVM *may* elide the copy to improve performance). The 
+The third reason should be explained further. By default, Rust (like C++) has
+*move* semantics – if you assign a value from `a` to `b`, `a` no longer holds 
+the value. However, for types that have a `Copy` implementation, the value is 
+actually copied (unless the original value is no longer used, in which case 
+LLVM *may* elide the copy to improve performance). The 
 [docs](http://doc.rust-lang.org/std/marker/trait.Copy.html) for `Copy` go into
 more detail.
 
@@ -228,8 +235,8 @@ somehow be reclaimed later, also it's used on files, sockets, database handles
 and the kitchen sink.
 
 Unless you have an instance where this applies, you should refrain from 
-implementing `Drop` at all – your values will be `Drop`ped correctly even if 
-you don't. A (temporary) exception is to insert some tracing output to find out 
+implementing `Drop` at all – your values will be `Drop`ped correctly by default
+anyway. A (temporary) exception is to insert some tracing output to find out
 when a specific value has been dropped.
 
 ### Default
@@ -250,7 +257,8 @@ let x = Foo { bar: baz, ..Default::default() }
 ```
 
 and have all other fourtytwo fields of Foo be filled with default values. How
-cool is that?
+cool is that? Honestly, the only single reason not to have `Default` is if 
+your type has no single value that works as a default.
 
 ### Error
 
@@ -335,12 +343,12 @@ mileage may vary.
 I said it before, whoever designed the 
 [`From`](http://doc.rust-lang.org/std/convert/trait.From.html) and 
 [`Into`](http://doc.rust-lang.org/std/convert/trait.Into.html) traits is a 
-genius. They abstract over *conversions* between types (which are used quite 
-often) and allow library authors to make their libraries much more 
+genius. They abstract over *conversions* between types (which are used quite
+often) and allow library authors to make their libraries much more
 interoperable, e.g. by using `Into<T>` instead of `T` as arguments.
 
 For obvious reasons, those traits cannot be auto-derived, but writing them
-should be trivial in most cases. If you choose to implement them – and you 
+should be trivial in most cases. If you choose to implement them – and you
 should wherever you find a worthwhile conversion! – implement `From` wherever
 possible, and failing that implement `Into`.
 
@@ -348,9 +356,9 @@ Why? There is a blanket implementation of `Into<U>` for `T` where `U: From<T>`.
 This means if you have implemented `From`, you get an `Into` delivered to your
 home free of charge.
 
-Why not implement `From` everywhere? The orphan rule unfortunately forbids 
+Why not implement `From` everywhere? The orphan rule unfortunately forbids
 implementing `From` for types not defined in other crates. For example, I have
-an `Optioned<T>` type, that I may want to convert into an 
+an `Optioned<T>` type, that I may want to convert into an
 [`Option<T>`](http://doc.rust-lang.org/std/option/enum.Option.html). Trying to 
 implement `From`:
 
@@ -368,17 +376,17 @@ be implemented for a type parameter `[E0210]`
 Note that you can implement `From` and `Into` with multiple classes, you can
 have a `From<Foo>` and a `From<Bar>` for the same type.
 
-There are a good number of traits starting with `Into` – `IntoIterator`, which 
-is stable and which we already have discussed above, just being one of them. 
-There also is 
-[`FromIterator`](http://doc.rust-lang.org/std/iter/trait.FromIterator.html), 
-which does the reverse, namely constructing a value of your type from an 
+There are a good number of traits starting with `Into` – `IntoIterator`, which
+is stable and which we already have discussed above, just being one of them.
+There also is
+[`FromIterator`](http://doc.rust-lang.org/std/iter/trait.FromIterator.html),
+which does the reverse, namely constructing a value of your type from an
 iterator of items.
 
-Then there is [`FromStr`](http://doc.rust-lang.org/std/str/trait.FromStr.html) 
-for any types that can be parsed from a string, which is very useful for types 
-that you want read from any textual source, e.g. configuration or user input. 
-Note that its interface differs from `From<&str>` in that it returns a 
+Then there is [`FromStr`](http://doc.rust-lang.org/std/str/trait.FromStr.html)
+for any types that can be parsed from a string, which is very useful for types
+that you want read from any textual source, e.g. configuration or user input.
+Note that its interface differs from `From<&str>` in that it returns a
 `Result`, and thus allows to relate parsing errors to the caller.
 
 ### Deref(Mut), AsRef/AsMut, Borrow(Mut) and ToOwned
@@ -387,10 +395,10 @@ Those all have to do with references and borrowing, so I grouped them into one
 section.
 
 The prefix-`*`-operator *dereferences* a reference, producing the value. This 
-is directly represented by the 
-[`Deref`](http://doc.rust-lang.org/std/ops/trait.Deref.html) trait; if we 
+is directly represented by the
+[`Deref`](http://doc.rust-lang.org/std/ops/trait.Deref.html) trait; if we
 require a mutable value (e.g. to assign somehing or call a mutating function), 
-we invoke the 
+we invoke the
 [`DerefMut`](http://doc.rust-lang.org/std/ops/trait.DerefMut.html) trait.
 
 Note that this does not necessarily mean *consuming* the value – maybe we take 
@@ -405,23 +413,23 @@ where `Target` is an associated type of the trait. The lifetime bound on the
 result requires that the returned value live as long as self. This requirement
 restricts the possible implementation strategies to two options:
 
-1. Dereference to a value *within* your type, e.g. if you have a 
+1. Dereference to a value *within* your type, e.g. if you have a
 `struct Foo { b: Bar }`, you could dereference to `Bar`. Note that this doesn't
 mean you *should* do it, but it's possible and may in some cases be useful.
 This obviously works as long as the part's lifetime is the one of the whole,
 which is the default with Rust's lifetime elision.
 
-2. Dereference to a constant `'static` value – I 
+2. Dereference to a constant `'static` value – I
 [do this](https://github.com/llogiq/optional/blob/db2b4c742e41f4607e64b9e855ae4638d839e828/src/lib.rs#L76) 
-in optional to have `OptionBool` dereference to a const `Option<bool>`. This 
-works because the result is guaranteed to outlive our value, because it is 
-alive for the rest of the program. This is only useful if you have a finite 
-value domain. Even then, it is probably clearer to use 
-[`Into`](http://doc.rust-lang.org/std/convert/trait.Into.html) instead of 
+in optional to have `OptionBool` dereference to a const `Option<bool>`. This
+works because the result is guaranteed to outlive our value, because it is
+alive for the rest of the program. This is only useful if you have a finite
+value domain. Even then, it is probably clearer to use
+[`Into`](http://doc.rust-lang.org/std/convert/trait.Into.html) instead of
 `Deref`. I doubt that we will see this too often.
 
-[`DerefMut`](http://doc.rust-lang.org/std/ops/trait.DerefMut.html) only has the 
-former strategy. Its usefulness is limited to implementing special kinds of 
+[`DerefMut`](http://doc.rust-lang.org/std/ops/trait.DerefMut.html) only has the
+former strategy. Its usefulness is limited to implementing special kinds of
 pointers.
 
 To see why no other implementation can be possible, let's make a thought
@@ -431,12 +439,12 @@ lifetime `'a` of our dereferenced value, it would by definition have a lifetime
 lifetimes – QED.
 
 As for the other traits, they exist mainly to abstract away the act of
-borrowing / referencing for some types (because e.g. with `Vec`s it is possible 
+borrowing / referencing for some types (because e.g. with `Vec`s it is possible
 to borrow a slice of them). As such, they fall into the same category as the
 `From`/`Into` traits – they don't get invoked behind the scenes, but exist to
 make some interfaces more adaptable.
 
-The relation between 
+The relation between
 [`Borrow`](http://doc.rust-lang.org/std/borrow/trait.Borrow.html), 
 [`AsRef`](http://doc.rust-lang.org/std/convert/trait.AsRef.html)/[`AsMut`](http://doc.rust-lang.org/std/convert/trait.AsMut.html) 
 and [`ToOwned`](http://doc.rust-lang.org/std/borrow/trait.ToOwned.html) is as 
