@@ -19,41 +19,53 @@ surprising:
 
 ### (Partial)–Eq/Ord
 
-[`PartialEq`](http://doc.rust-lang.org/std/cmp/trait.PartialEq.html) defines 
-partial equality. This means the relation is symmetric (`a == b` → `b == a` for
-all `a` and `b` of the respective type) and transitive (`a == b` ∧ `b == c` → 
-`a == c` for all `a`, `b` and `c` of the type).
+[`PartialEq`](http://doc.rust-lang.org/std/cmp/trait.PartialEq.html) defines
+partial equality. This means the relation is
+[symmetric](https://en.wikipedia.org/wiki/Symmetric_relation) (`a == b` →
+`b == a` for all `a` and `b` of the respective type) and
+[transitive](https://en.wikipedia.org/wiki/Transitive_relation) (`a == b`
+∧ `b == c` → `a == c` for all `a`, `b` and `c` of the type).
 
-[`Eq`](http://doc.rust-lang.org/std/cmp/trait.Eq.html) is used as a marker to 
-declare that `PartialEq` is also reflexive (`a == a` for all `a` of the 
-respective type). Counter-Example: The `f32` and `f64` types implement 
-`PartialEq`, but not `Eq`, because the `NAN` value does not equal itself.
+[`Eq`](http://doc.rust-lang.org/std/cmp/trait.Eq.html) is used as a marker to
+declare that `PartialEq` is also
+[reflexive](https://en.wikipedia.org/wiki/Reflexive_relation) (`a == a` for
+all `a` of the respective type). Counter-Example: The `f32` and `f64` types
+implement `PartialEq`, but not `Eq`, because `NAN != NAN`.
 
-It is useful to implement both traits, for a good number of `std`'s types use 
-them as trait bounds for one thing or another, e.g. `Vec`'s `dedup()` function. 
-Auto-deriving `PartialEq` will make the `eq`-method check equality of all parts 
-of your type (e.g. for `struct`s, all parts will be checked, while for `enum` 
+It is useful to implement both traits, for a good number of `std`'s types use
+them as trait bounds for one thing or another, e.g. `Vec`'s `dedup()` function.
+Auto-deriving `PartialEq` will make the `eq`-method check equality of all parts
+of your type (e.g. for `struct`s, all parts will be checked, while for `enum`
 types, the variant along with all its contents is checked).
 
-Since `Eq` is basically empty (apart from a pre-defined marker method that is 
-used by the auto-deriving logic to ensure that it actually worked and probably 
-shouldn't be used anywhere else), auto-deriving has no chance of doing 
+Since `Eq` is basically empty (apart from a
+[pre-defined marker method](http://doc.rust-lang.org/src/core/cmp.rs.html#81)
+that is used by the auto-deriving logic to ensure that it actually worked and
+probably shouldn't be used anywhere else), auto-deriving has no chance of doing
 something interesting, so it won't.
 
 [`PartialOrd`](http://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) defines 
 a partial order, and extends the equality of `PartialEq` by the 
 [`Ordering`](http://doc.rust-lang.org/std/cmp/enum.Ordering.html) relation.
- 
+Partial in this case means there may be instances of your type that cannot be
+meaningfully compared.
+
 [`Ord`](http://doc.rust-lang.org/std/cmp/trait.Ord.html) requires a full order 
 relation. In contrast to `PartialEq`/`Eq`, those two traits actually have a 
-different interface (the `partial_cmp(…)` method returns `Option<Ordering>`, 
-while `Ord`'s `cmp(…)` returns the `Ordering` directly), and their only 
-relation is that if you wish to implement `Ord`, you have to implement 
-`PartialOrd` as well, for the latter is a trait bound for the former. 
+different interface (the `partial_cmp(…)` method returns `Option<Ordering>`, so 
+it can return `None` for incomparable instances, while `Ord`'s `cmp(…)` returns 
+the `Ordering` directly), and their only relation is that if you wish to 
+implement `Ord`, you have to implement `PartialOrd` as well, for the latter is 
+a trait bound for the former.
+
 Auto-deriving both will order structs 
 [lexicographically](https://en.wikipedia.org/wiki/Lexicographical_order), enums 
 by the appearance of the variant in the definition (unless you define values 
 for the variants).
+
+Should you opt to implement the relation manually, be careful to ensure a stable
+result that follows the rules of ordering relations, lest your program break in
+confusing ways.
 
 The order imposed by (`Partial`)`Ord` is used for the `<`, `<=`, `=>` and `>`
 operators.
@@ -92,10 +104,10 @@ to the Rust gods until they mended this particular error.
 ### Bit-Operators
 
 The following operators are defined to be used bitwise. Note that unlike the 
-`!`-Operator, the short-circuiting `&&` and `||` cannot be overloaded – because 
+`!`-operator, the short-circuiting `&&` and `||` cannot be overloaded – because 
 this would require them to avoid eagerly evaluating their arguments, which 
-isn't possible in Rust – and even if it were possible, e.g. using closures as a 
-workaround, it would just be confusing other developers.
+isn't easily possible in Rust – and even if it were possible, e.g. using 
+closures as a workaround, it would just be confusing other developers.
 
 Operator|Trait
 --------|-----
@@ -109,7 +121,7 @@ Operator|Trait
 Like with all operators, be wary of implementing those for your type unless you 
 have specific reason to, e.g. it may make sense to define some of them on 
 `BitSet`s (which by the way are no longer part of the standard library as of 
-Rust 1.3.0).
+Rust 1.3.0) or on types representing large integers.
 
 ### Index and IndexMut
 
@@ -277,10 +289,17 @@ not implement `Hash` itself, because two equal hash maps could still store
 their contents in different order, resulting in different hashes, which would 
 break the hashing contract. Even if the items were ordered (see `Ord` above), 
 hashing them would require sorting, which would be too expensive to be useful.
+One could also xor the entry hash values, but that would require re-using the
+`Hasher`, which would at least require a `Clone` bound, which the interface
+lacks. In any event, use a 
+[`BTreeMap`](http://doc.rust-lang.org/std/collections/struct.BTreeMap.html) 
+as key for your maps if you must have maps as keys to a hashmap. In that case,
+you should probably also be thinking about a career change.
 
 Unless you have some very specific constraints regarding equality, you can 
-safely auto-derive `Hash`. Should you choose to implement it manually, beware
-not to break its contract.
+safely auto-derive `Hash`. Should you choose to implement it manually, be 
+careful not to break its contract, lest your programs fail in surprising and
+hard to debug ways.
 
 ### Iterator and Friends
 
