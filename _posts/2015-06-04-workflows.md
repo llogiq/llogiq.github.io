@@ -2,6 +2,8 @@
 title: My lint-writing workflow
 ---
 
+_(This Post uses Rust version 1.2.* some nightly)_
+
 Recently, I wrote a good number of lints for 
 [rust-clippy](https://github.com/Manishearth/rust-clippy). In order to 
 organize my thoughts and to share my findings, I'm going to write a bit 
