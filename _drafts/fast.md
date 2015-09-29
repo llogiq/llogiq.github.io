@@ -121,11 +121,18 @@ Veedrac did a
 * better load balanced threading,
 * really cool pack_byte implementation.
 
-The `pack_byte` function should pack DNA sequences into two bytes each. The
+The `pack_byte` function should pack DNA sequences into two bits each. The
 trick behind Veedrac's implementation is that "A", "C", "G" and "T" have all
 different ASCII representations in the second-to-lowest two bits. So the 
 function just shifts the ASCII bytes by one to the right and masks the lowest
 two bits. Look ma, no lookup!
+
+Choice quote from the source:
+
+```Rust
+        // Yes, this is hillarious
+        pub fn eat(&mut self, cereal: &[u8]) { ...
+```
 
 TODO
 
