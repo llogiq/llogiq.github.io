@@ -14,7 +14,7 @@ This goes beyond plain inertia: Plain text keeps things interoperable. We can ha
 
 # Robustness
 
-It's no surprise the internet runs on plain text protocols. Not only because to transfer stuff over the network, you have to serialize it into a stream of bytes.
+<a name="Robustness"></a>It's no surprise the internet runs on plain text protocols. Not only because to transfer stuff over the network, you have to serialize it into a stream of bytes.
 
 Plain text formats are extremely robust. With a non-textual format, when your file gets corrupted, you lose the whole thing. With plain text, you can look into it to see what's wrong, and probably fix it. I'd like to stress this point, because it's actually happening with some *solutions* that embed programs in databases or proprietary binary formats. Flip one bit, lose your whole program.
 
