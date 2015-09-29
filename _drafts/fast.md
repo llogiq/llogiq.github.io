@@ -26,15 +26,24 @@ Meanwhile, Veedrac had a few insights on how to optimize the *fasta* benchmark.
 The PR is [here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
 
 The biggest trick this program pulls is the full parallelization of the random
-number generator.
+number generator (RNG).
 
-TODO: Describe the powmod trick
+The RNG is predefined by the benchmarksgame. It's a simple 
+[Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator)
+with defined stride and modulus. This ensures that all implementation use the
+same stream of random numbers, but the algorithm has another interesting
+property: It's possible to fast-forward the generator using a modulus-power
+function (*Sⁿ % M*), which can be efficiently calculated within *O(log n)*.
 
-Another trick nicked from a haskell version is to create a lookup table of size
-`MODULUS` so that we can get the respective proteine for the random number by a
-simple lookup. Since the `MODULUS` isn't too big, and we only need one byte per
-value, this doesn't eat too much RAM and lets the cores concentrate on random
-number generation.
+This is used to split the RNG into multiple independent streams that run fully
+parallel on all CPUs. But Veedrac wasn't content to just run faster on multiple
+cores.
+
+So he nicked another trick from a haskell version: he creates a lookup table of 
+size `MODULUS` so that we can get the respective proteine for the random number
+by a simple lookup. Since the `MODULUS` isn't too big, and we only need one byte
+per value, this doesn't eat too much RAM and lets the cores concentrate on 
+random number generation.
 
 For the repeated text, there's another trick stolen from the Haskell version:
 Repeat the string so that every line is some index in it, then just insert the
@@ -42,7 +51,7 @@ newline and print the slice for each line.
 
 Finally, the random fasta has an optimized writer that uses a mutex + count to
 efficiently allow the threads to synchronize their output. One would think that
-it should be possible to do better with atomics, but that would require unsafe
+it should be possible to do better with atomics, but that would require `unsafe`
 and the work packets are so big that there is no contention, so a Mutex works
 nicely. The code to output the random lines pre-fills the output array with 
 newlines so that it can just skip the positions of the line breaks.
