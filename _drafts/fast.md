@@ -17,13 +17,37 @@ performance tricks we pulled.
 
 ### Fasta and Fasta-redux
 
-Veedrac had a few insights on how to optimize the *fasta* benchmark. The PR is
-[here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
+I am actually the one responsible for the slow fasta-redux implementation. It
+was submitted as a baseline to benchmark against, but I didn't get around to
+actually optimize it. However, it bugged me, so I at least inserted a 
+`BufWriter` to at least have faster IO.
+
+Meanwhile, Veedrac had a few insights on how to optimize the *fasta* benchmark. 
+The PR is [here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
 
 The biggest trick this program pulls is the full parallelization of the random
 number generator.
 
-TODO: ...
+TODO: Describe the powmod trick
+
+Another trick nicked from a haskell version is to create a lookup table of size
+`MODULUS` so that we can get the respective proteine for the random number by a
+simple lookup. Since the `MODULUS` isn't too big, and we only need one byte per
+value, this is fairly easy.
+
+For the repeated text, there's another trick stolen from the Haskell version:
+Repeat the string so that every line is some index in it, then just insert the
+newline and print the slice for each line.
+
+Finally, the random fasta has an optimized writer that uses a mutex + count to
+efficiently allow the threads to synchronize their output. One would think that
+it should be possible to do better with atomics, but that would require unsafe
+and the work packets are so big that there is no contention, so a Mutex works
+nicely. The code to output the random lines pre-fills the output array with 
+newlines so that it can just skip the positions of the line breaks.
+
+Veedrac's implementation just smokes everything else on four cores, and is
+still faster than speed limit on one core.
 
 I just adapted his code for the *fasta-redux* benchmark; in the this case the
 lookup table is predefined by the benchmark rules. Apart from that the code is
