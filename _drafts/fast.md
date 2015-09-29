@@ -15,7 +15,7 @@ some of them as of yet. teXitoi, Veedrac and yours truly set out
 semi-independently to rectify the situation. The following discusses the
 performance tricks we pulled.
 
-### Fasta and Fasta-redux
+### fasta and fasta-redux
 
 I am actually the one responsible for the slow fasta-redux implementation. It
 was submitted as a baseline to benchmark against, but I didn't get around to
@@ -53,7 +53,7 @@ I just adapted his code for the *fasta-redux* benchmark; in the this case the
 lookup table is predefined by the benchmark rules. Apart from that the code is
 exactly the same.
 
-### Spectralnorm
+### spectralnorm
 
 Rust didn't do as good as it could because the benchmarksgame site uses stable
 which cannot use unstable APIs, notably this means we cannot use SIMD directly.
@@ -71,8 +71,8 @@ fn A(i: usize, j: usize) -> f64 {
 }
 ```
 
-And here is the version that uses custom autovectorizable usizex2 and f64x2
-types: 
+And here is the version that uses custom autovectorizable `usizex2` and `f64x2`
+types:
 
 ```Rust
 fn Ax2(i: usizex2, j: usizex2) -> f64x2 {
@@ -80,7 +80,11 @@ fn Ax2(i: usizex2, j: usizex2) -> f64x2 {
 }
 ```
 
-Calling this function changes from:
+On the first glimpse, this looks more complex than the original, but it also
+does twice the work. The implementations of `usizex2` and `f64x2` are actually
+pretty boring; they just distribute the operations to their contents.
+
+With this. calling the `A`-function changes from:
 
 ```Rust
 let bot = f64x2(a(i, j), a(i, j + 1));
@@ -91,7 +95,9 @@ to
 ```Rust
 let bot = a(usizex2(i, i), usizex2(j, j+1));
 ```
-for a nice 20% speedup.
+for a nice 20% speedup. Note that the official Rust version *can* use nightly
+and thus SIMD. In a few weeks this interim version can be replaced again,
+yielding to the faster official version.
 
 ### k_nucleotide
 
@@ -111,4 +117,20 @@ two bits. Look ma, no lookup!
 
 TODO
 
-### 
+### thread_ring
+
+This one isn't even in the list of comparable benchmarks, because it divides
+languages using native threads from languages that have some abstraction. 
+Rust of course falls in the former category, and those tend to do worse on
+this benchmark.
+
+Veedrac has a superb mixed mutex/spinlock implementation that beats all
+other native-thread based implementations in terms of speed, however is
+subject to possible pathological behavior. Luckily this wasn't triggered
+in our benchmarks so far.
+
+TODO
+
+### chameneos-redux
+
+TODO
