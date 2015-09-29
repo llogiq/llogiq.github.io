@@ -33,7 +33,8 @@ TODO: Describe the powmod trick
 Another trick nicked from a haskell version is to create a lookup table of size
 `MODULUS` so that we can get the respective proteine for the random number by a
 simple lookup. Since the `MODULUS` isn't too big, and we only need one byte per
-value, this is fairly easy.
+value, this doesn't eat too much RAM and lets the cores concentrate on random
+number generation.
 
 For the repeated text, there's another trick stolen from the Haskell version:
 Repeat the string so that every line is some index in it, then just insert the
@@ -50,17 +51,17 @@ Veedrac's implementation just smokes everything else on four cores, and is
 still faster than speed limit on one core.
 
 I just adapted his code for the *fasta-redux* benchmark; in the this case the
-lookup table is predefined by the benchmark rules. Apart from that the code is
-exactly the same.
+lookup table is predefined by the benchmark rules (and we need some constant
+factor to index into the table). Apart from that the code is exactly the same.
 
 ### spectralnorm
 
 Rust didn't do as good as it could because the benchmarksgame site uses stable
 which cannot use unstable APIs, notably this means we cannot use SIMD directly.
-teXitoi had the idea to rewrite the hottest code in a way that let LLVM
+teXitoi had the idea to rewrite the hottest code in a way that lets LLVM
 auto-vectorize it. He wrote about it in an 
 [issue](https://github.com/TeXitoi/benchmarksgame-rs/issues/9) on his repo and
-I [provided](https://github.com/TeXitoi/benchmarksgame-rs/pull/22) the 
+I [wrote](https://github.com/TeXitoi/benchmarksgame-rs/pull/22) the 
 implementation.
 
 The hot function in question:
@@ -82,7 +83,18 @@ fn Ax2(i: usizex2, j: usizex2) -> f64x2 {
 
 On the first glimpse, this looks more complex than the original, but it also
 does twice the work. The implementations of `usizex2` and `f64x2` are actually
-pretty boring; they just distribute the operations to their contents.
+pretty boring; they just distribute the operations to their contents, e.g.
+
+```Rust
+struct usizex2(usize, usize);
+impl std::ops::Add for usizex2 {
+    type Output = Self;
+    fn add(self, rhs: Self) -> Self {
+        usizex2(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+//... similar implementations for Div and Mul
+```
 
 With this. calling the `A`-function changes from:
 
@@ -132,5 +144,8 @@ in our benchmarks so far.
 TODO
 
 ### chameneos-redux
+
+Now Veedrac was clearly on a roll. His chameneos-redux is so fast it's no longer
+funny. His implementation is faster than all others by an order of magnitude.
 
 TODO
