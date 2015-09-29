@@ -81,7 +81,7 @@ fn A(i: usize, j: usize) -> f64 {
 }
 ```
 
-And here is the version that uses custom autovectorizable `usizex2` and `f64x2`
+And here is my version that uses custom autovectorizable `usizex2` and `f64x2`
 types:
 
 ```Rust
@@ -143,7 +143,13 @@ Choice quote from the source:
         pub fn eat(&mut self, cereal: &[u8]) { ...
 ```
 
-TODO
+The optimized hash table is a pretty simple Robin Hood number, not unlike
+the implementation in the standard library, apart from the hash function,
+which has been tuned to the data (unfortunately, the hashing part of `std`'s
+`HashMap` isn't stabilized yet, so the code size could be reduced in the
+future.
+
+TODO @Veedrac: Describe pre-compacted input and load-balancing
 
 ### thread_ring
 
@@ -157,11 +163,11 @@ other native-thread based implementations in terms of speed, however is
 subject to possible pathological behavior. Luckily this wasn't triggered
 in our benchmarks so far.
 
-TODO
+TODO @Veedrac: Describe the mutex/spinlock in detail
 
 ### chameneos-redux
 
 Now Veedrac was clearly on a roll. His chameneos-redux is so fast it's no longer
 funny. His implementation is faster than all others by an order of magnitude.
 
-TODO
+TODO @Veedrac: I don't even understand what you're doing here... :-)
