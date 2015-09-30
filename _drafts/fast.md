@@ -2,76 +2,49 @@
 title: Rust Faster!
 ---
 
-A staple of all performance discussion is the Great Programming Language 
-Benchmarks Game, a.k.a. the "Shootout", currently maintained by Isaac Guoy.
-Despite the fact that the benchmarks say more about the resourcefulness of
-certain members of the respective programming language communities than the
-languages themselves, this site is often cited in discussions of the relative
-merits of programming languages.
+_This is a co-production with Veedrac, who wrote most of the awesome technical
+details._
 
-Since one of the core tenets of Rust is "Fast", we have some motivation to 
-score well on those benchmarks. Unfortunately, we're lagging behind C/C++ in
-some of them as of yet. teXitoi, Veedrac and yours truly set out 
-semi-independently to rectify the situation. The following discusses the
-performance tricks we pulled.
+A staple of all performance discussion is the [Great Programming Language Benchmarks Game](http://benchmarksgame.alioth.debian.org), a.k.a. the "Shootout", currently maintained by Isaac Guoy. Despite the fact that the benchmarks say more about the resourcefulness of certain members of the respective programming language communities than the languages themselves, this site is often cited in discussions of the relative merits of programming languages.
+
+Since one of the core tenets of Rust is "Fast", we have some motivation to score well on those benchmarks. Unfortunately, we're lagging behind C/C++ in some of them right now. teXitoi, Veedrac and yours truly set out semi-independently to rectify the situation. The following discusses the performance tricks we pulled.
 
 ### fasta and fasta-redux
 
-I am actually the one responsible for the slow fasta-redux implementation. It
-was submitted as a baseline to benchmark against, but I didn't get around to
-actually optimize it. However, it bugged me, so I at least inserted a 
-`BufWriter` to at least have faster IO.
+I am actually the one responsible for the slow fasta-redux implementation. I submitted it as a baseline to benchmark against, but didn't get around to actually optimize it. However, it bugged me, so I at least inserted a `BufWriter` to at least have faster IO.
 
-Meanwhile, Veedrac had a few insights on how to optimize the *fasta* benchmark. 
-The PR is [here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
+Meanwhile, Veedrac had a few insights on how to optimize the *fasta* benchmark. The PR is [here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
 
-The biggest trick this program pulls is the full parallelization of the random
-number generator (RNG).
+In this case, for the single-core benchmarks Haskell is in the lead. This is surprising, because Haskell rarely outpaces well-tuned Fortran or C. So the Haskell program must be doing something very right.
 
-The RNG is predefined by the benchmarksgame. It's a simple 
-[Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator)
-with defined stride and modulus. This ensures that all implementation use the
-same stream of random numbers, but the algorithm has another interesting
-property: It's possible to fast-forward the generator using a modulus-power
-function (*Sⁿ % M*), which can be efficiently calculated within *O(log n)*.
+There are really two different compute-intensive parts to the problem and the code has a clever attempt for both. The first is to repeat a string with line breaks. Of course, Rust's solution was to make a cyclic iterator and pass that to the line-breaking algorithm, which is roughly
 
-This is used to split the RNG into multiple independent streams that run fully
-parallel on all CPUs. But Veedrac wasn't content to just run faster on multiple
-cores.
+```Rust
+let mut it = alu.as_bytes().iter().cycle().map(|c| *c);
+for i in 0..n {
+    line[i] = it.next().unwrap();
+}
+line[n] = '\n' as u8;
+```
+Elegant and pretty fast, but not blindingly fast. The Haskell code does a quite clever alternative; it writes line-sized slices directly out of the input string:
 
-So he nicked another trick from a haskell version: he creates a lookup table of 
-size `MODULUS` so that we can get the respective proteine for the random number
-by a simple lookup. Since the `MODULUS` isn't too big, and we only need one byte
-per value, this doesn't eat too much RAM and lets the cores concentrate on 
-random number generation.
+```Haskell
+hPutBuf stdout (plusPtr buf pos) lineLen
+B.putStrLn ""
+```
+which approximately translated to Rust means `println!("{}", buf[pos..pos+line_len])` sans bounds checks. To avoid special casing when the line cycles past the end of the string, the string is extended by a line's length. Of course, this translates very well to Rust – only without the unsafety!
 
-For the repeated text, there's another trick stolen from the Haskell version:
-Repeat the string so that every line is some index in it, then just insert the
-newline and print the slice for each line.
+The second problem is to write the output generated live from a simple random number generator, passed through a small but frequent linear search. However, since the generator only produces 139968 separate numbers, the Haskell code just caches them all in an array. This means we already know the answer of the linear search for any result the RNG could throw at us.
 
-Finally, the random fasta has an optimized writer that uses a mutex + count to
-efficiently allow the threads to synchronize their output. One would think that
-it should be possible to do better with atomics, but that would require `unsafe`
-and the work packets are so big that there is no contention, so a Mutex works
-nicely. The code to output the random lines pre-fills the output array with 
-newlines so that it can just skip the positions of the line breaks.
+On that note, the RNG is predefined by the Benchmarks Game. It's a simple [Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator) with defined stride and modulus. This ensures that all implementation use the same stream of random numbers, but the algorithm has another interesting property: It's possible to fast-forward the generator using a modulus-power function (Sⁿ % M), which can be efficiently calculated in O(log n).
 
-Veedrac's implementation just smokes everything else on four cores, and is
-still faster than speed limit on one core.
+This is used to split the RNG into multiple independent streams that run fully parallel on all CPUs. The previous multicore entry could only parallelize adding the line breaks, which a more efficient loop largely removes the need for. Parallelizing everything, though, makes a big difference.
 
-I just adapted his code for the *fasta-redux* benchmark; in the this case the
-lookup table is predefined by the benchmark rules (and we need some constant
-factor to index into the table). Apart from that the code is exactly the same.
+I just adapted Veedrac's code for the *fasta-redux* benchmark; in the this case the size and shape of the lookup table is predefined by the benchmark rules (and per the rules we need some constant factor to index into the table and also need to do a linear search from our index). Apart from that the code is exactly the same.
 
 ### spectralnorm
 
-Rust didn't do as good as it could because the benchmarksgame site uses stable
-which cannot use unstable APIs, notably this means we cannot use SIMD directly.
-teXitoi had the idea to rewrite the hottest code in a way that lets LLVM
-auto-vectorize it. He wrote about it in an 
-[issue](https://github.com/TeXitoi/benchmarksgame-rs/issues/9) on his repo and
-I [wrote](https://github.com/TeXitoi/benchmarksgame-rs/pull/22) the 
-implementation.
+Rust didn't do as good as it could on this benchmark because the Benchmarks Game site uses stable which cannot use unstable APIs, notably this means we cannot use SIMD directly. teXitoi had the idea to rewrite the hottest code in a way that lets LLVM auto-vectorize it. He wrote about it in an [issue](https://github.com/TeXitoi/benchmarksgame-rs/issues/9) on his repo and I [implemented it](https://github.com/TeXitoi/benchmarksgame-rs/pull/22).
 
 The hot function in question:
 
@@ -81,8 +54,7 @@ fn A(i: usize, j: usize) -> f64 {
 }
 ```
 
-And here is my version that uses custom autovectorizable `usizex2` and `f64x2`
-types:
+And here is my version that uses custom autovectorizable `usizex2` and `f64x2` types:
 
 ```Rust
 fn Ax2(i: usizex2, j: usizex2) -> f64x2 {
@@ -90,9 +62,7 @@ fn Ax2(i: usizex2, j: usizex2) -> f64x2 {
 }
 ```
 
-On the first glimpse, this looks more complex than the original, but it also
-does twice the work. The implementations of `usizex2` and `f64x2` are actually
-pretty boring; they just distribute the operations to their contents, e.g.
+This looks only a smidgen more complex than the original, but it also does twice the work. The implementations of `usizex2` and `f64x2` are actually pretty boring; they just distribute the operations to their contents, e.g.
 
 ```Rust
 struct usizex2(usize, usize);
@@ -105,7 +75,7 @@ impl std::ops::Add for usizex2 {
 //... similar implementations for Div and Mul
 ```
 
-With this. calling the `A`-function changes from:
+Note that this doesn't do anything fancy, it really only wraps the two operations. With this. calling the `A`-function changes from:
 
 ```Rust
 let bot = f64x2(a(i, j), a(i, j + 1));
@@ -116,58 +86,135 @@ to
 ```Rust
 let bot = a(usizex2(i, i), usizex2(j, j+1));
 ```
-for a nice 20% speedup. Note that the official Rust version *can* use nightly
-and thus SIMD. In a few weeks this interim version can be replaced again,
-yielding to the faster official version.
+for a nice 20% speedup. Note that the official Rust version *can* use nightly and thus SIMD. In a few weeks this interim version can be replaced again, yielding to the faster official version.
 
 ### k_nucleotide
 
-Veedrac did a
-[full rewrite](https://github.com/TeXitoi/benchmarksgame-rs/pull/21) with:
+k_nucleotide is a test of how fast your Hash map is. The game has mostly devolved to one of specialization – specialized maps, specialized hashes, etc., so there's no surprise the Rust code uses a custom hash map in its current incantation. Unfortunately, it looks like this:
 
-* an improved hash table, using flat Robin Hood Hashing,
-* pre-compacted input,
-* better load balanced threading,
-* really cool pack_byte implementation.
+```Rust
+struct Entry {
+    code: Code,
+    count: usize,
+    next: Option<Box<Entry>>,
+}
 
-The `pack_byte` function should pack DNA sequences into two bits each. The
-trick behind Veedrac's implementation is that "A", "C", "G" and "T" have all
-different ASCII representations in the second-to-lowest two bits. So the 
-function just shifts the ASCII bytes by one to the right and masks the lowest
-two bits. Look ma, no lookup!
+struct Table {
+    items: Vec<Option<Box<Entry>>>
+}
+```
+
+For anyone familiar with hash maps, this is a standard chained hash map with linked lists. Linked lists aren't great for cache efficiency, especially as every lookup involves at least one extra pointer dereference. Here's a rough diagram:
+
+```
+items: vec![  . . . . . . . . .  ]
+              | |     |   | |
+              0 2     8   C E
+              |       |
+              1       9
+```
+
+One quick improvement is to remove the first Box used:
+
+```
+struct Table {
+    items: Vec<Option<Entry>>  // was Vec<Option<Box<Entry>>>
+}
+```
+
+which results in
+
+```
+items: vec![  0 2 . . 8 . C E .  ]
+              |       |
+              1       9
+```
+
+Unfortunately, this is still suboptimal when the vector starts getting crowded. The updated code uses [Robin Hood Hashing](http://codecapsule.com/2013/11/11/robin-hood-hashing/), a simple type of open addressing known for its high speed and great efficiency. It's even used in Rust's `HashMap`! The main property is that the vector ends up sorted by hash, which in our case is just the key:
+
+```
+items: vec![  0 1 2 . 8 9 C E .  ]
+```
+
+This helps cache coherency a lot, and also removes the space overhead of having pointers lying around.
+
+Once lookup is optimized a lot, reading the lines starts to look quite slow. By the rules, we're restricted to line-by-line reading. However, the `lines()` iterator being used is not allocation efficient. Simply moving to `input.read_until(b'\n', &mut line)` (or `read_line` if you want a `String`) makes a big difference.
+
+The code spends a lot of time calling `to_ascii_uppercase` and then
+
+```Rust
+fn pack_symbol(c: u8) -> u8 {
+    match c as char {
+        'A' => 0,
+        'C' => 1,
+        'G' => 2,
+        'T' => 3,
+        _ => panic!("{}", c as char),
+    }
+}
+```
+
+needed for the optimized hash of the string. The precise numbers don't matter; all that matters is that each gets a unique 2-bit encoding. It would really help to optimize this.
+
+The first act is to precompact the array – perform the match during reading and pack four symbols into each byte. This reduces memory costs and removes the need to pack repeatedly, but it still doesn't make the first pack cheap.
+
+The second act is a fun little bithack. See if you can spot it:
+
+|letter|ASCII encoding
+|------|--------------
+|A     |1000001
+|a     |1100001
+|C     |1000011
+|c     |1100011
+|G     |1000111
+|g     |1100111
+|T     |1010100
+|t     |1110100
+
+The two bits one from the end form a unique, case-independent mapping. Our resulting code is just `(byte >> 1) & 0b11`, or two assembly instructions.
+
+A final little bit of performance advice is to make sure all threads do the same amount of work. Seven threads were spawned, but there are only four cores and some finished long before others. Combining workloads so only four threads run and finish in about the same time gave a shockingly sizable thoroughput boost.
 
 Choice quote from the source:
 
-```Rust
-        // Yes, this is hillarious
-        pub fn eat(&mut self, cereal: &[u8]) { ...
 ```
-
-The optimized hash table is a pretty simple Robin Hood number, not unlike
-the implementation in the standard library, apart from the hash function,
-which has been tuned to the data (unfortunately, the hashing part of `std`'s
-`HashMap` isn't stabilized yet, so the code size could be reduced in the
-future.
-
-TODO @Veedrac: Describe pre-compacted input and load-balancing
+    // Yes, this is hilarious
+    pub fn eat(&mut self, cereal: &[u8]) { ...
+```
 
 ### thread_ring
 
-This one isn't even in the list of comparable benchmarks, because it divides
-languages using native threads from languages that have some abstraction. 
-Rust of course falls in the former category, and those tend to do worse on
-this benchmark.
+This one isn't even in the list of comparable benchmarks, because it divides languages using native threads from languages that have some abstraction. Rust of course falls in the former category, and those tend to do worse on this benchmark, but at least we could give the other OS-thread-based programs a run for their money.
 
-Veedrac has a superb mixed mutex/spinlock implementation that beats all
-other native-thread based implementations in terms of speed, however is
-subject to possible pathological behavior. Luckily this wasn't triggered
-in our benchmarks so far.
+The basic idea here is to pass a token around a bunch of threads for a long time. And by a bunch of threads, I mean 503. That many real threads causes problems. Almost all of the time is spent pausing and resuming them.
 
-TODO @Veedrac: Describe the mutex/spinlock in detail
+The previous version passes around the token with channels, which is much improved by just using a semaphore waiting on a mutex – basically a channel specialized to a one element buffer. However, this still has poor behavior for the multithreaded case, since the system scheduler seems to get overloaded or confused and we end up wasting yet more of our time waiting for the correct thread to get loaded in when we want it to.
+
+Spin locks on atomics help solve this problem. Exchanging values with atomics means we never have to pause a thread, nor wait for it to resume. An atomic exchange uses live threads and no scheduling. The only problem now is having 503 live threads at the same time, which we can solve by using the previous semaphores as a thread suspender and prefetcher. This seems to make it more obvious to the scheduler which threads should be running when, and gives it a little more headroom to do so too.
+
+Here's the actual main loop:
+
+```
+loop {
+    lock.lock();
+    let input_value = input.lock();
+    output.unlock(input_value.saturating_sub(1));
+    unlock.unlock();
+
+    if input_value == 1 { println!("{}", thread_id); }
+    if input_value <= 1 { return; }
+}
+```
+
+1. `lock.lock()` suspends the thread until the "prefetcher" – the thread two hops back – resumes it.
+2. `let input_value = input.lock()` waits for a value on the atomic spin lock.
+3. `output.unlock(input_value.saturating_sub(1))` passes this to the next thread, which the thread prior will have already unlocked just in time.
+4. `unlock.unlock();` is our time to be a prefetcher and unlock the thread next along.
+
+Some have noted that this solution can exhibit severe slowdowns when scaling up the number of threads. However, our preliminary measurements show that it works quite well within the specific parameters of the Benchmarks Game.
 
 ### chameneos-redux
 
-Now Veedrac was clearly on a roll. His chameneos-redux is so fast it's no longer
-funny. His implementation is faster than all others by an order of magnitude.
+Now Veedrac was clearly on a roll. His chameneos-redux is so fast it's no longer funny.
 
 TODO @Veedrac: I don't even understand what you're doing here... :-)
