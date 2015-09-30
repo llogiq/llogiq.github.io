@@ -15,7 +15,7 @@ I am actually the one responsible for the slow fasta-redux implementation. I sub
 
 Meanwhile, Veedrac had a few insights on how to optimize the *fasta* benchmark. The PR is [here](https://github.com/TeXitoi/benchmarksgame-rs/pull/20).
 
-In this case, for the single-core benchmarks Haskell is in the lead. This is surprising, because Haskell rarely outpaces well-tuned Fortran or C. So the Haskell program must be doing something very right.
+In this case, for the single-core benchmarks Haskell is in the lead. This is surprising, because Haskell rarely outpaces well-tuned Fortran or C. So the Haskell program must be doing something *very* right.
 
 There are really two different compute-intensive parts to the problem and the code has a clever attempt for both. The first is to repeat a string with line breaks. Of course, Rust's solution was to make a cyclic iterator and pass that to the line-breaking algorithm, which is roughly
 
@@ -36,7 +36,7 @@ which approximately translated to Rust means `println!("{}", buf[pos..pos+line_l
 
 The second problem is to write the output generated live from a simple random number generator, passed through a small but frequent linear search. However, since the generator only produces 139968 separate numbers, the Haskell code just caches them all in an array. This means we already know the answer of the linear search for any result the RNG could throw at us.
 
-On that note, the RNG is predefined by the Benchmarks Game. It's a simple [Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator) with defined stride and modulus. This ensures that all implementation use the same stream of random numbers, but the algorithm has another interesting property: It's possible to fast-forward the generator using a modulus-power function (Sⁿ % M), which can be efficiently calculated in O(log n).
+On that note, the RNG is predefined by the Benchmarks Game. It's a simple [Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator) with defined stride and modulus. This ensures that all implementations use the same stream of random numbers, but the algorithm has another interesting property: It's possible to fast-forward the generator using a modulus-power function (<i>S<sup>n</sup></i> mod <i>M</i>), which can be efficiently calculated in *O(log n)*.
 
 This is used to split the RNG into multiple independent streams that run fully parallel on all CPUs. The previous multicore entry could only parallelize adding the line breaks, which a more efficient loop largely removes the need for. Parallelizing everything, though, makes a big difference.
 
