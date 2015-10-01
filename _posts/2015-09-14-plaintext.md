@@ -46,4 +46,4 @@ On the flip side, this messyness gives rise to our creativity, so any language t
 
 Finally, every graphical language I've seen so far still employs text (or sometimes mathematical symbols where applicable) to represent most things – whether it's in boxes, circles or what have you. The simple reason is that we humans tend to *think in language*. After all, language is *the* medium we express ourselves in (unless you are a mute who does expressive dancing). While *naming things* is one of the really hard problems programmers face, it's also necessary to make our programs understandable.
 
-For example, suppose I have a variable, and because this is a graphical language, I call it `&#x2620;` (for those without unicode display, this is &amp;#x2620;: Skull and Crossbones). Now from that "name", could you understand what this variable *means*? I certainly don't.
+For example, suppose I have a variable, and because this is a graphical language, I call it `☠` (for those without unicode display, this is &amp;#x2620;: Skull and Crossbones). Now from that "name", could you understand what this variable *means*? I certainly don't.
