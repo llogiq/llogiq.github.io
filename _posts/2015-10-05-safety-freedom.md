@@ -72,7 +72,7 @@ lets us encode certain things about ownership and lifetimes of objects – thing
 which C++ programmers have to keep in their heads. The Borrow Checker ensures 
 that no two parts of the code can change a state within the same scope, whether 
 concurrently or serially (it also ensures that no code can mutate it while 
-another one is looking at it). This is sometimes just a bit cumbersome becauuse 
+another one is looking at it). This is sometimes just a bit cumbersome because 
 of course the checks are sometimes overbroad, but mostly you don't notice it at 
 all until it politely tells you when you're doing something stupid.
 
