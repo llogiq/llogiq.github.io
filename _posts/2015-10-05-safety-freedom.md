@@ -4,12 +4,14 @@ subtitle: Worse is Faster, Safe is Better
 ---
 
 I have long held the belief that in programming, unlike politics,
-*safety = freedom* (but I only recently found this succinct formulation). 
-If you feel safe doing something, you're free to do it. Conversely, your fears 
-of doing something will at least slow you down, if not stop you in your tracks 
-completely.
+*safety = freedom* (but I only 
+[recently](https://www.reddit.com/r/rust/comments/3mofy0/when_rust_makes_sense_or_the_state_of_typed/cvgpwke) 
+found this succinct formulation). If you feel safe doing something, you're free 
+to do it. Conversely, your fears of doing something will at least slow you 
+down, if not stop you in your tracks completely.
 
-I think this is also at least one big underlying reason of the Worse is Better 
+I think this is also at least one big underlying reason of the 
+[Worse is Better](http://www.dreamsongs.com/RiseOfWorseIsBetter.html)
 phenomenon: The New Jersey cowboy coders, who have no qualms doing things in 
 their code that would make Bjarne Stroustrup go a little pale around the nose, 
 are simply faster to the finish line, with programs that work, mostly.
@@ -26,14 +28,16 @@ ticking time bombs and wonder *when*, not *if* they'll blow up.
 So if you're now feeling like you're standing on a minefield and wonder how you 
 got there, this is the reason (As an aside, this also fuels the hate some 
 harbor against C and C++). I'm not telling this to sow hate. I've been there 
-and done that personally, so I share at least some of the blame.
+and done that personally, so I share at least some of the blame. Also let's not
+forget that those languages brought us a wealth of useful software, and their
+contribution, averaged out over about four decades, is very probably positive.
 
-This also could be related to the big differences in productivity between 
-programmers: Our measurements are by definition imprecise and as usual, taking 
-risks awards big payoffs, if all goes according to plan. Perhaps the 10× guys 
-really are just romanticized cowboy coders after all (Then again, I *do* know 
-people who can only code a tenth of what I do at a time – am I secretly a 
-cowboy after all?).
+The New Jersey style also could be related to the big differences in 
+productivity between programmers: Our measurements are by definition imprecise 
+and as usual, taking risks awards big payoffs, if all goes according to plan. 
+Perhaps the 10× guys really are just romanticized cowboy coders after all (Then 
+again, I *do* know people who can only code a tenth of what I do at a time – am 
+I secretly a cowboy after all?).
 
 Meanwhile us normal (some would say mediocre) programmers slave away on our 
 keyboards to write something that works in all cases, without too many crashes 
@@ -61,7 +65,7 @@ I cannot do that, Dave. About half of the thing is "unstable" scaffolding, just
 there to build the compiler (and off-limits to all but users of the "nightly" 
 version, which gives the "unstable" its meaning). The whole thing screams "you 
 haven't even seen my final form", and having learned it for the last months, 
-I'm curious what's in store.
+I'm optimistic about the future.
 
 Rust gets its **safety** from a few features working together. The type system 
 lets us encode certain things about ownership and lifetimes of objects – things 
@@ -69,8 +73,8 @@ which C++ programmers have to keep in their heads. The Borrow Checker ensures
 that no two parts of the code can change a state within the same scope, whether 
 concurrently or serially (it also ensures that no code can mutate it while 
 another one is looking at it). This is sometimes just a bit cumbersome becauuse 
-of course the checks are imprecise, but mostly you don't notice it at all until 
-it politely tells you when you're doing something stupid.
+of course the checks are sometimes overbroad, but mostly you don't notice it at 
+all until it politely tells you when you're doing something stupid.
 
 Some parts of the standard library purposefully cut holes into that safety 
 blanket to let low-level things go fast, yet supply a safe interface on top of 
