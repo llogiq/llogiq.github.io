@@ -1,0 +1,101 @@
+desc: (none)
+cmd: ./alloctest
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=329135
+mem_heap_B=552
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=332443
+mem_heap_B=672
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=333781
+mem_heap_B=792
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=464541
+mem_heap_B=792
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=peak
+n3: 792 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 552 0x56DE11B: __fopen_internal (iofopen.c:69)
+  n1: 552 0x503C328: pthread_getattr_np (pthread_getattr_np.c:81)
+   n1: 552 0x1124C3: rt::lang_start::he8146179479a8231mox (in /home/andre/projects/llogiq.github.io/_code/alloctest)
+    n0: 552 0x568FA3E: (below main) (libc-start.c:289)
+ n1: 240 0x56DEE1A: getdelim (iogetdelim.c:106)
+  n1: 240 0x503C3CD: pthread_getattr_np (pthread_getattr_np.c:116)
+   n1: 240 0x1124C3: rt::lang_start::he8146179479a8231mox (in /home/andre/projects/llogiq.github.io/_code/alloctest)
+    n0: 240 0x568FA3E: (below main) (libc-start.c:289)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=5
+#-----------
+time=464541
+mem_heap_B=552
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=467089
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=468602
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=472535
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=515649
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=1748769
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
