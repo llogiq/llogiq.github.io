@@ -30,8 +30,6 @@ Consistency is vital in reading comprehension, so using a good formatting tool t
 
 ### Documentation
 
-<blockquote>Documentation is like sex. When it's good, it's very very good, when it's bad, it's better than nothing. — Dick Brandon</blockquote>
-
 Here my experience has been more mixed. While the tools are usually good enough to create something decent, sometimes they engender bad practices, as the proverbial content-free javadoc comment:
 
 ```java
@@ -50,7 +48,7 @@ That said, documentation tools, when used correctly can be amazingly useful, esp
 Apart from static analysis (with its very limited knowledge about your problem), testing is still the cheapest way to find problems in code. Tools to make testing easier makes this even cheaper. Now when I write "testing", a good number of people will reflexively prepend "unit", and think frameworks like JUnit, Spock, py.test, test::more of whatever your language has, would be the one and only tool needed to test everything.
 
 This of course misses out on other tools:
-* [doctest](https://docs.python.org/2/library/doctest.html) runs examples in documentation as tests. This is great because it lets your documentation examples serve double duty: As documentation (good docs contain examples!) and unit-tests. This also means your tests will show you if your docs go stale.
+* [doctest](https://docs.python.org/2/library/doctest.html) runs examples in documentation as tests. This is great because it lets your documentation examples serve double duty: As documentation (good docs contain examples!) and unit-tests. This also means your tests will show you if your docs go stale. There are doctest tools for many languages (full disclosure: I wrote one for lua), others have them built in.
 * [american fuzzy lop](http://lcamtuf.coredump.cx/afl) is a code-directed fuzz testing tool. A fuzz testing tool will generate inputs for your program to make it crash. This one uses code instrumentation to help guide its input generation, so it will find problematic inputs relatively fast with very little configuration. If you have some idle CPU, this is a great tool to find out surprising things about your program, and become a little more paranoid in the process.
 * There are of course tools that enhance unit testing, like [QuickCheck](https://en.wikipedia.org/wiki/QuickCheck), which will pseudorandomly autogenerate inputs for your functions to test), and [infinitest](http://infinitest.github.io), which whenever you save a file will automatically run all unit tests that have a dependency on that file.
 
