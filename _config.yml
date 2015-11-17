@@ -27,3 +27,7 @@ defaults:
       type: "pages"
     values:
       layout: "default"
+
+# allow for rss feed
+gems:
+  - jekyll-feed
