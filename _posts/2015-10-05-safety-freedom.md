@@ -60,7 +60,7 @@ the community is, in the immortal words of Bill&Ted, excellent to each other.
 
 The language has some rough edges, being just a few months since it's 
 much-publicized 1.0.0 release. There are traits defined for arrays of size zero 
-to 32, and zero- to 32-sized tupels. Want a clone of a 33-element tuple? Sorry, 
+to 32, and zero- to 32-sized tuples. Want a clone of a 33-element tuple? Sorry, 
 I cannot do that, Dave. About half of the thing is "unstable" scaffolding, just 
 there to build the compiler (and off-limits to all but users of the "nightly" 
 version, which gives the "unstable" its meaning). The whole thing screams "you 
