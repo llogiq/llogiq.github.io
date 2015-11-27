@@ -14,15 +14,17 @@ I'm incredibly biased here. Having written tools in that space for multiple lang
 
 Often, such tools may highlight issues or show avenues for optimization the programmer would not have even considered themselves. People aren't that good at detecting subtle patterns in code, especially if those patterns have low locality. Static analysis can help because it has all the meta data, won't overlook things or be blinded by appearance.
 
-*But*, I hear some of you say, *I'm already an experienced coder. My code is* good. Great! Still that doesn't exempt you from the fallibility that makes us human (unless you are already a [bot](https://reddit.com/r/botsrights)). When we started to run clippy on [rustc](https://github.com/rust-lang/rust) itself, we got more than a hundred valid suggestions for improvement (which I subsequently implemented). Are the rust programmers newbies? Are they bad programmers? Nothing could be further from the truth. They just didn't have access to the tool before.
+*But*, I hear some of you say, *I'm already an experienced coder. My code is* good. Great! Still that doesn't exempt you from the fallibility that makes us human (unless you are already a [bot](https://reddit.com/r/botsrights)). When we started to run clippy on [rustc](https://github.com/rust-lang/rust) itself, we got more than a hundred valid suggestions for improvement (which I subsequently implemented). Are the rust programmers newbies? Are they bad programmers? Nothing could be further from the truth. They just didn't have access to the tool before. Apart from that, even clippy triggered some clippy warnings when we first ran it on itself.
 
-Improving our code based on a lint's suggestion has a profound consequence: You'll be more likely to detect those patterns in the future yourself. Believe it or not, it will make you a better programmer. I experienced this when I started running FindBugs on my Java code. Soon I noticed problems with my code that I would have overlooked just weeks ago. Nowadays, my code is FindBugs clean except in very rare circumstances. However, I still run FindBugs on my code, because it's cheap, and it still catches the occassional mishap.
+Improving our code based on a lint's suggestion has a profound consequence: You'll be more likely to detect those patterns in the future yourself. Believe it or not, it will make you a better programmer. I experienced this when I started running FindBugs on my Java code. Soon I noticed problems with my code that I would have overlooked just weeks ago. Nowadays, my code is FindBugs clean except in very rare circumstances. However, I still run FindBugs on my code, because it's cheap, and it still catches the occassional mishap. Sometimes, when code changes, ugly idioms and bugs creep in, and static analysis is a good first line of defense.
+
+Note that I wrote *first* line of defense, because static analysis doesn't absolve you from thinking about your code. It will usually only target low-hanging (automatically detectable) fruit.
 
 ### Metrics
 
 **Metrics are useless**. We simply don't have any *meaningful* metric for source code. To gauge a programmers output by lines of code is the same as measuring an aircraft engineer's progress by weight and all that jazz. I'll argue that there still is some value in those metrics, if you are alright with having a good helping of salt when interpreting them.
 
-For example, I recently looked at an estimate of the numbers of lines of code I had written in Rust, and concluded that I may not call myself a newbie anymore. When I look at this post, I'll look at the word count to ensure it's not boring you too much. I also try to keep my functions below about 30 lines of code, since that's what the source window of my editor will show at once.
+For example, I recently looked at an estimate of the numbers of lines of code I had written in Rust, and concluded that I may not call myself a newbie anymore. When I look at this post, I'll look at the word count to ensure it's not boring you too much. I also try to keep my functions below about 30 lines of code, since that's what the source window of my editor will show at once and I'm bad at keeping this stuff in my head.
 
 ### Formatting
 
@@ -41,7 +43,7 @@ Here my experience has been more mixed. While the tools are usually good enough 
     public Bar frob(Bar bar) { ... }
 ```
 
-That said, documentation tools, when used correctly can be amazingly useful, especially for libraries, which aren't complete without good documentation. Since documentation is a creative process (like writing a book), the tools cannot protect you from doing a bad job of it. Projecting failure to write meaningful documentation on the tools used to generate a browseable (or printable, or ...) version is just being dishonest with oneself.
+That said, documentation tools, when used correctly can be amazingly useful, especially for libraries, which aren't complete without good documentation. Since documentation is a creative process (like writing a book), the tools cannot protect you from doing a bad job of it. Projecting failure to write meaningful documentation on the tools used to generate a browseable (or printable, or ...) version is just being dishonest with oneself. Good tools will provide links to related information, allow keyword search within documentation, source highlighting for examples and more.
 
 ### Testing
 
@@ -50,6 +52,7 @@ Apart from static analysis (with its very limited knowledge about your problem),
 This of course misses out on other tools:
 * [doctest](https://docs.python.org/2/library/doctest.html) runs examples in documentation as tests. This is great because it lets your documentation examples serve double duty: As documentation (good docs contain examples!) and unit-tests. This also means your tests will show you if your docs go stale. There are doctest tools for many languages (full disclosure: I wrote one for lua), others have them built in.
 * [american fuzzy lop](http://lcamtuf.coredump.cx/afl) is a code-directed fuzz testing tool. A fuzz testing tool will generate inputs for your program to make it crash. This one uses code instrumentation to help guide its input generation, so it will find problematic inputs relatively fast with very little configuration. If you have some idle CPU, this is a great tool to find out surprising things about your program, and become a little more paranoid in the process.
+* [phantomjs](https://phantomjs.org), a headless browser which can be used to automate frontend tests, for which a number of frameworks have appeared.
 * There are of course tools that enhance unit testing, like [QuickCheck](https://en.wikipedia.org/wiki/QuickCheck), which will pseudorandomly autogenerate inputs for your functions to test), and [infinitest](http://infinitest.github.io), which whenever you save a file will automatically run all unit tests that have a dependency on that file.
 
-Again, those tools will help you find problems with your code that you either cannot find or would need much more effort to find. Of course *my code is perfect, bugs only exist in other people's code*, but even then wouldn't it be good to know about them? I'll leave the choice to you.
+Again, those tools will help you find problems with your code that you either cannot find or would need much more effort to find manually. Of course *my code is perfect, bugs only exist in other people's code*, but even then wouldn't it be good to know about them? I'll leave the choice to you.
