@@ -129,9 +129,9 @@ impl&lt;Ul: Unsigned + NonZero, Ur: Unsigned + NonZero&gt;
 </code></pre>
 leads to
 <pre><code class="hljs" data-trim contenteditable>
-src/uint.rs:241:1: 247:2 error: the trait `core::ops::Add&lt;Ur&gt;` is
-                         not implemented for the type `Ul` [E0277]
-src/uint.rs:241 impl&lt;Ul: Unsigned, Ur: Unsigned&gt; Add&lt;Ul, Ur&gt;…
+src/uint.rs:241:1: 247:2 error: the trait `core::ops::Add&lt;Ur&gt;`
+    is not implemented for the type `Ul` [E0277]
+src/uint.rs:241 impl&lt;Ul: Unsigned, Ur: Unsigned&gt; Add&lt;Ul, …
 </code></pre>
 </section>
 <section>
@@ -144,7 +144,7 @@ impl&lt;Ul: Unsigned + NonZero, Ur: Unsigned + NonZero&gt;
     where Ul: Add&lt;Ur&gt;,
           &lt;Ul as Add&lt;Ur&gt;&gt;::Output: Unsigned + NonZero {
     type Output = PInt&lt;&lt;Ul as Add&lt;Ur&gt;&gt;::Output&gt;;
-    fn add(self, _: PInt&lt;Ur&gt;) -&gt; Self::Output { unreachable!() }
+    fn add(self, _: PInt&lt;Ur&gt;) -&gt; Self::Output { .. }
 }
 </code></pre>
 </section>
