@@ -119,6 +119,52 @@ impl&lt;X&gt; BitAnd&lt;X&gt; for False {
 </section>
 
 <section>
+<h2>Molecules</h2>
+<code>PhantomData&lt;_&gt;</code>: bind atoms together
+<pre><code class="hljs rust" data-trim contenteditable>
+// typenum, src/uint.rs (note the generic types!)
+pub struct UInt&lt;U, B&gt; {
+    _marker: PhantomData&lt;(U, B)&gt;
+}
+</code></pre>
+<p><code>UInt</code> is zero-sized, but has two component types.</p>
+<p>9: <span class="b">&nbsp;&bull;&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;1&nbsp;</span>&larr;<span class="b">&emsp;</span><span 
+class="b">&nbsp;0&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;0&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;1&nbsp;</span></p>
+</section>
+
+<section>
+<h2>Related</h2>
+<p><code>Same</code> / <code>Cmp</code></p>
+<p>missing impls are type errors</p>
+<pre><code class="hljs rust" data-trim contenteditable>
+pub trait Same&lt;Rhs = Self&gt; {
+    type Output;
+}
+
+impl&lt;T&gt; Same&lt;T&gt; for T {
+    type Output = T;
+}
+</code></pre>
+</section>
+
+
+<section>
+<h2>Evaluate</h2>
+convert to runtime values
+
+<pre><code class="hljs rust" data-trim contenteditable>
+pub enum Ternary { T, F, U }
+pub trait TernaryType {
+    fn to_ternary() -> Ternary;
+}
+impl TernaryType for True {
+    #[inline] fn to_ternary() -> Ternary { Ternary::T }
+}
+...
+</code></pre>
+</section>
+
+<section>
 <section>
 <h2>where clauses</h2>
 <pre><code class="hljs rust" data-trim contenteditable>
@@ -154,51 +200,6 @@ impl&lt;Ul: Unsigned + NonZero, Ur: Unsigned + NonZero&gt;
 <p>replace generic impls with (multiple) concrete typed impls</p>
 <p>private intermediate traits can help</p>
 </section>
-</section>
-
-<section>
-<h2>Molecules</h2>
-<code>PhantomData&lt;_&gt;</code>: bind atoms together
-<pre><code class="hljs rust" data-trim contenteditable>
-// typenum, src/uint.rs (note the generic types!)
-pub struct UInt&lt;U, B&gt; {
-    _marker: PhantomData&lt;(U, B)&gt;
-}
-</code></pre>
-<p><code>UInt</code> is zero-sized, but has two component types.</p>
-<p>9: <span class="b">&nbsp;&bull;&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;1&nbsp;</span>&larr;<span class="b">&emsp;</span><span 
-class="b">&nbsp;0&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;0&nbsp;</span>&larr;<span class="b">&emsp;</span><span class="b">&nbsp;1&nbsp;</span></p>
-</section>
-
-<section>
-<h2>Evaluate</h2>
-convert to runtime values
-
-<pre><code class="hljs rust" data-trim contenteditable>
-pub enum Ternary { T, F, U }
-pub trait TernaryType {
-    fn to_ternary() -> Ternary;
-}
-impl TernaryType for True {
-    #[inline] fn to_ternary() -> Ternary { Ternary::T }
-}
-...
-</code></pre>
-</section>
-
-<section>
-<h2>Related</h2>
-<p><code>Same</code> / <code>Cmp</code></p>
-<p>missing impls are type errors</p>
-<pre><code class="hljs rust" data-trim contenteditable>
-pub trait Same&lt;Rhs = Self&gt; {
-    type Output;
-}
-
-impl&lt;T&gt; Same&lt;T&gt; for T {
-    type Output = T;
-}
-</code></pre>
 </section>
 
 <section>
