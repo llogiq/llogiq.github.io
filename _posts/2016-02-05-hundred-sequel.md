@@ -90,5 +90,7 @@ be misused, but lack a zero-overhead way of preventing that misuse,
 perhaps a lint could at least flag the problematic combinations? I'd
 like to hear from security-relevant crates in particular.
 
-Discuss this on [r/rust](https://reddit.com/r/rust) or
-[rust-users](https://users.rust-lang.org)!
+Discuss this on 
+[r/rust](https://www.reddit.com/r/rust/comments/44bma4/blog_a_hundred_lints_the_sequel/)
+or
+[rust-users](https://users.rust-lang.org/t/blog-a-hundred-lints-the-sequel/4536/2)!
