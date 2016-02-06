@@ -1,4 +1,3 @@
-
 ---
 title: A hundred lints: The sequel
 ---
