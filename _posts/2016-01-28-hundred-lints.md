@@ -41,7 +41,7 @@ There are a few overarching themes that most of the lints follow:
 [`let_and_return`](https://github.com/Manishearth/rust-clippy/wiki#let_and_return),
 [`needless_return`](https://github.com/Manishearth/rust-clippy/wiki#needless_return),
 [`no_effect`](https://github.com/Manishearth/rust-clippy/wiki#no_effect),
-[`temporary assignment`](https://github.com/Manishearth/rust-clippy/wiki#temporary assignment),
+[`temporary_assignment`](https://github.com/Manishearth/rust-clippy/wiki#temporary_assignment),
 [`type_complexity`](https://github.com/Manishearth/rust-clippy/wiki#type_complexity),
 [`unused_lifetimes`](https://github.com/Manishearth/rust-clippy/wiki#unused_lifetimes)
 * Performance – As Rust is touted as a systems language, we have some lints to
