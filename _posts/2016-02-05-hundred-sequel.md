@@ -1,5 +1,5 @@
 ---
-title: A hundred lints: The sequel
+title: A hundred lints – The sequel
 ---
 
 My last blog entry got some nice feedback, and here I'm trying to give
