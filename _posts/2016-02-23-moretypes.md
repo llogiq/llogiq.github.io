@@ -98,5 +98,5 @@ probably could just generate an empty function) instead of a more costly
 ----
 
 What stuff do you misuse the type system for? Discuss on
-[rust-users](https://users.rust-lang.org) and/or
-[r/rust](https://reddit.com/r/rust)!
+[rust-users](https://users.rust-lang.org/t/blog-more-type-level-shenanigans/4740/1) and/or
+[r/rust](https://www.reddit.com/r/rust/comments/478vky/blog_more_typelevel_shenanigans/)!
