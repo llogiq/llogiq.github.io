@@ -6,7 +6,7 @@ author:
   github: "https://github.com/llogiq"
 
 # Jekyll config
-future: false
+future: true
 timezone: "UTC"
 markdown: kramdown
 kramdown:
