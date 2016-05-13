@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rustic Bits</title>
+<meta name="description" content="A Few Tips for Rustic Code">
+<meta name="author" content="llogiq">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="css/reveal.css">
+<link rel="stylesheet" href="css/theme/black.css" id="theme">
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<style>
+span.b { border: 1px solid white }
+.warn { color: #ff0 }
+</style>
+<script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+<body><div class="reveal">
+<div class="slides">
+
+<section>
+<h1>Rustic Bits</h1>
+10 Tips to Make Your Code Rustic
+</section>
+
+<section>
+<h3>1. Small is Beautiful</h3>
+Favor small (sub-)crates/modules, especially with <code>unsafe</code> code
+</section>
+
+<section>
+<h3>2. Use the Type, Luke!</h3>
+use the type system to limit API operations to sensible behavior (see diesel,
+glium)
+</section>
+
+<section>
+<h3>3. Encapsulate!</h3>
+Keep data private (use private inner types), allow construction by methods or
+builders
+</section>
+
+<section>
+<section>
+<h3>4. Avoid Needless Copies</h3>
+Borrow instead of <code>.clone()</code> or use <code>std::borrow::Cow</code> to
+avoid needless copies!
+</section>
+
+<section>
+<h3>4. Avoid Needless Copies</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+fn foo(s: String) { .. }
+foo(mystring) // give the owned instance
+foo(mystr.clone()); // or make a copy
+</code></pre>
+</section>
+
+<section>
+<h3>4. Avoid Needless Copies</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+fn foo<'a>(c: Cow<'a, str>) { .. }
+foo(mystring.into_cow()); // just add an enum tag
+foo(mystr.into_cow()); // to either owned or borrowed
+</code></pre>
+</section>
+
+<section>
+<h3>4. Avoid Needless Copies</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+fn foo(s: &str) { .. }
+foo(&mystring); // if you only
+foo(mystr);     // need a borrow
+</code></pre>
+</section>
+</section>
+
+<section>
+<section>
+<h3>5. Use Entry to Update your Maps</h3>
+Use the std::collections:*map::Entry API instead of <code>.contains()</code> +
+<code>.insert()</code>/<code>.get_mut()</code> to free your code from double
+lookups!
+</section>
+
+<section>
+<h3>5. Use Entry to Update your Maps</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+if m.contains(k) {
+    m.get_mut(k).unwrap() += 1
+} else {
+    m.insert(k, 1)
+}
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>5. Use Entry to Update your Maps</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+m.entry(k).or_insert(0) += 1
+</code></pre>
+</section>
+</section>
+
+<section>
+<section>
+<h3>6. Power Tools for Power Fools</h3>
+<p>
+<code>for _ in _ { .. }</code> > <code>while let _ = _ { .. }</code> > 
+<code>while _ { .. }</code> > <code>loop { .. }</code>
+</p>
+<p>
+also <code>if let _ = _ { .. } | if _ { .. }</code> > <code>match { .. }</code>
+</section>
+
+<section>
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+match opt {
+    Some(val) => foo(val),
+    None => ()
+}
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+if let Some(val) = opt { foo(val) }
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+opt.map(foo)
+</code></pre>
+</section>
+
+<section>
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+loop {
+    match i.next() {
+         Some(val) => foo(val),
+         None => break
+    }
+}
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+while let Some(val) = i.next() { foo(val) }
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>6. Power Tools for Power Fools</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+for val in i { foo(val) }
+</code></pre>
+</section>
+</section>
+
+<section>
+<section>
+<h3>7. Use the Best Abstraction</h3>
+generics > macros > code duplication > trait objects
+</section>
+
+<section>
+<h3>7. Use the Best Abstraction</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+fn frob_foo(foo: &mut Foo) { .. }
+fn frob_bar(bar: &mut Bar) { .. } // duplicate
+// or
+trait Frobbable {}
+fn frob(f: &mut Frobbable) { .. } // trait object
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h3>7. Use the Best Abstraction</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+impl Frobbable for Foo { /* methods here */ }
+impl Frobbable for Bar { /* and here */ }
+//or as a generic function
+fn frob&lt;F: Frobbable&gt;(f: &mut F) { .. }
+</code></pre>
+</section>
+</section>
+
+<section>
+<h3>8. Improve UX through traits</h3>
+implement std traits: <code>std::borrow</code>, <code>cmp</code>, 
+<code>default</code>, <code>convert</code>, <code>iter</code>, <code>ops</code>, 
+</section>
+
+<section>
+<section>
+<h3>9. Results matter</h3>
+Return <code>std::result::Result</code>s if you want clients to handle them, 
+<code>()</code> in lieu of variant value
+</section>
+
+<section>
+<h3>9. Results matter</h3>
+<pre><code class="hljs rust" data-trim contenteditable>
+fn bool_is_cool(f: i32) -> bool { .. }
+
+fn results_count(f: i32) -> Result<(), ()> { .. }
+
+fn main() {
+    bool_is_cool(42); // meh
+    results_count(42); // KLAXONS WAILING
+}
+</code></pre>
+</section>
+
+<section>
+<h3>9. Results matter</h3>
+<div style="font-family: monospace; font-size: 65%; text-align: left;">
+results.rs:9:5: 9:25 <span class="warn">warning</span>: unused result which must be used, #[warn(unused_must_use)] on by default<br/>
+results.rs:9&nbsp;&nbsp;&nbsp;&nbsp;results_count(&amp;Foo); // KLAXONS WAILING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="warn">^~~~~~~~~~~~~~~~~~~~</span>
+</div>
+</section>
+</section>
+
+<section>
+<h3>10. Shadowing is OK</h3>
+shadowing > mutable bindings (but try for readability)
+</section>
+</div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    margin: 0.0,
+    minScale: 1.5,
+    maxScale: 3,
+    
+    transition: 'slide',
+
+    // Optional reveal.js plugins
+    dependencies: [
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'plugin/zoom-js/zoom.js', async: true },
+        { src: 'plugin/notes/notes.js', async: true }
+    ]
+});
+</script>
+</body>
+</html>
