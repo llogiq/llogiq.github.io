@@ -62,7 +62,7 @@ types and delegate to the `std::ops` traits for everyone else? A quick
 proof-of-concept turned out to work, so I quickly implemented the beginnings of 
 [overflower_support](https://crates.io/crates/overflower_support). This crate 
 contains the traits that get called instead of those in `std::ops`, and are 
-specialized for integral types to handle overflow in a specific way.
+specialized for integer types to handle overflow in a specific way.
 
 Now all overflower has to do is to fold the code and replace binary operations 
 with the corresponding method calls (actually the current version uses calls, 
