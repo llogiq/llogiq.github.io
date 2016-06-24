@@ -90,7 +90,7 @@ anyway, because sooner or later specialization will land in stable and then we
 will, too.
 
 So do you think this belongs in core? Discuss on 
-[rust-users](https://users.rust-lang.org) or 
-[/r/rust](https://reddit.com/r/rust).
+[rust-users](https://users.rust-lang.org/t/blog-announcing-overflower/6321) or 
+[/r/rust](https://www.reddit.com/r/rust/comments/4poxuu/blog_announcing_overflower/).
 
 ⚘
