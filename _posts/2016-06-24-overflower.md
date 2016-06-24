@@ -4,17 +4,16 @@ title: Announcing Overflower
 
 Integer overflow handling is a problem in many languages. Some, like Java, 
 don't even have specialized methods to check or cope with overflow, so you're 
-left on your own. As I work with statistic computations that sometimes need 
-higher precision than [IEE754](https://en.wikipedia.org/wiki/IEEE754) 
-double-width can give us, so using 64 bit integers is an appealing solution 
-(that unlike bignums doesn't kill performance). However, integers usually wrap 
-around on overflow, which is a bad thing to happen if you try to optimize a 
-value.
+left on your own. I work with statistic computations that sometimes need higher 
+precision than [IEE754](https://en.wikipedia.org/wiki/IEEE754) double-width can 
+give us, so using 64 bit integers is an appealing solution (that unlike bignums 
+doesn't kill performance). However, integers usually wrap around on overflow, 
+which is a bad thing to happen if you try to optimize a value.
 
 In Rust, the story is much better, with a compiler option to enable/disable 
 overflow checks globally (and the default to enable them in debug builds, but 
 disable them in release builds), checked/wrapping and saturating methods on all 
-integral types and even wrapper types that use the specialized methods in 
+integer types and even wrapper types that use the specialized methods in 
 arithmetic operations. However, I felt that this puzzle was missing a piece. 
 Ideally, I'd want to just tell the compiler: "Within this method/module/crate, 
 use wrapping operations" or something like that. Cheap to put in, cheap to 
@@ -28,7 +27,7 @@ crate to do exactly this. As a cute pun, I named it
 
 ### Use Cases
 
-Apart from my rather specific use case (I want release all the way, and get 
+Apart from my rather specific use case (I want `--release` all the way, and get 
 checked overflow every now and then, but only in certain modules or even 
 methods, to be easily switched in and out), there are other uses for such a 
 crate. For example, specifying `#[overflow(wrap)]` will ensure that arithmetic 
@@ -55,11 +54,12 @@ is going to be implemented before the end of the year). My time's better
 invested in writing code or blog copy than trying to follow rustc's type 
 system.
 
-As luck has it, just recently support for specialization landed in nightly. 
-Since a procedural macro is a compiler plugin and thus has to use nightly 
-anyway, why not use it to specialize our own traits for integer types and 
-delegate to the `std::ops` traits for everyone else? A quick proof-of-concept 
-turned out to work, so I quickly implemented the beginnings of 
+As luck has it, just recently support for 
+[specialization](https://github.com/rust-lang/rfcs/blob/master/text/1210-impl-specialization.md)
+landed in nightly. Since a procedural macro is a compiler plugin and thus has
+to use nightly anyway, why not use it to specialize our own traits for integer
+types and delegate to the `std::ops` traits for everyone else? A quick 
+proof-of-concept turned out to work, so I quickly implemented the beginnings of 
 [overflower_support](https://crates.io/crates/overflower_support). This crate 
 contains the traits that get called instead of those in `std::ops`, and are 
 specialized for integral types to handle overflow in a specific way.
