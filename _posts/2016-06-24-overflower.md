@@ -37,7 +37,7 @@ to be quite valuable in panic handlers (because double-panics suck) or
 interrupt handlers (where you may not panic at all).
 
 Also it lends itself to experiments like "what if that code used saturating 
-arithmetic?", which are a fun way to spend the time, for some damittedly rather 
+arithmetic?", which are a fun way to spend the time, for some admittedly rather 
 improbable definition of fun. :-)
 
 ### Implementation
