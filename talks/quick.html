@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quick, Check!</title>
+<meta name="description" content="Quickcheck">
+<meta name="author" content="llogiq">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="css/reveal.css">
+<link rel="stylesheet" href="css/theme/black.css" id="theme">
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<style>
+span.b { border: 1px solid white }
+</style>
+<script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+<body><div class="reveal">
+<div class="slides">
+
+<section>
+<h1>Quick, Check!</h1>
+
+<h3>"Hot Fuzz"ing our code</h3>
+
+Frankfurt, 12.08.2016
+</section>
+
+<section>
+<h2>Agenda</h2>
+<ul>
+<li>What is QuickCheck?</li>
+<li>Setting it up</li>
+<li><tt>Arbitrary</tt></li>
+<li><tt>Testable</tt> Predicates</li>
+<li>Dealing with Panics</li>
+</ul>
+</section>
+
+<section>
+<h2>What is QuickCheck?</h2>
+<ul>
+<li>Test a pure function</li>
+<li>Random test inputs</li>
+<li>Minimization</li>
+</ul>
+</section>
+
+<section>
+<h2>Setting it up</h2>
+(in <tt>Cargo.toml</tt>)
+<pre><code class="hljs rust" data-trim contenteditable>
+[dev-dependencies]
+quickcheck = "0.3.1"
+</code></pre>
+(in test code)
+<pre><code class="hljs rust" data-trim contenteditable>
+extern crate quickcheck;
+use quickcheck::quickcheck;
+</code></pre>
+</section>
+
+<section>
+<section>
+<h2><tt>Arbitrary</tt> values</h2>
+<ul>
+<li>Defines how inputs are created</li>
+<li>All the usual types (incl. Collections)</li>
+<li>Can <tt>impl</tt> for your own types</li>
+</ul>
+</section>
+<section>
+<h2><tt>Arbitrary</tt> values</h2>
+<pre><code class="hljs rust" data-trim contenteditable>
+extern crate quickcheck;
+use quickcheck::{Arbitrary, Gen};
+#[derive(Clone)] struct Foo(u64);
+impl Arbitrary for Foo {
+    fn arbitrary&lt;G: Gen&gt;(g: &amp;mut G) -&gt; Self { 
+        Foo(&lt;u64 as Arbitrary&gt;::arbitrary(g))
+    }
+    fn shrink(&amp;self) -&gt; Box&lt;Iterator&lt;Item=Self&gt;&gt; {
+        Box::new(self.0.shrink().map(Foo))
+    }
+}
+</code></pre>
+</section>
+<section>
+<h2><tt>Arbitrary</tt> values</h2>
+although if you have a constructor...
+<pre><code class="hljs rust" data-trim contenteditable>
+fn my_test_predicate(arg: (u64, bool, Option&lt;(usize, usize)&gt;, Vec<u8>)) -&gt; bool {
+    test_with_foo(Foo::new(arg.0, arg.1, arg.2, arg.3, arg.4))
+}
+</code></pre>
+</section>
+</section>
+
+<section>
+<section>
+<h2><tt>Testable</tt> Predicates</h2>
+We can test any function from arbitrary values to <tt>bool</tt>
+<pre><code class="hljs rust" data-trim contenteditable>
+impl&lt;T: Arbitrary&gt; Testable for Fn(T) -&gt; bool
+</code></pre>
+(Also a few other types, but they're rarely used)
+</section>
+<section>
+<h2><tt>Testable</tt> Predicates</h2>
+<pre><code class="hljs rust" data-trim contenteditable>
+extern crate quickcheck;
+use quickcheck::quickcheck;
+#[test]
+fn check_predicate() {
+    fn predicate(..) -&gt; bool { .. }
+    quickcheck(predicate as Fn(..) -&gt; bool)
+}
+</code></pre>
+</section>
+</section>
+
+<section>
+<section>
+<h2>Dealing with Panics</h2>
+<h1>Don't Panic!</h1>
+</section>
+<section>
+<h2>Dealing with Panics</h2>
+<h1>Deal With It!</h1>
+</section>
+<section>
+<h2>Dealing with Panics</h2>
+<ol>
+<li><code>std::panic::catch_unwind(_)</code></li>
+<li><code>std::panic::set_hook(_)</code></li>
+</ol>
+</section>
+</section>
+
+<section>
+<h1>See you next time!</h1>
+<h3>Our next table of regulars will be on Friday,
+September 9th at Hobbit, Darmstadt</h3>
+</section>
+
+</div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    margin: 0.0,
+    minScale: 1.5,
+    maxScale: 3,
+    
+    transition: 'slide',
+
+    // Optional reveal.js plugins
+    dependencies: [
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'plugin/zoom-js/zoom.js', async: true },
+        { src: 'plugin/notes/notes.js', async: true }
+    ]
+});
+</script>
+</body>
+</html>
