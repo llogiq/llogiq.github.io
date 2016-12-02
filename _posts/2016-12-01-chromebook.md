@@ -30,6 +30,10 @@ fonts unreadable and the icons too small to click. Given that Google has renewed
 probably do something for those great displays sooner or later. I've yet to install a dev version of ChromeOS, maybe
 it's better with that.
 
+**Update**: I've been reliably informed that the resolution setting just changes the size of the UI controls. Looking
+at the screen really closely, this appears to be the case. Sorry, the setting is weird, and I didn't wear my glasses
+when I first wtote this.
+
 Regardless the surprise, I'm using the Linux part of the equation to 99% anyway. Setting the xDPI value in the XFCE
 settings editor to 180 brought me acceptable font and icon sizes. However, those apply to external displays, too, which
 means fonts on HD displays will look comically large. I also needed to add `-Dswt.autoscale=175` to my Eclipse Neon's
