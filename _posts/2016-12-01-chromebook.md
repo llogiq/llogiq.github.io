@@ -13,10 +13,11 @@ benchmarks showed to be on par, at times even slightly faster than the older Cor
 runs in a 4.5W power envelope.
 
 That doesn't mean there aren't downsides apart from the aforementioned dearth of keys (for example, there's no Home/End
-nor PgUp/PgDn buttons, no Del key nor any Lock keys (the key in the usual CapsLock position is redefined as Fn or
-"search" key). Pressing the search key in conjunction with the cursor keys will emit `Home` / `End` / `PgUp` / `PgDn`
+nor <kbd>PgUp</kbd>/<kbd>PgDn</kbd> buttons, no <kbd>Del</kbd> key nor any Lock keys (the key in the usual
+<kbd>CapsLock</kbd> position is redefined as <kbd>Fn</kbd> or "search" key). Pressing the <kbd>search</kbd> key in
+conjunction with the cursor keys will emit <kbd>Home</kbd> / <kbd>End</kbd> / <kbd>PgUp</kbd> / <kbd>PgDn</kbd>
 presses, which crouton will also do if you install the `keyboard` target, so it's not that bad. Also at least, there's
-Escape. Take that, Apple!
+<kbd>Esc</kbd>. Take that, Apple!
 
 Disk space is severely restricted at 32GB (of which roughly 6GB are claimed by the system, the rest is for personal
 use), but as I don't store too many 4K movies on internal memory, I'll be fine. Ports are also quite restricted, so I
