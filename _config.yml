@@ -8,6 +8,7 @@ author:
 # Jekyll config
 future: true
 timezone: "UTC"
+pygments: true
 markdown: kramdown
 kramdown:
   input: GFM
