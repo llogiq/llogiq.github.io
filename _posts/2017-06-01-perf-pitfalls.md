@@ -40,7 +40,7 @@ This:
 ```rust
 println!("{}", header);
 for line in lines {
-    println!("{}, line);
+    println!("{}", line);
 }
 println!("{}", footer);
 ```
@@ -54,7 +54,7 @@ small) writes. Speed it up with:
     let mut buf = io::BufWriter::new(lock);
     writeln!(buf, "{}", header);
     for line in lines {
-        writeln!(buf, "{}, line);
+        writeln!(buf, "{}", line);
     }
     writeln!(buf, "{}", footer);
 }   // end scope to unlock stdout
@@ -141,7 +141,7 @@ While codegen for complex iterator chains
 using an iterator will be faster than an indexed loop. So this:
 
 ```rust
-for i in 0..xs.len() {
+for i in 0..(xs.len()) {
     let x = xs[i];
     // do something with x
 }
