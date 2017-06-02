@@ -117,7 +117,7 @@ covering even the most popular cases.
 ### Making a Hash of it
 
 A lot has been written about the topic of hashing (including
-[by me](/2016/12/08/hash.html)
+[by me](/2016/12/08/hash.html))
 
 Like with UTF-8 strings, Rust chooses a sensible, safe default and allows you
 to override that choice should you be so inclined. For example, the Rust
