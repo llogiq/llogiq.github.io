@@ -190,10 +190,59 @@ Depending on what we do with our frungies, we may even get rid of the second
 `collect()`. Watch out for side effects, which might be relevant and change
 evaluation order if a `collect()` is removed.
 
+### Avoid needless allocation
+
+Rust gives us a good number of tools to avoid needless allocations. It however
+also gives us tools to do them if we're so inclined. Especially when starting
+out and getting into the first disagreements with the borrow checker, often a
+simple fix is to call `.to_owned()` or `.clone()`. However, while this keeps
+the code simple, performance may suffer.
+
+As there are multiple techniques to avoiding allocation, I'll only list those
+that I deem both useful and sufficiently easy to implement:
+
+* Use `&str` instead of `&String` (or even `String` unless you explicitly want
+to consume it)
+* Similarly, use `&[T]` (slices) instead of `&Vec<T>` (or even `Vec<T>`). Also
+use `&mut [T]` instead of `&mut Vec<T>` if you have no resizing operation.
+* For static values, you can often get away with arrays instead of `Vec`s. Just
+reference them to get a slice.
+* If you cannot replace your owned value with a borrow, consider using a `Cow`.
+For example, it is often possible to replace `String` with `Cow<'static, str>`
+and `Vec<T>` with `Cow<'a, [T]>` if you can borrow in some but not all cases.
+* Sometimes, when changing an enum, we want to keep parts of the old value. Use
+[`mem::replace` to avoid needless clones](https://github.com/rust-unofficial/patterns/blob/master/idioms/mem-replace.md).
+
+### Avoid other needless work
+
+Sometimes, adding a bit more lazyness can make a positive difference. For
+example, in the name of readability, people may convert this:
+
+```
+match my_option {
+    Some(foo) -> frobnicate(foo),
+    None -> calculate_default_frob(),
+}
+```
+
+to `my_option.map_or(calculate_default_frob(), frobnicate)`, which calculates
+the default frob even when there is a `foo`. Using
+`my_option.map_or_else(calculate_default_frob, frobnicate)` solves this
+particular case. Note that while I wrote the `fn` names directly, sometime you
+need a closure to capture some arguments (e.g. on `Result::ok_or_else(..)`) or
+to auto-dereference them (e.g. `&Box`es will be dereferenced to refs to their
+contents). The easiest way then is to always use a closure and let
+[clippy](https://github.com/Manishearth/rust-clippy) tell you when to remove
+it.
+
+Also Rust uses LLVM, which performs dead-store analysis, which *may*
+optimize away the needless default calculation. However, this analysis doesn't
+always work, so as always measure the effect.
+
 ### More?
 
 That's all I have for now. Do you have navigated other pitfalls? Discuss on
 [/r/rust] or [rust-users]!
 
-[/r/rust]: https://www.reddit.com/r/rust
-[rust-users]: https://users.rust-lang.org
+[/r/rust]: https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/
+[rust-users]: https://users.rust-lang.org/t/blog-rust-performance-pitfalls/11163?u=llogiq
