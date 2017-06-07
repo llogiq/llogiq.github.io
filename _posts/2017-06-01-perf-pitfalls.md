@@ -28,43 +28,50 @@ optimizing a program that doesn't work correctly.
 
 ### Unbuffered IO
 
-By default, Rust uses unbuffered IO. Worse, the default `print!` macros will
-lock STDOUT *for each write* operation. So if you have a larger output (or
-input from STDIN), you should both lock manually and wrap them in a `BufWriter`
-/ `BufReader`, unless you have good reason to forgo the speedup (e.g.
+By default, Rust uses unbuffered File IO. So when you write files, wrap them in
+a `BufWriter` / `BufReader`, unless you have good reason to forgo the speedup –
 constrained memory, using a custom buffering scheme, specific need for high
-write granularity).
+write granularity. Also if you read/write the whole thing at once, buffering
+won't help you.
+
+Similarly, the default `print!` macros will lock STDOUT *for each
+write* operation. So if you have a larger textual output (or input from STDIN),
+you should lock manually.
+
 
 This:
 
 ```rust
+let mut out = File::new("test.out");
 println!("{}", header);
 for line in lines {
     println!("{}", line);
+    writeln!(out, "{}", line);
 }
 println!("{}", footer);
 ```
 
 locks and unlocks io::stdout a lot, and does a linear number of (potentially
-small) writes. Speed it up with:
+small) writes both to stdout and the file. Speed it up with:
 
 ```rust
 {
+    let mut out = File::new("test.out");
+    let mut buf = BufWriter::new(out);
     let mut lock = io::stdout().lock();
-    let mut buf = io::BufWriter::new(lock);
-    writeln!(buf, "{}", header);
+    writeln!(lock, "{}", header);
     for line in lines {
+        writeln!(lock, "{}", line);
         writeln!(buf, "{}", line);
     }
-    writeln!(buf, "{}", footer);
-}   // end scope to unlock stdout
+    writeln!(lock, "{}", footer);
+}   // end scope to unlock stdout and flush/close buf
 ```
 
 This locks only once and writes only once the buffer is filled (or buf is
 closed), so it should be much faster.
 
-Similarly, for File or network IO, you may want to use buffered IO, but may or
-may not need a lock.
+Similarly, for network IO, you may want to use buffered IO.
 
 ### Reading lines
 
