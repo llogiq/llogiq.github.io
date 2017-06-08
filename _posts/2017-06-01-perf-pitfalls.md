@@ -2,10 +2,11 @@
 title: Rust Performance Pitfalls
 ---
 
-Overall, Rust is pretty good for performance. Write the most simple stuff, and
-it will usually run within a factor of two from optimized C/C++ code. However,
-Rust makes some tradeoffs for different reasons than sheer speed, so here's a
-handy list of some things that may bite you and how you can speed them up.
+Overall, Rust is pretty good for performance. Write the most simple, naive
+stuff, and it will usually run within a factor of two from optimized C/C++
+code, without any further performance work on the code. However, Rust makes
+some tradeoffs for different reasons than sheer speed, so here's a handy list
+of some things that may bite you and how you can speed them up.
 
 Before we come to the list, please remember that this is only general advice
 that may or may not apply to your specific situation. As Kirk Pepperdine always
@@ -186,7 +187,7 @@ let frungies : Vec<_> = nopes.iter().filter(|x| x > MIN_THRESHOLD).collect();
 
 Could most probably be this:
 
-```
+```rust
 let frungies : Vec<_> = bleeps.iter()
                               .map(boop)
                               .filter(|x| x > MIN_THRESHOLD)
@@ -225,7 +226,7 @@ and `Vec<T>` with `Cow<'a, [T]>` if you can borrow in some but not all cases.
 Sometimes, adding a bit more lazyness can make a positive difference. For
 example, in the name of readability, people may convert this:
 
-```
+```rust
 match my_option {
     Some(foo) -> frobnicate(foo),
     None -> calculate_default_frob(),
