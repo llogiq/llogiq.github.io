@@ -4,9 +4,11 @@ title: Rust Performance Pitfalls
 
 Overall, Rust is pretty good for performance. Write the most simple, naive
 stuff, and it will usually run within a factor of two from optimized C/C++
-code, without any further performance work on the code. However, Rust makes
-some tradeoffs for different reasons than sheer speed, so here's a handy list
-of some things that may bite you and how you can speed them up.
+code, without any further performance work on the code. With some investment
+into optimizations, matching or exceeding C's speed should be possible in most
+cases. However, Rust makes some tradeoffs for different reasons than sheer
+speed, so here's a handy list of some things that may bite you and how you can
+speed them up.
 
 Before we come to the list, please remember that this is only general advice
 that may or may not apply to your specific situation. As Kirk Pepperdine always
