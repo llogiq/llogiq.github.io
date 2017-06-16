@@ -14,6 +14,10 @@ Before we come to the list, please remember that this is only general advice
 that may or may not apply to your specific situation. As Kirk Pepperdine always
 exhorts: "Measure, don't guess!".
 
+*Update*: redditor MEaster did some
+[benchmarks](https://gist.github.com/Measter/53acc0816083239dd48f40779337e5d1)
+and was so nice to share them. Thanks!
+
 ### Ask for `--release`
 
 The first stumbling block is that Rust by default compiles (and runs) in
@@ -28,6 +32,12 @@ I'd like to add that this is actually a good default, letting you test your
 code quickly without much hassle, leaving the heavyweight optimizations until
 you're sufficiently confident it does the right thing. No need to waste cycle
 optimizing a program that doesn't work correctly.
+
+Also if you want to leverage the full potential of your CPU,
+`-C target-cpu=native` can give you a bit of extra oomph. Note that for some
+CPUs the target detection is broken and will result in illegal opcodes in your
+binaries. I get this with my intel Core m3-6y30, and using
+`-C target-cpu=skylake` works like a charm for me.
 
 ### Unbuffered IO
 
@@ -112,8 +122,9 @@ entrance fee by way of UTF-8 checking.
 
 To get rid of the checks, we can either use bytes directly (usually via
 `Vec<u8>` / `&[u8]`) or, if we are absolutely sure the input will be valid
-UTF-8, use `str::from_utf8_unchecked(_)` (note that this will require `unsafe`
-and break your code in surprising ways should the input not be valid UTF-8).
+UTF-8, use `str::from_utf8_unchecked(_)` (**WARNING**: this will require
+`unsafe` and break your code in surprising ways should the input *not* be valid
+UTF-8).
 
 The [`regex`](https://crates.io/crates/regex) crate has a `regex::bytes`
 submodule containing all functions to work with byte slices where `regex` does
