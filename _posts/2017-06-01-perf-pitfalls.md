@@ -39,6 +39,17 @@ CPUs the target detection is broken and will result in illegal opcodes in your
 binaries. I get this with my intel Core m3-6y30, and using
 `-C target-cpu=skylake` works like a charm for me.
 
+Bonus: You can also add some `.cargo` directory within *any* directory from
+the project root upwards (many people will have their projects somewhere in
+their home directory, so if they use `rustup`, they'll already have it). If
+this directory contains a `config` file, its contents will be parsed for
+defaults. So insert e.g.:
+
+```
+[target.`cfg(any(windows, unix))`]
+rustflags = ["-C target-cpu=native"]
+```
+
 ### Unbuffered IO
 
 By default, Rust uses unbuffered File IO. So when you write files, wrap them in
