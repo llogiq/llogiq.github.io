@@ -2,7 +2,7 @@
 title: Opportunistic Mutations
 ---
 
-As you may know, my current [mutagen](https.//github.com/llogiq/mutagen)
+As you may know, my current [mutagen](https://github.com/llogiq/mutagen)
 project deals with mutation testing in Rust. However, as I remarked, Rust's
 famed flexibility leaves us little room to do mutations while keeping the type
 checker happy. For example, other mutation testing frameworks can mutate
