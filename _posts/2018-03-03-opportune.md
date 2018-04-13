@@ -72,11 +72,12 @@ knowing the types are one and the same gives us no way to convert between them.
 
 *Update:* redditor [kennytm](https://reddit.com/user/kennytm)
 [informs me](https://www.reddit.com/r/rust/comments/81pth8/blog_opportunistic_mutations_for_the_mutagen_rust/dv4oqrl/)
-that Rust has a special syntax for requiring two types to be equal in where
-clauses, notably the surprisingly unsurprising `where T1 = T2`, and unlike the
-`Same` trait actually allows the type system to see through the equality
-relation. Thanks, kennytm! I'll still use the following solution, because it's
-more flexible.
+
+that Rust has a special syntax for requiring two associated types to be equal
+in where clauses, notably the surprisingly unsurprising `where T1 = T2`, and
+unlike the `Same` trait actually allows the type system to see through the
+equality relation. Thanks, kennytm! I'll still use the following solution,
+because it's more flexible.
 
 So let's take a step back and re-evaluate our requirements:
 
