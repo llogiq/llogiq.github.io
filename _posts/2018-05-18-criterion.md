@@ -58,5 +58,5 @@ introduce multiple input values, comparisons, etc.
 The verdict: Criterion is a tad more complex than Bencher. It certainly has the better statistics
 (though it could in theory improve even more), and allows for finer-grained control, but the
 complexity still comes at a cost – in this case runtime, especially on larger/slower benchmarks.
-Perhaps Brook should introduce a compatibility layer that allows bencher-benchmarks to run
-with criterion unchanged – this would allow folks to cheaply test before switching.
+Perhaps Brook should introduce a compatibility layer that allows bencher-benchmarks to run with
+criterion unchanged – this would allow folks to cheaply test before switching.
