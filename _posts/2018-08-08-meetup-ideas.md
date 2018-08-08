@@ -41,6 +41,6 @@ Or do you have other ideas? Discuss on [reddit], [twitter] or [rust-users]!
 [Clippy lint workshop]: https://llogiq.github.io/2016/04/16/apology.html
 [crate polishing workshop]: https://llogiq.github.io/2017/02/27/cpw.html
 [rust patterns]: https://github.com/rust-unofficial/patterns
-[reddit]: https://reddit.com/r/rust
-[twitter]: https://twitter.com/llogiq
-[rust-users]: https://users.rust-lang.org
+[reddit]: https://www.reddit.com/r/rust/comments/95ksrz/blog_ideas_for_rust_meetups
+[twitter]: https://mobile.twitter.com/llogiq/status/1027137686941954048
+[rust-users]: https://users.rust-lang.org/t/blog-ideas-for-rust-meetups/19423?u=llogiq
