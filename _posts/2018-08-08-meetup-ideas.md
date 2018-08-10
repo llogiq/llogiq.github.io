@@ -3,7 +3,7 @@ title: Ideas for Rust Meetups
 ---
 
 Since I'm co-organizing the Rhein-Main Rust meetup (and am probably the main driving force behind
-it), I tought, it might be useful to share a few ideas we have that we have either already done, or
+it), I thought, it might be useful to share a few ideas we have that we have either already done, or
 plan doing – perhaps other meetup organizers can benefit from this. Note that our meetups usually
 run 2-4 hours, but some attendees may have to join late or leave early so the format has to take
 this into account.
