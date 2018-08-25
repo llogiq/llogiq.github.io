@@ -12,7 +12,7 @@ that it could only derive `Arbitrary` for structs.
 which appears to be written roughly a year ago. The used `syn` was also quite
 old, so I looked around to find if there were some improvements I could use.
 
-I was in luck – what I found was the ['synstructure`] crate which makes writing
+I was in luck – what I found was the [`synstructure`] crate which makes writing
 procedural macros a breeze (as a testament, the git stats show that I deleted
 more lines than I added, despite adding a sizable chunk of new functionality).
 Also the crate is well-documented, so you can find examples for most things you
@@ -65,4 +65,4 @@ So if you want to create macros to derive your trait, give `synstructure` a
 try. You won't be disappointed.
 
 [`quickcheck_derive`]: https://crates.io/crates/quickcheck_derive
-['synstructure`]: https://crates.io/crates/synstructure
+[`synstructure`]: https://crates.io/crates/synstructure
