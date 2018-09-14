@@ -2,16 +2,16 @@
 title: A hundred lints
 ---
 
-[clippy](https://github.com/Manishearth/rust-clippy) just reached a hundred
+[clippy](https://github.com/rust-lang-nursery/rust-clippy) just reached a hundred
 lints. Besides the obvious
 [partying](https://www.youtube.com/watch?v=3RbnBvQ1bC0), this is a good time to
 look at the lints, and see what we've come up with so far.
 
 When Manish started clippy, he had about 5 lints, most of them fairly trivial.
-I added my own [`eq_op`](https://github.com/Manishearth/rust-clippy/wiki#eq_op) 
+I added my own [`eq_op`](https://rust-lang-nursery.github.io/rust-clippy/#eq_op)
 lint, which was a bit more complex (and, as it turned out later, wrong), and we
 both followed up with a heap of lints each. Others joined us, we got automated
-testing, a CONTRIBUTION.md and even more heaps of lints. But what do we lint 
+testing, a CONTRIBUTION.md and even more heaps of lints. But what do we lint
 *against*? What do we lint *for*?
 
 # Reasons to lint
@@ -19,46 +19,46 @@ testing, a CONTRIBUTION.md and even more heaps of lints. But what do we lint
 There are a few overarching themes that most of the lints follow:
 
 * Likely Errors – some patterns are usually programmer errors, e.g.
-[`bad_bit_mask`](https://github.com/Manishearth/rust-clippy/wiki#bad_bit_mask),
-[`cmp_nan`](https://github.com/Manishearth/rust-clippy/wiki#cmp_nan),
-[`eq_op`](https://github.com/Manishearth/rust-clippy/wiki#eq_op),
-[`empty_loop`](https://github.com/Manishearth/rust-clippy/wiki#empty_loop),
-[`match_overlapping_arm`](https://github.com/Manishearth/rust-clippy/wiki#match_overlapping_arm),
-[`ineffective_bit_mask`](https://github.com/Manishearth/rust-clippy/wiki#ineffective_bit_mask),
-[`min_max`](https://github.com/Manishearth/rust-clippy/wiki#min_max),
-[`modulo_one`](https://github.com/Manishearth/rust-clippy/wiki#modulo_one),
-[`nonsensical_open_options`](https://github.com/Manishearth/rust-clippy/wiki#nonsensical_open_options),
-[`out_of_bounds_indexing`](https://github.com/Manishearth/rust-clippy/wiki#out_of_bounds_indexing),
-[`range_step_by_zero`](https://github.com/Manishearth/rust-clippy/wiki#range_step_by_zero),
-[`unit_cmp`](https://github.com/Manishearth/rust-clippy/wiki#unit_cmp) and others
+[`bad_bit_mask`](https://rust-lang-nursery.github.io/rust-clippy/#bad_bit_mask),
+[`cmp_nan`](https://rust-lang-nursery.github.io/rust-clippy/#cmp_nan),
+[`eq_op`](https://rust-lang-nursery.github.io/rust-clippy/#eq_op),
+[`empty_loop`](https://rust-lang-nursery.github.io/rust-clippy/#empty_loop),
+[`match_overlapping_arm`](https://rust-lang-nursery.github.io/rust-clippy/#match_overlapping_arm),
+[`ineffective_bit_mask`](https://rust-lang-nursery.github.io/rust-clippy/#ineffective_bit_mask),
+[`min_max`](https://rust-lang-nursery.github.io/rust-clippy/#min_max),
+[`modulo_one`](https://rust-lang-nursery.github.io/rust-clippy/#modulo_one),
+[`nonsensical_open_options`](https://rust-lang-nursery.github.io/rust-clippy/#nonsensical_open_options),
+[`out_of_bounds_indexing`](https://rust-lang-nursery.github.io/rust-clippy/#out_of_bounds_indexing),
+[`range_step_by_zero`](https://rust-lang-nursery.github.io/rust-clippy/#range_step_by_zero),
+[`unit_cmp`](https://rust-lang-nursery.github.io/rust-clippy/#unit_cmp) and others
 * Readability – a good many lints suggest readability improvements, such as
-[`approx_constant`](https://github.com/Manishearth/rust-clippy/wiki#approx_constant),
-[`block_in_if_condition_stmt`](https://github.com/Manishearth/rust-clippy/wiki#block_in_if_condition_stmt),
-[`collapsible_if`](https://github.com/Manishearth/rust-clippy/wiki#collapsible_if),
-[`cyclomatic_complexity`](https://github.com/Manishearth/rust-clippy/wiki#cyclomatic_complexity),
-[`filter_next`](https://github.com/Manishearth/rust-clippy/wiki#filter_next),
-[`len_zero`](https://github.com/Manishearth/rust-clippy/wiki#len_zero),
-[`let_and_return`](https://github.com/Manishearth/rust-clippy/wiki#let_and_return),
-[`needless_return`](https://github.com/Manishearth/rust-clippy/wiki#needless_return),
-[`no_effect`](https://github.com/Manishearth/rust-clippy/wiki#no_effect),
-[`temporary_assignment`](https://github.com/Manishearth/rust-clippy/wiki#temporary_assignment),
-[`type_complexity`](https://github.com/Manishearth/rust-clippy/wiki#type_complexity),
-[`unused_lifetimes`](https://github.com/Manishearth/rust-clippy/wiki#unused_lifetimes)
+[`approx_constant`](https://rust-lang-nursery.github.io/rust-clippy/#approx_constant),
+[`block_in_if_condition_stmt`](https://rust-lang-nursery.github.io/rust-clippy/#block_in_if_condition_stmt),
+[`collapsible_if`](https://rust-lang-nursery.github.io/rust-clippy/#collapsible_if),
+[`cyclomatic_complexity`](https://rust-lang-nursery.github.io/rust-clippy/#cyclomatic_complexity),
+[`filter_next`](https://rust-lang-nursery.github.io/rust-clippy/#filter_next),
+[`len_zero`](https://rust-lang-nursery.github.io/rust-clippy/#len_zero),
+[`let_and_return`](https://rust-lang-nursery.github.io/rust-clippy/#let_and_return),
+[`needless_return`](https://rust-lang-nursery.github.io/rust-clippy/#needless_return),
+[`no_effect`](https://rust-lang-nursery.github.io/rust-clippy/#no_effect),
+[`temporary_assignment`](https://rust-lang-nursery.github.io/rust-clippy/#temporary_assignment),
+[`type_complexity`](https://rust-lang-nursery.github.io/rust-clippy/#type_complexity),
+[`unused_lifetimes`](https://rust-lang-nursery.github.io/rust-clippy/#unused_lifetimes)
 * Performance – As Rust is touted as a systems language, we have some lints to
 avoid patterns that produce suboptimal code. Examples are
-[`box_vec`](https://github.com/Manishearth/rust-clippy/wiki#box_vec),
-[`boxed_local`](https://github.com/Manishearth/rust-clippy/wiki#boxed_local),
-[`cmp_owned`](https://github.com/Manishearth/rust-clippy/wiki#cmp_owned),
-[`extend_from_slice`](https://github.com/Manishearth/rust-clippy/wiki#extend_from_slice),
-[`linkedlist`](https://github.com/Manishearth/rust-clippy/wiki#linkedlist),
-[`mutex_atomic`](https://github.com/Manishearth/rust-clippy/wiki#mutex_atomic),
-[`or_fun_call`](https://github.com/Manishearth/rust-clippy/wiki#or_fun_call),
-[`redundant_closure`](https://github.com/Manishearth/rust-clippy/wiki#redundant_closure),
-[`str_to_string`](https://github.com/Manishearth/rust-clippy/wiki#str_to_string),
-[`string_to_string`](https://github.com/Manishearth/rust-clippy/wiki#string_to_string)
+[`box_vec`](https://rust-lang-nursery.github.io/rust-clippy/#box_vec),
+[`boxed_local`](https://rust-lang-nursery.github.io/rust-clippy/#boxed_local),
+[`cmp_owned`](https://rust-lang-nursery.github.io/rust-clippy/#cmp_owned),
+[`extend_from_slice`](https://rust-lang-nursery.github.io/rust-clippy/#extend_from_slice),
+[`linkedlist`](https://rust-lang-nursery.github.io/rust-clippy/#linkedlist),
+[`mutex_atomic`](https://rust-lang-nursery.github.io/rust-clippy/#mutex_atomic),
+[`or_fun_call`](https://rust-lang-nursery.github.io/rust-clippy/#or_fun_call),
+[`redundant_closure`](https://rust-lang-nursery.github.io/rust-clippy/#redundant_closure),
+[`str_to_string`](https://rust-lang-nursery.github.io/rust-clippy/#str_to_string),
+[`string_to_string`](https://rust-lang-nursery.github.io/rust-clippy/#string_to_string)
 * Being a good citizen, this is enforced by
-[`unstable_as_mut_slice`](https://github.com/Manishearth/rust-clippy/wiki#unstable_as_mut_slice),
-[`zero_width_space`](https://github.com/Manishearth/rust-clippy/wiki#zero_width_space)
+[`unstable_as_mut_slice`](https://rust-lang-nursery.github.io/rust-clippy/#unstable_as_mut_slice),
+[`zero_width_space`](https://rust-lang-nursery.github.io/rust-clippy/#zero_width_space)
 and others.
 
 There are a few things to note here.
