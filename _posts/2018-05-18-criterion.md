@@ -42,7 +42,7 @@ we use the more complex one, that allows us to configure the Criterion runner fo
 for most benchmarks the first form will be sufficient. The benchmark functions get the Criterion
 object and can set up and run the benchmarks programmatically:
 
-```
+```rust
 fn target(criterion: Criterion) {
     criterion.bench("target",
         Benchmark::new("foo", ..));
