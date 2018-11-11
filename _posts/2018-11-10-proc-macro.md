@@ -83,10 +83,11 @@ care of the attributes. An accessor on `Expr` would have been very helpful
 here.
 
 When I finally thought that I had it figured out, I got an unhelpful error
-during macro expanson. `cargo expand` proved unhelpful, so I commented out
-various parts of the code to see whether they'd make any difference. This at
-least reduced the possible errors to the generation of the trait method
-calls. The problem is that a `&str` cannot be quoted as an `Ident`.
+during macro expanson. `cargo expand` only spat out the same error, which
+didn't help either, so I commented out various parts of the code to see whether
+they'd make any difference. This at least reduced the possible errors to the
+generation of the trait method calls. The problem is that a `&str` cannot be
+quoted as an `Ident`.
 
 I finally arrived at the solution: `syn::parse_str::<Ident>(..).unwrap()`. This
 leaves me with one final problem: I cannot get macros expanded. This used to be
@@ -109,5 +110,5 @@ anyone working on this, chat me up on [twitter], [reddit] or the next
 [flamer]: https://github.com/llogiq/flamer/blob/92b3427857b463e4f94c71c180c145034bfe9574/src/lib.rs
 [overflower]: https://github.com/llogiq/overflower
 [twitter]: https://mobile.twitter.com/llogiq
-[reddit]: https://www.reddit.com/r/rust
+[reddit]: https://www.reddit.com/r/rust/comments/9vy1e5/blog_proc_macro_attribute_revisited
 [RustFest]: https://rome.rustfest.eu
