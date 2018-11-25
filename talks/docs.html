@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Effective Documentation</title>
+<meta name="description" content="Let's write some docs!">
+<meta name="author" content="llogiq">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="css/reveal.css">
+<link rel="stylesheet" href="css/theme/black.css" id="theme">
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<style type="text/css">
+@keyframes scroll {
+    from {
+        background-position: -100px;
+    }
+    to {
+        background-pos: -300%;
+    }
+}
+
+html.lemming div.slide-background.present {
+    animation: scroll 80s
+}
+</style>
+<script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+<body><div class="reveal">
+<div class="slides">
+
+<section>
+<h1>Effective Rust documentation</h1>
+<p>Rome, 25.11.2018</p>
+</section>
+
+<section>
+<h1>Goals</h1>
+<ul>
+<li class="fragment fade-in">discoverability</li>
+<li class="fragment fade-in">aiding understanding</li>
+<li class="fragment fade-in">shorten learning curve</li>
+<li class="fragment fade-in">ease of use</li>
+<li class="fragment fade-in">reducing WTFs</li>
+<li class="fragment fade-in">driving API design</li>
+<li class="fragment fade-in">fun</li>
+</ul>
+</section>
+
+<section>
+<h1>Thinking In Docs</h1>
+<section>Many programmers don't like to document</section>
+<section data-transition="slide fade">Because they're doing it wrong</section>
+<section data-transition="fade slide">Because they're <s>doing</s><span style="width:0px; margin:0px 0em 0px -2.5em; color:red; background: #000;"><b>thinking</b></span> it wrong</section>
+<section data-background="lemmings.gif" data-state="lemming"><h3>Documentation ≈ Lemmings™</h3></section>
+</section>
+
+<section>
+<h1>A Word About Words</h1>
+<section>Write as you speak. But with more care.</section>
+<section>Prefer short &amp; to the point sentences. Avoid filler.</section>
+<section>Write active, not passive.</section>
+<section>
+<p>Don't dither.</p>
+<p>If you are unsure, find out.</p>
+<p>If there are exceptions, state them.</p>
+</section>
+<section data-transition="slide fade"><h3>Foo &amp; Bar</h3>&nbsp;</section>
+<section data-transition="fade slide">
+<h3><s>Foo &amp; Bar</s></h3>
+Please try for plausible examples
+</section>
+</section>
+
+<section>
+<section><h1>What to document</h1></section>
+<section>
+<h2>Front Matter</h2>
+<ul>
+<li>README.md</li>
+<li>CONTRIBUTING.md</li>
+<li>LICENSE</li>
+<li>Cargo.toml (description, keywords)</li>
+</ul>
+</section>
+<section><h2>Crate / Module</h2>The big picture
+<pre><code class="hljs rust" data-trim>
+//! Library functions for the SPUTNIK II spacecraft
+//!
+//! For the sequence you need a `Spaceship` that a `Rocket`
+//! brings to lower earch orbit. For correct execution, the
+//! `Spacecraft` will contain a `Dog` called Leika.
+</code></pre>
+
+</section>
+<section><h2>Type</h2>
+<ul>
+<li>What it is (for)</li>
+<li>How to obtain one</li>
+<li>How to use them</li>
+<li>Invariants</li>
+</ul>
+</section>
+<section>
+<h3>Function</h3>
+First, what it <i>does</i> (It "returns", "creates", "mutates", etc.)
+<p>Then, a longer description of the function and its arguments</p>
+<pre><code class="hljs rust" data-trim>
+/// Returns the doggo to earth
+///
+/// This function takes an argument of type [`Dog`]
+/// and returns it to earth, safely
+/// [`Dog`]: struct.Dog.html
+</code></pre>
+</section><section>
+<h3>Function</h3>
+Special headings (optional): Panics, Errors, Safety
+<pre><code class="hljs rust" data-trim>
+/// # Panic
+///
+/// Some doggos may panic upon re-entry. Give them some rest.
+///
+/// # Errors
+///
+/// This function may return `Err(ReentryError)` if the
+/// re-entry sequence fails.
+///
+/// # Safety
+///
+/// This function is safe as long as the doggo is trained well
+/// and the craft has been maintained correctly.
+</code></pre>
+</section><section>
+<h3>Function</h3>
+Examples (mandatory): Short description, then code.
+<pre><code class="hljs rust" data-trim>
+/// # Examples
+///
+/// Return a random doggo to earth in the default craft
+///
+/// ```rust
+///# let mut doggo: Dog = Dog::new();
+///# let mut craft: Spaceship = Spaceship::default();
+/// craft.initiate_reentry(&mut doggo)?;
+/// ```
+fn initiate_reentry(doggo: &mut Dog)
+-> Result<(), ReentryError>;
+</code></pre>
+Pro-tip: You may use comments in the code
+</section>
+<section><h3>Macro</h3>
+Similar to functions, state the args, effects &amp; results
+<pre><code class="hljs rust" data-trim>
+/// Join a path with the correct path separator
+///
+/// This will take the args which must evaluate to string and
+/// join them using the system path separator. Prepend `/` to
+/// the arguments to get an absolute path.
+///
+/// # Examples
+///
+/// ```rust
+///# #[macro_use] extern crate pathsep;
+/// assert_eq!(join_path!("src","def"),
+///     concat!("src", path_separator!(), "def"));
+/// ```
+</code></pre>
+</section>
+</section>
+
+<section>
+<section><h1>What Else to Put in Your Docs</h1></section>
+<section>
+<h3>[links]</h3>
+<pre><code class="hljs rust" data-trim>
+//! This example has [anchors](#anchors) as well as [links].
+//!
+//! [links]: ../../links/enum.Links.html
+//!
+//! # Anchors
+//!
+//! Every heading has its own anchor.
+</code></pre>
+</section>
+<section>
+<h3>Tables</h3>
+<pre><code class="hljs rust" data-trim>
+//! &lt;table&gt;
+//! &lt;tr&gt;&lt;th&gt;One&lt;/th&gt;&lt;th&gt;Two&lt;/th&gt;&lt;/tr&gt;
+//! &lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;
+//! &lt;/table&gt;
+</code></pre>
+<hr />
+<table>
+<tr><th>One</th><th>Two</th></tr>
+<tr><td>1</td><td>2</td></tr>
+</table>
+</section>
+<section>
+<h3>Images</h3>
+<pre><code class="hljs rust" data-trim>
+//! &lt;img src="/rust-logo.svg" alt="Rust logo" />&gt;
+</code></pre>
+</section>
+<section>
+<h3>Ponies?</h3>
+Please don't do <a href="https://docs.rs/pwnies">this</a>.
+</section>
+</section>
+
+<section>
+<h1>doctests</h1>
+<section>dual-use<hr>&gt; sum of parts</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust
+/// ..
+/// ```
+</code></pre>
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust,ignore
+/// ..
+/// ```
+</code></pre>
+Docs only, no test
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust,no_run
+/// ..
+/// ```
+</code></pre>
+Checks that the code compiles, but don't run
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust,should_panic
+/// ..
+/// ```
+</code></pre>
+Check that the code compiles and panics on running
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust
+///# #[allow(unused)]
+/// ```
+</code></pre>
+hide code from docs (setup, lint attrs, repeated parts of examples)
+</section>
+<section>
+Actually none of the above compiles
+<pre><code class="hljs rust" data-trim>
+ --&gt; docworkshop.rs:4:6
+  |
+5 |      ..
+  |      ^^ expected (), found struct `std::ops::RangeFull`
+  |
+  = note: expected type `()`
+             found type `std::ops::RangeFull`
+</code></pre>
+<hr>
+But there's a trick...
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+/// ```rust
+///# #[allow(unused)]
+/// for i in 0..12 {
+///     ..
+///#; // ← See this?
+/// }
+/// ```
+</code></pre>
+</section>
+<section>
+Also:
+<pre><code class="hljs rust" data-trim>
+/// ```rust,compile_fail
+/// This does not compile. Big surprise!
+/// ```
+</code></pre>
+Check that something <i>doesn't</i> compile.
+</section>
+</section>
+
+<section>
+<h1>Docs vs. Macros</h1>
+<section>
+<pre><code class="hljs rust" data-trim>
+macro_rules generate! {
+    { x: $ty } => {
+        /// this is the same for all types
+        fn send_to_space(e: $ty) { .. }
+    };
+}
+</code></pre>
+<hr>
+this is the same for all types
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+macro_rules generate {
+    { $ty:ty } => {
+        /// Send a $ty to space
+        fn send_to_space(e: $ty) { .. }
+    };
+}
+</code></pre>
+<hr>
+Send a $ty to space
+</section>
+<section>
+<pre><code class="hljs rust" data-trim>
+macro_rules! doc_comment {
+    ($x:expr, $($tt:tt)*) => { #[doc = $x] $($tt)* };
+}
+
+macro_rules generate {
+    { $ty:ty } => {
+        doc_comment! {
+            concat!("Send a ", stringify!($ty), " to space"),
+            fn send_to_space(e: $ty) { .. }
+        }
+    };
+}
+</code></pre>
+<hr>
+Send a Doggo to space
+</section>
+</section>
+
+<section>
+<h1>Examples of Great Docs</h1>
+<ul>
+<li><a href="https://docs.rs/ripgrep">ripgrep</a></li>
+<li><a href="https://docs.rs/itertools">itertools</a></li>
+<li><a href="https://docs.rs/rand">rand</a></li>
+</ul>
+</section>
+
+<section>
+<h1>Docs That Don't Fit</h1>
+<section>What to do?</section>
+<section>
+<h3>Case study: clippy lints</h3>
+<ul>
+<li class="fragment fade-in">README.md</li>
+<li class="fragment fade-in">wiki, manually updated</li>
+<li class="fragment fade-in"<tt>update_lints.py + wiki</tt></li>
+<li class="fragment fade-in">github.io page</li>
+</ul>
+</section>
+<section data-background-color="#ccc" data-background-iframe="https://danielkeep.github.io/itercheat_baked.html" data-background-interactive>
+<h3>Case study: Iterator Cheat Sheet</h3>
+</section>
+</section>
+
+<section>
+<h1>Let's go!</h1>
+<p>Who needs a crate?</p>
+<p>Start by <code style="display:inline" class="hljs rust">#[warn(missing_docs)]</code>, follow the warnings</p>
+</section>
+</div></div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        dependencies: [ // Optional reveal.js plugins
+                { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true },
+                { src: 'plugin/notes/notes.js', async: true }
+        ]
+});
+</script>
+</body>
+</html>
