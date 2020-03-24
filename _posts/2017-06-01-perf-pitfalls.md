@@ -252,8 +252,8 @@ example, in the name of readability, people may convert this:
 
 ```rust
 match my_option {
-    Some(foo) -> frobnicate(foo),
-    None -> calculate_default_frob(),
+    Some(foo) => frobnicate(foo),
+    None => calculate_default_frob(),
 }
 ```
 
