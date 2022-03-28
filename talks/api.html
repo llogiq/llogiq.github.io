@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rustic APIs</title>
+<meta name="description" content="Let's write some docs!">
+<meta name="author" content="llogiq">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="css/reveal.css">
+<link rel="stylesheet" href="css/theme/black.css" id="theme">
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+<body><div class="reveal"><div class="slides">
+<section>
+    <h1>Rustic APIs</h1>
+    <p>Berlin, 28.03.2022</p>
+</section>
+<section>
+    <h1>The tenets</h1>
+    <p>APIs should be:</p>
+    <ul>
+        <li>unsurprising</li>
+        <li>flexible</li>
+        <li>obvious</li>
+        <li>constrained</li>
+    </ul>
+</section>
+<section>
+    <h1>Be unsurprising</h1>
+    <p>Don't be clever.</p>
+    <p>No really, that's it.</p>
+</section>
+<section>
+    <section>
+        <h1>Be flexible</h1>
+        <ul>
+            <li>Generics</li>
+            <li>Hide stuff: impl Trait</li>
+            <li>Dynamic Dispatch</li>
+        </ul>
+    </section>
+    <section>
+        <h1>Generics</h1>
+        What would you prefer? This:
+        <pre><code class="hljs rust" data-trim>
+pub fn do_the_boogie(d: &mut DanceFloor);
+        </code></pre>
+        Or this:
+        <pre><code class="hljs rust" data-trim>
+pub fn do_the_boogie(d: impl Danceable);
+        </code></pre>
+        Why one or the other?
+    </section>
+    <section>
+        <h1>Hide Stuff</h1>
+        <ul>
+            <li><code>return impl Trait</code></li>
+            <li>Opaque types</li>
+        </ul>
+    </section>
+    <section>
+        <h1>Dynamic Dispatch</h1>
+        (Underused, although sometimes not ergonomic)
+    </section>
+    <section>
+        <h1>Think about evolution</h1>
+        <p>Don't commit to details you want to change later</p>
+        <p>Semantic Versioning</p>
+    </section>
+</section>
+<section>
+    <h1>Be obvious</h1>
+    <ul>
+        <li>newtypes vs. bool</li>
+        <li>Think about discoverability</li>
+        <li>When in doubt, document</li>
+        <li>When not in doubt, document anyway</li>
+    </ul>
+</section>
+<section>
+    <section>
+        <h1>Be constrained</h1>
+        <ul>
+            <li>Protocol types: Make invalid states unrepresentable</li>
+            <li>Provide minimal interfaces</li>
+            <li>Guard types</li>
+        </ul>
+    </section>
+    <section>
+        <h1>Protocol types</h1>
+        <pre><code class="hljs rust" data-trim>
+pub struct Rocket&lt;T&gt; { .. }
+pub struct Floored;
+pub struct Launched;
+
+impl Rocket&lt;Floored&gt; {
+    pub fn new() -> Self { .. }
+    pub fn launch(self) -> Rocket&lt;Launched&gt; { .. }
+}
+
+impl Rocket&lt;Launched&gt; {
+    pub fn steer(&mut self, d: Direction);
+}
+        </code></pre>
+    </section>
+    <section>
+        <h1>Minimal Interface</h1>
+        YAGNI
+    </section>
+    <section>
+        <h1>Guard types</h1>
+        Defer parts of operations
+        <pre><code class="hljs rust" data-trim>
+struct MyGuard;
+impl Drop for MyGuard {
+    fn drop(&mut self) {
+        println!("tear down here");
+    }
+}
+fn guarded() -> MyGuard {
+    println!("set up here");
+}
+
+// note the name here!
+let _guard = guarded();
+..
+        </code></pre>
+    </section>
+</section>
+<section>
+    <h1>That's all, folks!</h1>
+</section>
+</div></div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        dependencies: [ // Optional reveal.js plugins
+                { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true },
+                { src: 'plugin/notes/notes.js', async: true }
+        ]
+});
+</script>
+</body>
+</html>
