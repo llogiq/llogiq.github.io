@@ -1,0 +1,881 @@
+<!DOCTYPE html><html lang="de-DE"><head><title>RUST IN RHYMES Ⅱ</title><meta property="og:title" content="RUST IN RHYMES Ⅱ"><meta name="author" content="Andre 'llogiq' Bogus"><meta property="article:author" content="Andre 'llogiq' Bogus"><meta name="description" content="double the rhymes, double the fun"><meta property="og:description" content="double the rhymes, double the fun"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><style>@media screen{body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button{-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;background-color:transparent;border:0;color:inherit;cursor:pointer;font-size:inherit;opacity:.8;outline:none;padding:0;transition:opacity .2s linear}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:disabled,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:disabled,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:disabled,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:disabled{cursor:not-allowed;opacity:.15!important}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover{opacity:1}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:active,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:active,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover:active,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover:active{opacity:.6}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled),body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled),body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover:not(:disabled),body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover:not(:disabled){transition:none}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button.bespoke-marp-presenter-info-page-prev{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNNjggOTAgMjggNTBsNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button.bespoke-marp-presenter-info-page-next{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJtMzIgOTAgNDAtNDAtNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTQwIDcwSDIwVjUwbTIwIDBMMjAgNzBtNDAtNDBoMjB2MjBtLTIwIDAgMjAtMjAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button.exit[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button.exit[data-bespoke-marp-osc=fullscreen]{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTIwIDUwaDIwdjIwbS0yMCAwIDIwLTIwbTQwIDBINjBWMzBtMjAgMEw2MCA1MCIvPjwvc3ZnPg==")}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNODcuOCA0Ny41Qzg5IDUwIDg3LjcgNTIgODUgNTJIMzVhOC43IDguNyAwIDAgMS03LjItNC41bC0xNS42LTMxQzExIDE0IDEyLjIgMTIgMTUgMTJoNTBhOC44IDguOCAwIDAgMSA3LjIgNC41ek02MCA1MnYzNm0tMTAgMGgyME00NSA0MmgyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iNSIvPjwvc3ZnPg==") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button.bespoke-marp-presenter-note-bigger{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMTIgNTBoODBNNTIgOTBWMTAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjUiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button.bespoke-marp-presenter-note-smaller{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMTIgNTBoODAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjUiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}}@keyframes __bespoke_marp_transition_reduced_outgoing__{0%{opacity:1}to{opacity:0}}@keyframes __bespoke_marp_transition_reduced_incoming__{0%{mix-blend-mode:plus-lighter;opacity:0}to{mix-blend-mode:plus-lighter;opacity:1}}.bespoke-marp-note,.bespoke-marp-osc,.bespoke-progress-parent{display:none;transition:none}@media screen{::view-transition-group(*){animation-duration:var(--marp-bespoke-transition-animation-duration,.5s);animation-timing-function:ease}::view-transition-new(*),::view-transition-old(*){animation-delay:0s;animation-direction:var(--marp-bespoke-transition-animation-direction,normal);animation-duration:var(--marp-bespoke-transition-animation-duration,.5s);animation-fill-mode:both;animation-name:var(--marp-bespoke-transition-animation-name,var(--marp-bespoke-transition-animation-name-fallback,__bespoke_marp_transition_no_animation__));mix-blend-mode:normal}::view-transition-old(*){--marp-bespoke-transition-animation-name-fallback:__bespoke_marp_transition_reduced_outgoing__;animation-timing-function:ease}::view-transition-new(*){--marp-bespoke-transition-animation-name-fallback:__bespoke_marp_transition_reduced_incoming__;animation-timing-function:ease}::view-transition-new(root),::view-transition-old(root){animation-timing-function:linear}::view-transition-new(__bespoke_marp_transition_osc__),::view-transition-old(__bespoke_marp_transition_osc__){animation-duration:0s!important;animation-name:__bespoke_marp_transition_osc__!important}::view-transition-new(__bespoke_marp_transition_osc__){opacity:0!important}.bespoke-marp-transition-warming-up::view-transition-group(*),.bespoke-marp-transition-warming-up::view-transition-new(*),.bespoke-marp-transition-warming-up::view-transition-old(*){animation-play-state:paused!important}body,html{height:100%;margin:0}body{background:#000;overflow:hidden}svg.bespoke-marp-slide{content-visibility:hidden;opacity:0;pointer-events:none;z-index:-1}svg.bespoke-marp-slide:not(.bespoke-marp-active) *{view-transition-name:none!important}svg.bespoke-marp-slide.bespoke-marp-active{content-visibility:visible;opacity:1;pointer-events:auto;z-index:0}svg.bespoke-marp-slide.bespoke-marp-active.bespoke-marp-active-ready *{animation-name:__bespoke_marp__!important}@supports not (content-visibility:hidden){svg.bespoke-marp-slide[data-bespoke-marp-load=hideable]{display:none}svg.bespoke-marp-slide[data-bespoke-marp-load=hideable].bespoke-marp-active{display:block}}}@media screen and (prefers-reduced-motion:reduce){svg.bespoke-marp-slide *{view-transition-name:none!important}}@media screen{[data-bespoke-marp-fragment=inactive]{visibility:hidden}body[data-bespoke-view=""] .bespoke-marp-parent,body[data-bespoke-view=next] .bespoke-marp-parent{bottom:0;left:0;position:absolute;right:0;top:0}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc{view-transition-name:__bespoke_marp_transition_osc__;background:rgba(0,0,0,.65);border-radius:7px;bottom:50px;color:#fff;contain:paint;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;left:50%;line-height:0;opacity:1;padding:12px;position:absolute;touch-action:manipulation;transform:translateX(-50%);transition:opacity .2s linear;-webkit-user-select:none;user-select:none;white-space:nowrap;will-change:transform;z-index:1}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>*,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>*{margin-left:6px}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>:first-child,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>:first-child{margin-left:0}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>span,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>span{opacity:.8}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page]{display:inline-block;min-width:140px;text-align:center}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev]{height:32px;line-height:32px;width:32px}body[data-bespoke-view=""] .bespoke-marp-parent.bespoke-marp-inactive,body[data-bespoke-view=next] .bespoke-marp-parent.bespoke-marp-inactive{cursor:none}body[data-bespoke-view=""] .bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc,body[data-bespoke-view=next] .bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc{opacity:0;pointer-events:none}body[data-bespoke-view=""] svg.bespoke-marp-slide,body[data-bespoke-view=next] svg.bespoke-marp-slide{height:100%;left:0;position:absolute;top:0;width:100%}body[data-bespoke-view=""] .bespoke-progress-parent{background:#222;display:flex;height:5px;width:100%}body[data-bespoke-view=""] .bespoke-progress-parent+.bespoke-marp-parent{top:5px}body[data-bespoke-view=""] .bespoke-progress-parent .bespoke-progress-bar{background:#0288d1;flex:0 0 0;transition:flex-basis .2s cubic-bezier(0,1,1,1)}body[data-bespoke-view=next]{background:transparent}body[data-bespoke-view=presenter]{background:#161616}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container{display:grid;font-family:Helvetica,Arial,sans-serif;grid-template:"current dragbar next" minmax(140px,1fr) "current dragbar note" 2fr "info    dragbar note" 3em;grid-template-columns:minmax(3px,var(--bespoke-marp-presenter-split-ratio,66%)) 0 minmax(3px,1fr);height:100%;left:0;position:absolute;top:0;width:100%}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent{grid-area:current;overflow:hidden;position:relative}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent svg.bespoke-marp-slide{height:calc(100% - 40px);left:20px;pointer-events:none;position:absolute;top:20px;-webkit-user-select:none;user-select:none;width:calc(100% - 40px)}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent svg.bespoke-marp-slide.bespoke-marp-active{filter:drop-shadow(0 3px 10px rgba(0,0,0,.5))}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container{background:#0288d1;cursor:col-resize;grid-area:dragbar;margin-left:-3px;opacity:0;position:relative;transition:opacity .4s linear .1s;width:6px;z-index:10}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container:hover{opacity:1}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container.active{opacity:1;transition-delay:0s}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container{background:#222;cursor:pointer;display:none;grid-area:next;overflow:hidden;position:relative}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container.active{display:block}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container iframe.bespoke-marp-presenter-next{background:transparent;border:0;display:block;filter:drop-shadow(0 3px 10px rgba(0,0,0,.5));height:calc(100% - 40px);left:20px;pointer-events:none;position:absolute;top:20px;-webkit-user-select:none;user-select:none;width:calc(100% - 40px)}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container{background:#222;color:#eee;grid-area:note;position:relative;z-index:1}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button{height:1.5em;line-height:1.5em;width:1.5em}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-wrapper{bottom:0;display:block;left:0;position:absolute;right:0;top:0}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-buttons{background:rgba(0,0,0,.65);border-radius:4px;bottom:0;display:flex;gap:4px;margin:12px;opacity:0;padding:6px;pointer-events:none;position:absolute;right:0;transition:opacity .2s linear}}@media screen{body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-buttons:focus-within,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-wrapper:focus-within+.bespoke-marp-presenter-note-buttons,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container:hover .bespoke-marp-presenter-note-buttons{opacity:1;pointer-events:auto}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note{word-wrap:break-word;box-sizing:border-box;font-size:calc(1.1em*var(--bespoke-marp-note-font-scale, 1));height:calc(100% - 40px);margin:20px;overflow:auto;padding-right:3px;scrollbar-color:hsla(0,0%,93%,.5) transparent;scrollbar-width:thin;white-space:pre-wrap;width:calc(100% - 40px)}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar{width:6px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar-track{background:transparent}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar-thumb{background:hsla(0,0%,93%,.5);border-radius:6px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note:empty{pointer-events:none}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note.active{display:block}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note p:first-child{margin-top:0}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note p:last-child{margin-bottom:0}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container{align-items:center;box-sizing:border-box;color:#eee;display:flex;flex-wrap:nowrap;grid-area:info;justify-content:center;overflow:hidden;padding:0 10px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-time,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer{box-sizing:border-box;display:block;padding:0 10px;white-space:nowrap;width:100%}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button{height:1.5em;line-height:1.5em;width:1.5em}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page{order:2;text-align:center}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page .bespoke-marp-presenter-info-page-text{display:inline-block;min-width:120px;text-align:center}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-time{color:#999;order:1;text-align:left}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer{color:#999;order:3;text-align:right}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer:hover{cursor:pointer}}@media print{.bespoke-marp-presenter-info-container,.bespoke-marp-presenter-next-container,.bespoke-marp-presenter-note-container{display:none}}</style><style>div#p>svg>foreignObject>section{width:1280px;height:720px;box-sizing:border-box;overflow:hidden;position:relative;scroll-snap-align:center center}div#p>svg>foreignObject>section:after{bottom:0;content:attr(data-marpit-pagination);padding:inherit;pointer-events:none;position:absolute;right:0}div#p>svg>foreignObject>section:not([data-marpit-pagination]):after{display:none}/* Normalization */div#p>svg>foreignObject>section :is(h1,marp-h1){font-size:2em;margin:0.67em 0}div#p>svg>foreignObject>section video::-webkit-media-controls{will-change:transform}@page{size:1280px 720px;margin:0}@media print{body,html{background-color:#fff;margin:0;page-break-inside:avoid;break-inside:avoid-page}div#p>svg>foreignObject>section{page-break-before:always;break-before:page}div#p>svg>foreignObject>section,div#p>svg>foreignObject>section *{-webkit-print-color-adjust:exact!important;animation-delay:0s!important;animation-duration:0s!important;color-adjust:exact!important;transition:none!important}div#p>svg[data-marpit-svg]{display:block;height:100vh;width:100vw}}div#p>svg>foreignObject>section img[data-marp-twemoji]{background:transparent;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em;width:1em}
+/*!
+ * Marp / Marpit Uncover theme
+ *
+ * @theme uncover
+ * @author Yuki Hattori
+ *
+ * @auto-scaling true
+ * @size 16:9 1280px 720px
+ * @size 4:3 960px 720px
+ */div#p>svg>foreignObject>section{word-wrap:break-word;--color-background:#fdfcff;--color-background-code:#f2f1f4;--color-background-paginate:rgba(32,34,40,.05);--color-foreground:#202228;--color-highlight:#009dd5;--color-highlight-hover:#087eaa;--color-highlight-heading:#33b1dd;--color-header:rgba(32,34,40,.4);--color-header-shadow:rgba(253,252,255,.8);background:var(--color-background);flex-flow:column nowrap;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;font-size:40px;height:720px;justify-content:center;letter-spacing:3px;line-height:1.4;padding:30px 70px;position:relative;text-align:center;width:1280px;z-index:0}div#p>svg>foreignObject>section{--marpit-root-font-size:40px}div#p>svg>foreignObject>section,div#p>svg>foreignObject>section:after{color:var(--color-foreground);display:flex}div#p>svg>foreignObject>section:after{align-items:flex-end;background:linear-gradient(-45deg,var(--color-background-paginate) 50%,transparent 50%);background-size:cover;font-size:.6em;height:80px;justify-content:flex-end;padding:30px;text-align:right;text-shadow:0 0 5px var(--color-background);width:80px}div#p>svg>foreignObject>section:after{--marpit-root-font-size:.6em}div#p>svg>foreignObject>section:where(:not(.invert)) :is(pre,marp-pre) code.hljs{display:block;overflow-x:auto;padding:1em}div#p>svg>foreignObject>section:where(:not(.invert)) code.hljs{padding:3px 5px}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs{background:#fff;color:#000}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-addition,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-meta,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-string,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-symbol,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-template-tag,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-template-variable{color:#756bb1}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-comment,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-quote{color:#636363}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-bullet,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-link,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-literal,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-number,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-regexp{color:#31a354}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-deletion,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-variable{color:#88f}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-built_in,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-doctag,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-keyword,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-name,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-section,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-selector-class,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-selector-id,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-selector-tag,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-strong,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-tag,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-title,div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-type{color:#3182bd}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-emphasis{font-style:italic}div#p>svg>foreignObject>section:where(:not(.invert)) .hljs-attribute{color:#e6550d}div#p>svg>foreignObject>section:where(.invert){--color-background:#202228;--color-background-code:#2b2d33;--color-background-paginate:hsla(0,0%,100%,.05);--color-foreground:#fff;--color-highlight:#60d0f0;--color-highlight-hover:#88dcf4;--color-highlight-heading:#80d9f3;--color-header:hsla(0,0%,100%,.4);--color-header-shadow:rgba(32,34,40,.8)}div#p>svg>foreignObject>section:where(.invert) :is(pre,marp-pre) code.hljs{display:block;overflow-x:auto;padding:1em}div#p>svg>foreignObject>section:where(.invert) code.hljs{padding:3px 5px}div#p>svg>foreignObject>section:where(.invert) .hljs{background:#222;color:#fff}div#p>svg>foreignObject>section:where(.invert) .hljs-comment,div#p>svg>foreignObject>section:where(.invert) .hljs-quote{color:#777}div#p>svg>foreignObject>section:where(.invert) .hljs-built_in,div#p>svg>foreignObject>section:where(.invert) .hljs-bullet,div#p>svg>foreignObject>section:where(.invert) .hljs-deletion,div#p>svg>foreignObject>section:where(.invert) .hljs-link,div#p>svg>foreignObject>section:where(.invert) .hljs-literal,div#p>svg>foreignObject>section:where(.invert) .hljs-meta,div#p>svg>foreignObject>section:where(.invert) .hljs-number,div#p>svg>foreignObject>section:where(.invert) .hljs-params,div#p>svg>foreignObject>section:where(.invert) .hljs-regexp,div#p>svg>foreignObject>section:where(.invert) .hljs-symbol,div#p>svg>foreignObject>section:where(.invert) .hljs-tag,div#p>svg>foreignObject>section:where(.invert) .hljs-template-variable,div#p>svg>foreignObject>section:where(.invert) .hljs-variable{color:#ab875d}div#p>svg>foreignObject>section:where(.invert) .hljs-attribute,div#p>svg>foreignObject>section:where(.invert) .hljs-name,div#p>svg>foreignObject>section:where(.invert) .hljs-section,div#p>svg>foreignObject>section:where(.invert) .hljs-selector-class,div#p>svg>foreignObject>section:where(.invert) .hljs-selector-id,div#p>svg>foreignObject>section:where(.invert) .hljs-title,div#p>svg>foreignObject>section:where(.invert) .hljs-type{color:#9b869b}div#p>svg>foreignObject>section:where(.invert) .hljs-addition,div#p>svg>foreignObject>section:where(.invert) .hljs-keyword,div#p>svg>foreignObject>section:where(.invert) .hljs-selector-tag,div#p>svg>foreignObject>section:where(.invert) .hljs-string{color:#8f9c6c}div#p>svg>foreignObject>section:where(.invert) .hljs-emphasis{font-style:italic}div#p>svg>foreignObject>section:where(.invert) .hljs-strong{font-weight:700}div#p>svg>foreignObject>section>:first-child,div#p>svg>foreignObject>section[data-header]>:nth-child(2){margin-top:0}div#p>svg>foreignObject>section>:last-child,div#p>svg>foreignObject>section[data-footer]>:nth-last-child(2){margin-bottom:0}div#p>svg>foreignObject>section blockquote,div#p>svg>foreignObject>section p{margin:0 0 15px}div#p>svg>foreignObject>section :is(h1,marp-h1),div#p>svg>foreignObject>section :is(h2,marp-h2),div#p>svg>foreignObject>section :is(h3,marp-h3),div#p>svg>foreignObject>section :is(h4,marp-h4),div#p>svg>foreignObject>section :is(h5,marp-h5),div#p>svg>foreignObject>section :is(h6,marp-h6){margin:15px 0 30px}div#p>svg>foreignObject>section :is(h1,marp-h1) strong,div#p>svg>foreignObject>section :is(h2,marp-h2) strong,div#p>svg>foreignObject>section :is(h3,marp-h3) strong,div#p>svg>foreignObject>section :is(h4,marp-h4) strong,div#p>svg>foreignObject>section :is(h5,marp-h5) strong,div#p>svg>foreignObject>section :is(h6,marp-h6) strong{color:var(--color-highlight-heading);font-weight:inherit}div#p>svg>foreignObject>section :is(h1,marp-h1)::part(auto-scaling),div#p>svg>foreignObject>section :is(h2,marp-h2)::part(auto-scaling),div#p>svg>foreignObject>section :is(h3,marp-h3)::part(auto-scaling),div#p>svg>foreignObject>section :is(h4,marp-h4)::part(auto-scaling),div#p>svg>foreignObject>section :is(h5,marp-h5)::part(auto-scaling),div#p>svg>foreignObject>section :is(h6,marp-h6)::part(auto-scaling){max-height:660px}div#p>svg>foreignObject>section :is(h1,marp-h1){font-size:2em}div#p>svg>foreignObject>section :is(h2,marp-h2){font-size:1.7em}div#p>svg>foreignObject>section :is(h3,marp-h3){font-size:1.4em;letter-spacing:2px}div#p>svg>foreignObject>section :is(h4,marp-h4){font-size:1.2em;letter-spacing:2px}div#p>svg>foreignObject>section :is(h5,marp-h5){font-size:1em;letter-spacing:1px}div#p>svg>foreignObject>section :is(h6,marp-h6){font-size:.8em;letter-spacing:1px}div#p>svg>foreignObject>section footer,div#p>svg>foreignObject>section header{color:var(--color-header);font-size:.45em;left:70px;letter-spacing:1px;position:absolute;right:70px;text-shadow:0 1px 0 var(--color-header-shadow);z-index:1}div#p>svg>foreignObject>section header{top:30px}div#p>svg>foreignObject>section footer{bottom:30px}div#p>svg>foreignObject>section a{color:var(--color-highlight);text-decoration:none}div#p>svg>foreignObject>section a:hover{color:var(--color-highlight-hover);text-decoration:underline}div#p>svg>foreignObject>section ol,div#p>svg>foreignObject>section ul{margin:0 auto;text-align:left}div#p>svg>foreignObject>section>ol,div#p>svg>foreignObject>section>ul{margin-bottom:15px}div#p>svg>foreignObject>section code{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;letter-spacing:0}div#p>svg>foreignObject>section :not(:is(pre,marp-pre))>code,div#p>svg>foreignObject>section>code{background:var(--color-background-code);color:var(--color-foreground);margin:-.2em .2em .2em;padding:.2em}div#p>svg>foreignObject>section :is(pre,marp-pre){--preserve-aspect-ratio:xMidYMid meet;filter:drop-shadow(0 4px 4px rgba(0,0,0,.2));font-size:70%;line-height:1.15;margin:15px 0 30px;text-align:left}div#p>svg>foreignObject>section :is(pre,marp-pre)::part(auto-scaling){max-height:570px}div#p>svg>foreignObject>section :is(pre,marp-pre)>code{background:var(--color-background-code);box-sizing:content-box;color:var(--color-foreground);display:block;margin:0 auto;min-width:456px;padding:.4em .6em}div#p>svg>foreignObject>section[data-size="4:3"] :is(pre,marp-pre)>code{min-width:328px}div#p>svg>foreignObject>section table{border-collapse:collapse;margin:0 auto 15px}div#p>svg>foreignObject>section table>tbody>tr>td,div#p>svg>foreignObject>section table>tbody>tr>th,div#p>svg>foreignObject>section table>thead>tr>td,div#p>svg>foreignObject>section table>thead>tr>th{padding:.15em .5em}div#p>svg>foreignObject>section table>thead>tr>td,div#p>svg>foreignObject>section table>thead>tr>th{border-bottom:3px solid}div#p>svg>foreignObject>section table>tbody>tr:not(:last-child)>td,div#p>svg>foreignObject>section table>tbody>tr:not(:last-child)>th{border-bottom:1px solid}div#p>svg>foreignObject>section blockquote{font-size:90%;line-height:1.3;padding:0 2em;position:relative;z-index:0}div#p>svg>foreignObject>section blockquote:after,div#p>svg>foreignObject>section blockquote:before{content:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNDQgMTkuMyAzOC45NCAwQzguMTQgOS41OSAwIDQwLjA1IDAgNTQuODNWMTAwaDQxLjQ3VjU0LjgzaC0yM2MtLjA0LS4yOC4yNS0yNy42NiAyNS41My0zNS41M3ptNTYgMEw5NC45NCAwQzY0LjE0IDkuNTkgNTYgNDAuMDUgNTYgNTQuODNWMTAwaDQxLjQ3VjU0LjgzaC0yM2MtLjA0LS4yOC4yNS0yNy42NiAyNS41My0zNS41M3oiIHN0eWxlPSJmaWxsOiM4ODg7b3BhY2l0eTouMzMiLz48L3N2Zz4=");height:auto;pointer-events:none;position:absolute;width:1em;z-index:-1}div#p>svg>foreignObject>section blockquote:before{left:0;top:0}div#p>svg>foreignObject>section blockquote:after{bottom:0;right:0;transform:rotate(180deg)}div#p>svg>foreignObject>section blockquote>:last-child{margin-bottom:0}div#p>svg>foreignObject>section mark{background:transparent;color:var(--color-highlight)}div#p>svg>foreignObject>section :is(pre,marp-pre){font-size:40px}div#p>svg>foreignObject>section[data-marpit-advanced-background=background]{columns:initial!important;display:block!important;padding:0!important}div#p>svg>foreignObject>section[data-marpit-advanced-background=background]:after,div#p>svg>foreignObject>section[data-marpit-advanced-background=background]:before,div#p>svg>foreignObject>section[data-marpit-advanced-background=content]:after,div#p>svg>foreignObject>section[data-marpit-advanced-background=content]:before{display:none!important}div#p>svg>foreignObject>section[data-marpit-advanced-background=background]>div[data-marpit-advanced-background-container]{all:initial;display:flex;flex-direction:row;height:100%;overflow:hidden;width:100%}div#p>svg>foreignObject>section[data-marpit-advanced-background=background]>div[data-marpit-advanced-background-container][data-marpit-advanced-background-direction=vertical]{flex-direction:column}div#p>svg>foreignObject>section[data-marpit-advanced-background=background][data-marpit-advanced-background-split]>div[data-marpit-advanced-background-container]{width:var(--marpit-advanced-background-split,50%)}div#p>svg>foreignObject>section[data-marpit-advanced-background=background][data-marpit-advanced-background-split=right]>div[data-marpit-advanced-background-container]{margin-left:calc(100% - var(--marpit-advanced-background-split, 50%))}div#p>svg>foreignObject>section[data-marpit-advanced-background=background]>div[data-marpit-advanced-background-container]>figure{all:initial;background-position:center;background-repeat:no-repeat;background-size:cover;flex:auto;margin:0}div#p>svg>foreignObject>section[data-marpit-advanced-background=content],div#p>svg>foreignObject>section[data-marpit-advanced-background=pseudo]{background:transparent!important}div#p>svg>foreignObject>section[data-marpit-advanced-background=pseudo],div#p>svg[data-marpit-svg]>foreignObject[data-marpit-advanced-background=pseudo]{pointer-events:none!important}div#p>svg>foreignObject>section[data-marpit-advanced-background-split]{width:100%;height:100%}</style></head><body><div class="bespoke-marp-osc"><button data-bespoke-marp-osc="prev" tabindex="-1" title="Previous slide">Previous slide</button><span data-bespoke-marp-osc="page"></span><button data-bespoke-marp-osc="next" tabindex="-1" title="Next slide">Next slide</button><button data-bespoke-marp-osc="fullscreen" tabindex="-1" title="Toggle fullscreen (f)">Toggle fullscreen</button><button data-bespoke-marp-osc="presenter" tabindex="-1" title="Open presenter view (p)">Open presenter view</button></div><div id="p"><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="1" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1>RUST-a-RHYMES</h1>
+<p><em>proudly presents</em></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="2" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1>RUST IN RHYMES Ⅱ</h1>
+<p>ᴛhe ʀʜymer's ʀevenge</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="3" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/fire-alarm.jpg" alt="" style="height:19em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/java.svg" alt="java logo" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="5" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/jfrog.svg" alt="" style="width:16em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="6" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/bloop.png" alt="" /></p>
+<h2>@TryBloop</h2>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="7" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/rust-numbergoup.png" alt="" style="width:30em;" /><br />
+(Google Trends: Rust Programming Language)</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="8" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/tv.jpg" alt="tv" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/dynamic.webp" alt="" style="height:19em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/bun.png" alt="bun" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/ferrous.svg" alt="" style="width:10em;" /> <img src="images/adacore.svg" alt="" style="width:10em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/ferrocene.svg" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/kragle.jpg" alt="" style="width:32em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/cfree.png" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p>&quot;For example, the Microsoft Visual Studio analyzer and its memory-safety profile deliver much of<br />
+the CG support today and any good static analyzer (e.g., Clang tidy, that has some CG support) could be<br />
+made to completely deliver those guarantees at a fraction of the cost of a change to a variety of novel<br />
+“safe” languages.&quot;</p>
+<p>                        – B. Stroustup</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/foundation.png" alt="" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><strong>This Week in Rust</strong><br />
+——————————————————————————</p>
+<h1><em>Handpicked Rust updates, delivered to your inbox.</em></h1>
+<p>Stay up to date with events, learning resources, and recent developments in the Rust community.</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><code>184594741, 2880289470, 2881141438, 2965027518, 2976579765, 3203381950, 3405691582, 3405697037, 3735927486, 3735932941, 4027431614, 4276992702</code></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/jigsaw.png" alt="refactoring" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/tools.jpg" alt="tools" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/android.jpg" alt="" style="width:1200px;height:750px;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/linux.svg" alt="" style="width:15em;height:15em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/asahilina.jpg" alt="" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/hal-9000.png" alt="" style="height:19em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/curl.svg" alt="curl" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/esteban.jpg" alt="E. Küber" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/mara.jpg" alt="Mara Bos" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/nyx.png" alt="" style="width:32em;height:10em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/nushell.png" alt="nushell" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> rustdecimal<br />≠<br /> <img class="emoji" draggable="false" alt="🆗" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f197.svg" data-marp-twemoji=""/> rust-decimal</h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Talk</span> {
+    <span class="hljs-title function_ invoke__">Boring</span>(TechnicalStuff),
+    <span class="hljs-title function_ invoke__">Interesting</span>(Rhymes),
+};
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-built_in">assert!</span>(
+    matches!(
+        this_talk,
+        Talk::<span class="hljs-title function_ invoke__">Interesting</span>(_),
+    )
+)
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Xorable</span> {
+    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span>;
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">xored</span>(<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span>::Output;
+}
+
+<span class="hljs-keyword">impl</span>&lt;T: BitXor, I: <span class="hljs-built_in">Iterator</span>&lt;Item = T&gt;&gt; Xorable <span class="hljs-keyword">for</span> <span class="hljs-title class_">I</span>
+<span class="hljs-keyword">where</span> &lt;T <span class="hljs-keyword">as</span> BitXor&gt;::Output = T {
+    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span> = T;
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">xored</span>(<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> T {
+        <span class="hljs-keyword">self</span>.<span class="hljs-title function_ invoke__">reduce</span>(BitXor::xor)
+    }
+}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>$ RUST_BACKTRACE=1 cargo t --test precondition
+error: custom attribute panicked
+ --&gt; tests/precondition.rs:3:1
+  |
+3 | #[contracts]
+  | ^^^^^^^^^^^^
+  |
+  = help: message: unexpected end of input, expected semicolon
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">x</span> = <span class="hljs-title function_ invoke__">get_x</span>();
+<span class="hljs-title function_ invoke__">mutate_x</span>(&amp;<span class="hljs-keyword">mut</span> x);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = x;
+<span class="hljs-comment">// x is now immutable</span>
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-symbol">&#x27;scope</span>: { ..
+    <span class="hljs-keyword">if</span> broke { <span class="hljs-keyword">break</span> <span class="hljs-symbol">&#x27;scope</span>; }
+    ..
+}
+<span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-symbol">&#x27;scoop</span> { ..
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(value) = <span class="hljs-title function_ invoke__">scoop</span>() {
+        <span class="hljs-keyword">break</span> <span class="hljs-symbol">&#x27;scoop</span> value;
+    }
+    default_value
+};
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">x</span> = <span class="hljs-number">1</span>;
+<span class="hljs-comment">// behold: do-while!</span>
+<span class="hljs-keyword">while</span> {
+    x += <span class="hljs-number">1</span>;
+    x &lt; <span class="hljs-number">10</span>
+} {}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(v: &amp;<span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u32</span>&gt;) {
+    <span class="hljs-comment">// bounds checked `Vec` index</span>
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..v.<span class="hljs-title function_ invoke__">len</span>() { <span class="hljs-title function_ invoke__">bar</span>(v[i]) }
+    <span class="hljs-comment">// no bounds check on slice index</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = &amp;v[..];
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..v.<span class="hljs-title function_ invoke__">len</span>() { <span class="hljs-title function_ invoke__">bar</span>(v[i]) }
+}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <code>Result&lt;(), ()&gt;</code></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <code>|_|()</code></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust">(a, b) = (b, a);
+</code></pre>
+<h2>Look ma, no <code>let</code></h2>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <code>_ = foo();</code></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(x) = y
+<span class="hljs-keyword">else</span> { <span class="hljs-keyword">return</span> };
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/fence.jpg" alt="" style="width:27em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">range</span> = <span class="hljs-number">0</span>..<span class="hljs-number">16</span>;
+<span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> range.<span class="hljs-title function_ invoke__">clone</span>() { <span class="hljs-comment">// why???</span>
+    ..
+}
+<span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> range { .. }
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-comment">// look ma, no box! <img class="emoji" draggable="false" alt="📦" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f4e6.svg" data-marp-twemoji=""/></span>
+<span class="hljs-keyword">let</span> (<span class="hljs-keyword">mut</span> stdin_read, <span class="hljs-keyword">mut</span> file_read);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">readable</span>: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">dyn</span> io::Read = <span class="hljs-keyword">if</span> arg == <span class="hljs-string">&#x27;-&#x27;</span> {
+    stdin_read = io::<span class="hljs-title function_ invoke__">stdin</span>();
+    &amp;<span class="hljs-keyword">mut</span> stdin_read
+} <span class="hljs-keyword">else</span> {
+    file_read = fs::File::<span class="hljs-title function_ invoke__">open</span>(arg)?;
+    &amp;<span class="hljs-keyword">mut</span> file_read
+};
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/slice-of-pizza.jpg" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/guard.jpg" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/grenade.svg" alt="" style="width:20em;height:20em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="50" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/pcwalton.png" alt="" style="width:24em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="51" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-toml"><span class="hljs-comment"># In Cargo.toml</span>
+<span class="hljs-section">[package.metadata.docs.rs]</span>
+<span class="hljs-attr">all-features</span> = <span class="hljs-literal">true</span>
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="52" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-meta">#![feature(portable_simd)]</span>
+<span class="hljs-keyword">use</span> std::simd::f32x4;
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = f32x4::<span class="hljs-title function_ invoke__">from_array</span>([<span class="hljs-number">0</span>., <span class="hljs-number">1</span>., <span class="hljs-number">2</span>., <span class="hljs-number">3</span>.]);
+    dbg!(x * <span class="hljs-number">2</span>.)
+}
+</code></pre>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>$ rustc +nightly simd.rs -O &amp;&amp; simd             
+[simd.rs:7] y = [
+    0.0,
+    2.0,
+    4.0,
+    6.0,
+]
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="53" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">use</span> std::marker::PhantomData;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NoSend</span> = PhantomData&lt;*<span class="hljs-keyword">mut</span> <span class="hljs-type">u8</span>&gt;;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NoSync</span> = PhantomData&lt;Cell&lt;<span class="hljs-type">u8</span>&gt;&gt;;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyType</span>(<span class="hljs-type">usize</span>, NoSend, NoSync);
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="54" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">sum</span>;
+std::thread::<span class="hljs-title function_ invoke__">scope</span>(|s| {
+    s.<span class="hljs-title function_ invoke__">spawn</span>(|| dbg!(x));
+    s.<span class="hljs-title function_ invoke__">spawn</span>(|| sum = x[<span class="hljs-number">0</span>] + x[<span class="hljs-number">1</span>])
+});
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="55" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-comment">// Cow says Moo</span>
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">cow</span> = Cow::<span class="hljs-title function_ invoke__">Borrowed</span>(<span class="hljs-string">&quot;Clone on write&quot;</span>);
+cow += <span class="hljs-string">&quot; makes ownership optional&quot;</span>;
+
+cow.<span class="hljs-title function_ invoke__">as_mut</span>().<span class="hljs-title function_ invoke__">make_ascii_uppercase</span>();
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="56" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">world</span> = <span class="hljs-string">&quot;Rust world&quot;</span>;
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Hello, {world}&quot;</span>);
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="57" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">wait_what</span>() {}
+
+<span class="hljs-title function_ invoke__">wait_what</span>(); <span class="hljs-comment">// .await!</span>
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="58" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/coyote.jpg" alt="coyote" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="59" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <img class="emoji" draggable="false" alt="🚮" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f6ae.svg" data-marp-twemoji=""/></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="60" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/hashbrown.jpg" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="61" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">use</span> std::io::BufWriter;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">out</span> = BufWriter::<span class="hljs-title function_ invoke__">new</span>(out);
+<span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> lines {
+    out.<span class="hljs-title function_ invoke__">write_all</span>(line.<span class="hljs-title function_ invoke__">as_bytes</span>())?;
+    out.<span class="hljs-title function_ invoke__">write_all</span>(<span class="hljs-string">b&quot;\n&quot;</span>)?;
+}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="62" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">use</span> std::io::Write <span class="hljs-keyword">as</span> _;
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">stdout</span> = std::io::<span class="hljs-title function_ invoke__">stdout</span>();
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">locked</span> = stdout.<span class="hljs-title function_ invoke__">lock</span>(); <span class="hljs-comment">// &lt;--</span>
+<span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> lines {
+    <span class="hljs-built_in">writeln!</span>(locked, <span class="hljs-string">&quot;{}&quot;</span>, line)?;
+}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="63" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">unsafe</span> { <span class="hljs-title function_ invoke__">rust</span>() }
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="64" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">orig_len</span> = <span class="hljs-keyword">unsafe</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">ref_text</span> = &amp;text;
+    text += <span class="hljs-string">&quot; mutated&quot;</span>;
+    ref_text.<span class="hljs-title function_ invoke__">len</span>()
+};
+</code></pre>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>error[E0502]: cannot borrow `text` as mutable because it is also borrowed as immutable
+ --&gt; src/main.rs:4:9
+  |
+3 |         let ref_text = &amp;text;
+  |                        ----- immutable borrow occurs here
+4 |         text += &quot; mutated&quot;;
+  |         ^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+5 |         ref_text.len()
+  |         -------------- immutable borrow later used here
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="65" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/crab.jpg" alt="crab" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="66" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-meta">#[test]</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">test_fail</span>() {
+    <span class="hljs-built_in">assert!</span>(<span class="hljs-title function_ invoke__">fail</span>());
+}
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="67" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/reductrs.png" alt="" style="width:24em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="68" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-meta">#[derive(Zeroize, ZeroizeOnDrop)]</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Secret</span>(<span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt;);
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="69" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-rust"><span class="hljs-meta">#[policy(
+    entities = (
+        user: Session,
+        document_metadata: DocumentMeta
+    ),
+    guard = (
+        user is Owner for document_metadata
+    )
+)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">DocumentOwnerPolicy</span> { .. }
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="70" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/burntsushi.jpg" alt="" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="71" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/semverhack.jpg" alt="" style="width:28em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="72" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1><code>$ clap # if you're happy</code></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="73" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/bevy.svg" alt="" style="width:25em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="74" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/tauri.png" alt="" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="75" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/squat.jpg" alt="" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="76" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-c">$ cargo nextest run
+  Finished test [unoptimized]
+  Starting <span class="hljs-number">5</span> tests across <span class="hljs-number">2</span> binaries
+       PASS [ <span class="hljs-number">0.002</span>s] tests::types::serialize
+       PASS [ <span class="hljs-number">0.002</span>s] tests::types::deserialize
+       PASS [ <span class="hljs-number">0.003</span>s] types::create
+       PASS [ <span class="hljs-number">0.001</span>s] types::emit
+       PASS [ <span class="hljs-number">0.005</span>s] types::full
+    Summary [ <span class="hljs-number">0.013</span>s] <span class="hljs-number">5</span> tests run: <span class="hljs-number">5</span> passed, <span class="hljs-number">0</span> skipped
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="77" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/insta.png" alt="" style="height:20em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="78" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/274c.svg" data-marp-twemoji=""/> cargo deny</h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="79" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/clippy.jpg" alt="clip" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="80" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <code>$ cargo clippy --fix</code></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="81" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/clippyworkshop.jpg" alt="" style="width:25em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="82" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>$ cargo semver -h
+usage: cargo semver [options]
+
+Options:
+    -h, --help          print this message and exit
+    -V, --version       print version information and exit
+    -e, --explain       print detailed error explanations
+    -q, --quiet         suppress regular cargo output, print only important
+                        messages
+        --show-public   print the public types in the current crate given by
+                        -c or -C and exit
+    -d, --debug         print command to debug and exit
+    -a, --api-guidelines
+                        report only changes that are breaking according to the
+                        API-guidelines
+        --features FEATURES
+                        Space-separated list of features to activate
+        --all-features  Activate all available features
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="83" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/calipers.jpg" alt="" style="width:30em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="84" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/helix.png" alt="helix%" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="85" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/winter.jpg" alt="" style="width:32em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="86" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> ::&lt;&gt;</h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="87" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/lastsupper.jpg" alt="The last supper" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="88" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/resf.jpg" alt="" style="width:15em;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="89" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/twitter.svg" alt="" style="width:15em;height:15em;" /></p>
+<p>@llogiq</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="90" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<p><img src="images/mlrhyme.jpg" alt="ML rhyme" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="91" data-class="invert" data-background-color="#000000" data-theme="uncover" data-style="pre { font-size: 40px; }" class="invert" style="--class:invert;--background-color:#000000;--theme:uncover;--style:pre { font-size: 40px; };background-color:#000000;background-image:none;">
+<h1 is="marp-h1" data-auto-scaling> <img class="emoji" draggable="false" alt="👋" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f44b.svg" data-marp-twemoji=""/></h1>
+</section>
+<script>!function(){"use strict";const t={h1:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"1"},style:"display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h2:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"2"},style:"display: block; font-size: 1.5em; margin-block-start: 0.83em; margin-block-end: 0.83em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h3:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"3"},style:"display: block; font-size: 1.17em; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h4:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"4"},style:"display: block; margin-block-start: 1.33em; margin-block-end: 1.33em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h5:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"5"},style:"display: block; font-size: 0.83em; margin-block-start: 1.67em; margin-block-end: 1.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h6:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"6"},style:"display: block; font-size: 0.67em; margin-block-start: 2.33em; margin-block-end: 2.33em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},span:{proto:()=>HTMLSpanElement},pre:{proto:()=>HTMLElement,style:"display: block; font-family: monospace; white-space: pre; margin: 1em 0; --marp-auto-scaling-white-space: pre;"}},e="data-marp-auto-scaling-wrapper",i="data-marp-auto-scaling-svg",n="data-marp-auto-scaling-container";class s extends HTMLElement{constructor(){super(),this.svgPreserveAspectRatio="xMinYMid meet";const t=t=>([e])=>{const{width:i,height:n}=e.contentRect;this[t]={width:i,height:n},this.updateSVGRect()};this.attachShadow({mode:"open"}),this.containerObserver=new ResizeObserver(t("containerSize")),this.wrapperObserver=new ResizeObserver(((...e)=>{t("wrapperSize")(...e),this.flushSvgDisplay()}))}static get observedAttributes(){return["data-downscale-only"]}connectedCallback(){var t,s,o,r,a;this.shadowRoot.innerHTML=`\n<style>\n  svg[${i}] { display: block; width: 100%; height: auto; vertical-align: top; }\n  span[${n}] { display: table; white-space: var(--marp-auto-scaling-white-space, nowrap); width: max-content; }\n</style>\n<div ${e}>\n  <svg part="svg" ${i}>\n    <foreignObject><span ${n}><slot></slot></span></foreignObject>\n  </svg>\n</div>\n    `.split(/\n\s*/).join(""),this.wrapper=null!==(t=this.shadowRoot.querySelector(`div[${e}]`))&&void 0!==t?t:void 0;const l=this.svg;this.svg=null!==(o=null===(s=this.wrapper)||void 0===s?void 0:s.querySelector(`svg[${i}]`))&&void 0!==o?o:void 0,this.svg!==l&&(this.svgComputedStyle=this.svg?window.getComputedStyle(this.svg):void 0),this.container=null!==(a=null===(r=this.svg)||void 0===r?void 0:r.querySelector(`span[${n}]`))&&void 0!==a?a:void 0,this.observe()}disconnectedCallback(){this.svg=void 0,this.svgComputedStyle=void 0,this.wrapper=void 0,this.container=void 0,this.observe()}attributeChangedCallback(){this.observe()}flushSvgDisplay(){const{svg:t}=this;t&&(t.style.display="inline",requestAnimationFrame((()=>{t.style.display=""})))}observe(){this.containerObserver.disconnect(),this.wrapperObserver.disconnect(),this.wrapper&&this.wrapperObserver.observe(this.wrapper),this.container&&this.containerObserver.observe(this.container),this.svgComputedStyle&&this.observeSVGStyle(this.svgComputedStyle)}observeSVGStyle(t){const e=()=>{const i=(()=>{const e=t.getPropertyValue("--preserve-aspect-ratio");if(e)return e.trim();return`x${(({textAlign:t,direction:e})=>{if(t.endsWith("left"))return"Min";if(t.endsWith("right"))return"Max";if("start"===t||"end"===t){let i="rtl"===e;return"end"===t&&(i=!i),i?"Max":"Min"}return"Mid"})(t)}YMid meet`})();i!==this.svgPreserveAspectRatio&&(this.svgPreserveAspectRatio=i,this.updateSVGRect()),t===this.svgComputedStyle&&requestAnimationFrame(e)};e()}updateSVGRect(){var t,e,i,n,s,o,r;let a=Math.ceil(null!==(e=null===(t=this.containerSize)||void 0===t?void 0:t.width)&&void 0!==e?e:0);const l=Math.ceil(null!==(n=null===(i=this.containerSize)||void 0===i?void 0:i.height)&&void 0!==n?n:0);void 0!==this.dataset.downscaleOnly&&(a=Math.max(a,null!==(o=null===(s=this.wrapperSize)||void 0===s?void 0:s.width)&&void 0!==o?o:0));const c=null===(r=this.svg)||void 0===r?void 0:r.querySelector(":scope > foreignObject");if(null==c||c.setAttribute("width",`${a}`),null==c||c.setAttribute("height",`${l}`),this.svg&&(this.svg.setAttribute("viewBox",`0 0 ${a} ${l}`),this.svg.setAttribute("preserveAspectRatio",this.svgPreserveAspectRatio),this.svg.style.height=a<=0||l<=0?"0":""),this.container){const t=this.svgPreserveAspectRatio.toLowerCase();this.container.style.marginLeft=t.startsWith("xmid")||t.startsWith("xmax")?"auto":"0",this.container.style.marginRight=t.startsWith("xmi")?"auto":"0"}}}const o=(t,{attrs:e={},style:i})=>class extends t{constructor(...t){super(...t);for(const[t,i]of Object.entries(e))this.hasAttribute(t)||this.setAttribute(t,i);this.attachShadow({mode:"open"})}static get observedAttributes(){return["data-auto-scaling"]}connectedCallback(){this._update()}attributeChangedCallback(){this._update()}_update(){const t=i?`<style>:host { ${i} }</style>`:"";let e="<slot></slot>";const{autoScaling:n}=this.dataset;if(void 0!==n){e=`<marp-auto-scaling exportparts="svg:auto-scaling" ${"downscale-only"===n?"data-downscale-only":""}>${e}</marp-auto-scaling>`}this.shadowRoot.innerHTML=t+e}};let r;const a=Symbol();let l;const c="marpitSVGPolyfill:setZoomFactor,",d=Symbol(),g=Symbol();const h=()=>{const t="Apple Computer, Inc."===navigator.vendor,e=t?[u]:[],i={then:e=>(t?(async()=>{if(void 0===l){const t=document.createElement("canvas");t.width=10,t.height=10;const e=t.getContext("2d"),i=new Image(10,10),n=new Promise((t=>{i.addEventListener("load",(()=>t()))}));i.crossOrigin="anonymous",i.src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%201%201%22%3E%3CforeignObject%20width%3D%221%22%20height%3D%221%22%20requiredExtensions%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml%22%3E%3Cdiv%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml%22%20style%3D%22width%3A%201px%3B%20height%3A%201px%3B%20background%3A%20red%3B%20position%3A%20relative%22%3E%3C%2Fdiv%3E%3C%2FforeignObject%3E%3C%2Fsvg%3E",await n,e.drawImage(i,0,0),l=e.getImageData(5,5,1,1).data[3]<128}return l})().then((t=>{null==e||e(t?[u]:[])})):null==e||e([]),i)};return Object.assign(e,i)};let p,m;function u(t){const e="object"==typeof t&&t.target||document,i="object"==typeof t?t.zoom:t;window[g]||(Object.defineProperty(window,g,{configurable:!0,value:!0}),document.body.style.zoom=1.0001,document.body.offsetHeight,document.body.style.zoom=1,window.addEventListener("message",(({data:t,origin:e})=>{if(e===window.origin)try{if(t&&"string"==typeof t&&t.startsWith(c)){const[,e]=t.split(","),i=Number.parseFloat(e);Number.isNaN(i)||(m=i)}}catch(t){console.error(t)}})));let n=!1;Array.from(e.querySelectorAll("svg[data-marpit-svg]"),(t=>{var e,s,o,r;t.style.transform||(t.style.transform="translateZ(0)");const a=i||m||t.currentScale||1;p!==a&&(p=a,n=a);const l=t.getBoundingClientRect(),{length:c}=t.children;for(let i=0;i<c;i+=1){const n=t.children[i];if(n.getScreenCTM){const t=n.getScreenCTM();if(t){const i=null!==(s=null===(e=n.x)||void 0===e?void 0:e.baseVal.value)&&void 0!==s?s:0,c=null!==(r=null===(o=n.y)||void 0===o?void 0:o.baseVal.value)&&void 0!==r?r:0,d=n.children.length;for(let e=0;e<d;e+=1){const s=n.children[e];if("SECTION"===s.tagName){const{style:e}=s;e.transformOrigin||(e.transformOrigin=`${-i}px ${-c}px`),e.transform=`scale(${a}) matrix(${t.a}, ${t.b}, ${t.c}, ${t.d}, ${t.e-l.left}, ${t.f-l.top}) translateZ(0.0001px)`;break}}}}}})),!1!==n&&Array.from(e.querySelectorAll("iframe"),(({contentWindow:t})=>{null==t||t.postMessage(`${c}${n}`,"null"===window.origin?"*":window.origin)}))}function v({once:t=!1,target:e=document}={}){const i=function(t=document){if(t[d])return t[d];let e=!0;const i=()=>{e=!1,delete t[d]};Object.defineProperty(t,d,{configurable:!0,value:i});let n=[],s=!1;(async()=>{try{n=await h()}finally{s=!0}})();const o=()=>{for(const e of n)e({target:t});s&&0===n.length||e&&window.requestAnimationFrame(o)};return o(),i}(e);return t?(i(),()=>{}):i}p=1,m=void 0;const b=Symbol(),w=(e=document)=>{if("undefined"==typeof window)throw new Error("Marp Core's browser script is valid only in browser context.");if(((e=document)=>{const i=window[a];i||customElements.define("marp-auto-scaling",s);for(const n of Object.keys(t)){const s=`marp-${n}`,a=t[n].proto();null!=r||(r=!!document.createElement("div",{is:"marp-auto-scaling"}).outerHTML.startsWith("<div is")),r&&a!==HTMLElement?i||customElements.define(s,o(a,{style:t[n].style}),{extends:n}):(i||customElements.define(s,o(HTMLElement,t[n])),e.querySelectorAll(`${n}[is="${s}"]`).forEach((t=>{t.outerHTML=t.outerHTML.replace(new RegExp(`^<${n}`,"i"),`<${s}`).replace(new RegExp(`</${n}>$`,"i"),`</${s}>`)})))}window[a]=!0})(e),e[b])return e[b];const i=v({target:e}),n=()=>{i(),delete e[b]},l=Object.assign(n,{cleanup:n,update:()=>w(e)});return Object.defineProperty(e,b,{configurable:!0,value:l}),l},y=document.currentScript;w(y?y.getRootNode():document)}();
+</script></foreignObject></svg></div><div class="bespoke-marp-note" data-index="0" tabindex="0"><p>My boss said this time I should try a Rust rap
+but my rapping skills are positively crap,
+Even so, Rust and rapping are a thrilling combination
+with which to introduce my talk to RustNation
+
+In London we meet, and the workshops are complete,
+so now you people have my talk approaching at full speed,
+wakey, wakey, here we are, and I hope you will get
+entertainment out of this, or some knowledge instead
+
+Of course I won't start right away with pages full of code
+I'll start with a few stories, and then switch to teaching mode.
+I hope that by the end you'll know a bit more than before
+but otherwise enjoy the show, I'll try hard not to bore.
+
+I could go on and on about how many talks are lacking
+the silliness, the fireworks, just going straight to hacking,
+so have some whimsy, have some rhyme, some bars, a little flow
+we're here for having a good time, by golly, HERE WE GO!</p></div><div class="bespoke-marp-note" data-index="1" tabindex="0"><p>Welcome to this talk, dear Rustacean,
+You're hailing from many a nation,
+And you've waited some time
+for most uplifting rhyme
+so let's start the edification!</p></div><div class="bespoke-marp-note" data-index="2" tabindex="0"><p>Someone from outside London got
+his head in my hotel too hot
+and the fire alarm
+worked this night like a charm
+and woke everyone up on the spot.</p></div><div class="bespoke-marp-note" data-index="3" tabindex="0"><p>Since I last talked in rhyme about Rust
+I worked in Java and just
+three years ago moved
+to Rust which behooved
+me to go in completely. Or bust.</p></div><div class="bespoke-marp-note" data-index="4" tabindex="0"><p>JFrog, from the name you suppose
+they used Java a while, and now those
+folks who work to contain
+err'rs in our supply chain
+they're here getting their five lines of prose.</p></div><div class="bespoke-marp-note" data-index="5" tabindex="0"><p>Nowadays I write Rust to help you
+getting into Rust code old and new
+It will show you the code
+and in semantic mode
+it will also explain what's it do.</p></div><div class="bespoke-marp-note" data-index="6" tabindex="0"><p>Rust's steadily been on the rise,
+to no Rustacean's surprise
+many people take note
+of our bug-antidote
+without any speed compromise.</p></div><div class="bespoke-marp-note" data-index="7" tabindex="0"><p>Rust has now made it on TV
+where hackers compiling you see
+so join us and write
+Rust code with shades by night
+if you want as cool as them to be.</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>Sometimes in Rust you will need
+more time 'til your code is complete
+Where in Python you're &quot;done&quot;
+When the code is still wrong
+And on perf it'll never compete.</p></div><div class="bespoke-marp-note" data-index="9" tabindex="0"><p>There once was a runtime called bun
+who thought beating Rust perf was fun.
+Rustaceans said &quot;please
+bench with dash-dash-release&quot;
+Now look at the benchmarks...they're gone.</p></div><div class="bespoke-marp-note" data-index="10" tabindex="0"><p>With Rust and Ada some find
+them competing for shares of our mind
+Ferrous and AdaCore
+thought &quot;we might achieve more
+by applying our powers combined!&quot;</p></div><div class="bespoke-marp-note" data-index="11" tabindex="0"><p>The Ferrocene scheme will contain
+necessary steps to obtain
+a Rust certified to
+ISO 2 6 2 6 2
+Let's hope the effort's not in vain.</p></div><div class="bespoke-marp-note" data-index="12" tabindex="0"><p>Some functional zealots will tell
+that mutation can never go well
+but if we never share
+what's mutated, we spare
+us from data race debugging hell.</p></div><div class="bespoke-marp-note" data-index="13" tabindex="0"><p>Some coders will still look in vain
+for reasons with C to remain
+but &quot;freedom&quot; to crash
+is an unholy mash
+of stupidity, hubris and pain.</p></div><div class="bespoke-marp-note" data-index="14" tabindex="0"><p>Bjarne wants C++ to sprout
+some memory safety without
+needing more than some lint
+Well, good luck, and a hint:
+That's what Rust's type system is all about.</p></div><div class="bespoke-marp-note" data-index="15" tabindex="0"><p>The Rust foundation is here
+not to mandate, prescribe, boss or steer,
+they support from within
+Rustaceans for the win,
+so let's everyone give them some cheer!</p></div><div class="bespoke-marp-note" data-index="16" tabindex="0"><p>By this time you probably just
+have heard elsewhere of This Week in Rust.
+I collect crate and quote
+and PRs people wrote
+for our main source of Rust news you trust.</p></div><div class="bespoke-marp-note" data-index="17" tabindex="0"><p>There was a certain Rust PR
+that some folks think went too far
+make internal code omit
+certain numbers, to wit
+in hex they'd fill the swearing jar.</p></div><div class="bespoke-marp-note" data-index="18" tabindex="0"><p>In Rust you will gladly embrace
+the compiler's help if you face
+a refactor so hairy
+your brain's feeling airy
+It'll keep track of time, stuff and space.</p></div><div class="bespoke-marp-note" data-index="19" tabindex="0"><p>We all have learned that a bad
+craftsman blamed the tools that they had
+but Rust will well teach
+us it's not out of reach
+to build far better tooling instead.</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>For Androids it's been a must
+To be shiny and free of Rust
+But to safety's advance
+Google loosened their stance
+hoping blue tooths no longer combust.
+
+Now in Android version thirteen
+there's more Rust than ever has been.
+But now that they wrote
+millions Rust lines of code
+memory bugs remain to be seen.</p></div><div class="bespoke-marp-note" data-index="21" tabindex="0"><p>Meanwhile Rust in Linux progressed
+to the point where it's put to the test,
+The patch builds the foundation
+for the carcination
+of drivers. This stuff is the best!</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>Asahi Lina just took
+the GPU of a Macbook
+to write drivers in Rust
+for Linux, one must
+think this is an elite-worthy look.
+
+15 thousand lines of Rust code later
+Despite claims from many a hater
+Lina's work here shows
+How kernel dev goes
+Without any in-GPU crater.</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>When your Rust goes embedded, you'll find
+no need to leave abstractions behind,
+with a HAL (not the boor
+who won't open the door)
+you get a piece of low-level mind.</p></div><div class="bespoke-marp-note" data-index="24" tabindex="0"><p>When asked curl in Rust to rewrite
+Daniel Stenberg said that he might
+But he won't rearrange
+everything in one change
+So it sure won't be done overnight.</p></div><div class="bespoke-marp-note" data-index="25" tabindex="0"><p>Rust would be far too arcane
+Without Esteban keeping us sane
+for the message on error
+sparks joy and not terror
+though the steep learning curve does remain.</p></div><div class="bespoke-marp-note" data-index="26" tabindex="0"><p>When rustc surprisingly showed
+it converts a large int to a float
+Mara Bos went complete-
+ly berserk for more speed
+the compiler's builtins to demote.</p></div><div class="bespoke-marp-note" data-index="27" tabindex="0"><p>Nyx toolkit brings Rust into space
+as other tools they replace
+at speed they simulate
+how craft accelerate
+at this scale you can't let data race.</p></div><div class="bespoke-marp-note" data-index="28" tabindex="0"><p>nushell builds on Rust to be able
+to work with data by the table
+and letting you pipe
+your data with type.
+It's elegant, mighty and stable.</p></div><div class="bespoke-marp-note" data-index="29" tabindex="0"><p>If your code depends at any rate
+on the so-called &quot;rustdecimal&quot; crate
+and you also did choose
+Gitlab CI to use
+Check your systems before it's too late.</p></div><div class="bespoke-marp-note" data-index="30" tabindex="0"><p>Rust enums enjoy much attention,
+well deserved, so allow me to mention
+with `match` they enable
+us to code more stable
+and refactor to match our intention.</p></div><div class="bespoke-marp-note" data-index="31" tabindex="0"><p>Now if you just need a bool
+from a match, this macro is cool
+unless you must take out
+of your type, it's about
+the best match code-size reducing tool.</p></div><div class="bespoke-marp-note" data-index="32" tabindex="0"><p>With traits your code faces ascension
+by internal Rust type extension
+where you tell everything
+how to do anything
+so allow me the pay-offs to mention.</p></div><div class="bespoke-marp-note" data-index="33" tabindex="0"><p>When in Rust code macros you use
+I worry a hard way you choose
+for debugging it might
+become heck of a fight
+which means more time later you lose.</p></div><div class="bespoke-marp-note" data-index="34" tabindex="0"><p>In Rust when a thing you mutate
+And desire to annotate
+that it no longer should
+change you easily could
+`let` it be itself until its fate.</p></div><div class="bespoke-marp-note" data-index="35" tabindex="0"><p>Last time I showed how to break Rust
+but this easter egg is now dust,
+here's how out of a scope
+you can jump without rope
+which is useful and far more robust.</p></div><div class="bespoke-marp-note" data-index="36" tabindex="0"><p>Rust loops come in many a style
+but few know it too has a do-while
+though its looks may bemuse
+you can put it to use
+and rest assured it'll compile.</p></div><div class="bespoke-marp-note" data-index="37" tabindex="0"><p>Sometimes iterating a `Vec`
+by index incurs a bounds check
+however a slice
+often won't, which is nice.
+So go get your runtime perf back.</p></div><div class="bespoke-marp-note" data-index="38" tabindex="0"><p>Just sometimes a Rust Result looks
+like an owl sitting on stacks of books.
+With two units as eyes,
+on embedded it flies
+over meadows and forests and brooks.</p></div><div class="bespoke-marp-note" data-index="39" tabindex="0"><p>Rust has special syntax to let
+you a function to drop values get
+It is named for its looks
+toilet closure, the books
+tell you to use mem::drop instead.</p></div><div class="bespoke-marp-note" data-index="40" tabindex="0"><p>In Febuary a year ago
+Rust one-fiftynine stole the show
+with assignments that could
+destructure where you would
+do multiple ones, now you know.</p></div><div class="bespoke-marp-note" data-index="41" tabindex="0"><p>One cool byproduct of this option
+that has not seen too much adoption
+is that you can ignore foo
+without `let` as you do,
+it's a small RSI antitoxin.</p></div><div class="bespoke-marp-note" data-index="42" tabindex="0"><p>Rust used to use `let` but with any
+irrefutable bindings, so many
+uses where one would guard
+the code was somewhat hard
+now you get them a dozen a penny.</p></div><div class="bespoke-marp-note" data-index="43" tabindex="0"><p>Atomics allow you to choose
+what ordering on access to use.
+While on X-eighty-six
+You may easily mix
+them, on ARM the results may confuse.
+
+Know what that is? A memory fence.</p></div><div class="bespoke-marp-note" data-index="44" tabindex="0"><p>In Rust you may know that the Range
+type does not impl Copy, how strange!
+But I've heard that some fine
+folks hatch plans to combine
+their powers this to rearrange.</p></div><div class="bespoke-marp-note" data-index="45" tabindex="0"><p>Sometimes dyn traits in Rust do require
+thinking outside the box to acquire
+a solution to track
+different types on the stack
+to quench our full-stack desire.</p></div><div class="bespoke-marp-note" data-index="46" tabindex="0"><p>To many a newbie's surprise
+we oft' use a str slice
+for a lot of stuff
+borrowing is enough
+and not needing more memory is nice.</p></div><div class="bespoke-marp-note" data-index="47" tabindex="0"><p>To defer a task isn't hard,
+in Rust you can just use a guard
+which is a type that
+does on drop what you had
+it in mind to complete from the start.</p></div><div class="bespoke-marp-note" data-index="48" tabindex="0"><p>When a large naïve linked list you drop
+your program will crash and then stop
+for you'll exhaust the stack
+from there it's no way back
+so please do manual while-let-pop.</p></div><div class="bespoke-marp-note" data-index="49" tabindex="0"><p>With Rust, every coder feels safe,
+so some venture ever so brave
+into OS flaws to
+poke some holes into
+the cover to then rant and rave.</p></div><div class="bespoke-marp-note" data-index="50" tabindex="0"><p>When in Rust crates features you use
+and don't ask for docs.rs to choose
+to document all
+it's dropping the ball,
+as with features it's somewhat obtuse.</p></div><div class="bespoke-marp-note" data-index="51" tabindex="0"><p>A cool thing in nightly rust be
+called &quot;portable SIMD&quot;,
+which means you can say
+in a cross-platform way
+how instructions should parallel be.</p></div><div class="bespoke-marp-note" data-index="52" tabindex="0"><p>If your code has the requirement
+that a type be not Sync or not Send
+it's time to introduce
+a phantom to choose
+which type's contract you will amend.</p></div><div class="bespoke-marp-note" data-index="53" tabindex="0"><p>thread::scope, the first time around
+Rust one-zero, alas, was unsound
+But if you're keeping track
+you know that it's back,
+this time with correct lifetime bound.</p></div><div class="bespoke-marp-note" data-index="54" tabindex="0"><p>I told you about Cow last time
+but failed to mention in my rhyme
+that you can assign-add
+change in-place what you had
+here as_mut is its partner in crime.</p></div><div class="bespoke-marp-note" data-index="55" tabindex="0"><p>Formatting macros now combine
+format strings with arguments inline!
+Note that this will fail to
+work with all things you do
+not in local bindings define.</p></div><div class="bespoke-marp-note" data-index="56" tabindex="0"><p>When in Rust async functions you call
+they don't do any work at all
+instead they will wait
+for you to await
+them, this might cause your program to stall</p></div><div class="bespoke-marp-note" data-index="57" tabindex="0"><p>When in Rust async code you borrow
+across an `await`, you reap sorrow
+for those two things don't mix
+but with `Arc` you might fix
+your code's problems until tomorrow.</p></div><div class="bespoke-marp-note" data-index="58" tabindex="0"><p>When a future no longer you need,
+and you won't wait for it to complete,
+you `drop` it, it's gone
+there's no need to hold on,
+and your other code works at full speed.</p></div><div class="bespoke-marp-note" data-index="59" tabindex="0"><p>Rust hashmaps have some subtle tricks
+now throw `rustc-hash` into the mix
+if you do not expect
+to be perf-wise attacked
+use the hasher it has called Fx.</p></div><div class="bespoke-marp-note" data-index="60" tabindex="0"><p>When in Rust you're coding for speed
+and write to a file, you will need
+to buffer the write
+or your system might
+wait for every byte to complete.</p></div><div class="bespoke-marp-note" data-index="61" tabindex="0"><p>Likewise it may come as a shock
+all your `println!` calls silently block
+on standard out, be aware
+if for speed you do care
+in that case best use standard out's `lock`.</p></div><div class="bespoke-marp-note" data-index="62" tabindex="0"><p>Those decrying Rust's unsafe 'scape hatch
+because it &quot;kills all safety&quot;, natch?
+Most experts will tell
+that it works pretty well
+if all invariants you do catch.</p></div><div class="bespoke-marp-note" data-index="63" tabindex="0"><p>Some people tell you `unsafe` will
+turn of borrowck and then shill
+for C, which is why
+they tell this bald lie
+because rustc is checking things still.</p></div><div class="bespoke-marp-note" data-index="64" tabindex="0"><p>When in unsafe Rust code you write
+and get some things not quite right
+it's no longer the season
+for rhyme nor for reason
+though your program may run out of spite.</p></div><div class="bespoke-marp-note" data-index="65" tabindex="0"><p>Though Rust saves you from a large class
+of errors when RAM you amass,
+it won't fix any test
+on it's own, so you best
+make sure that each one does pass</p></div><div class="bespoke-marp-note" data-index="66" tabindex="0"><p>When rustc with garbage you feed
+Don't fret if the errors you read
+Are confusing as hell
+The compiler goes: &quot;Well,
+I'm telling you straight what 𝐼 need.&quot;</p></div><div class="bespoke-marp-note" data-index="67" tabindex="0"><p>When secrets you handle in Rust,
+deleting them safely you must,
+so you don't get hacked
+and your defenses cracked.
+The zeroize crate I would trust.</p></div><div class="bespoke-marp-note" data-index="68" tabindex="0"><p>Dacquiri: you'd normally think
+I was rhyming while having a drink.
+But in Rust it describes
+A framework to use types
+so folks can't step over the brink</p></div><div class="bespoke-marp-note" data-index="69" tabindex="0"><p>Andrew Gallant of ripgrep fame
+is upping Rust's byte string game
+to make prodding with Rust
+real-world data robust
+with impressive performance to claim.</p></div><div class="bespoke-marp-note" data-index="70" tabindex="0"><p>If a Rust library you change
+to avoid things downstream going strange
+you can deftly depend
+on what future amend
+you're going to pre-re-arrange.</p></div><div class="bespoke-marp-note" data-index="71" tabindex="0"><p>If in Rust code you need to parse
+some args either dense or sparse
+where one went for structopt
+this dependency stopped
+as now clap pulls it out of its...derives.</p></div><div class="bespoke-marp-note" data-index="72" tabindex="0"><p>A bevy of games, not of geese
+in Rust is a sight that will please
+so join in the fun
+get some Rust games to run
+you'll find one can do that with ease.</p></div><div class="bespoke-marp-note" data-index="73" tabindex="0"><p>With tauri you stand on the shoulder
+of web tech giants, tread bolder
+to build quick applications
+in all variations
+and run them before getting older.</p></div><div class="bespoke-marp-note" data-index="74" tabindex="0"><p>When some Rustaceans exercise
+their muscles, it's not very nice,
+their squats at any rate
+each go on their own crate
+so that others need to improvise.</p></div><div class="bespoke-marp-note" data-index="75" tabindex="0"><p>We're surprised to hear cargo test
+Is speedwise no longer the best
+so I'll gladly install
+nextest, after all
+my cores don't need too much rest.</p></div><div class="bespoke-marp-note" data-index="76" tabindex="0"><p>insta will easily check
+if the objects your test code gets back
+are the same as before
+when a good state they bore
+so your tests are quickly on track.</p></div><div class="bespoke-marp-note" data-index="77" tabindex="0"><p>From Embark in Stockholm says hi
+the subcommand `cargo deny`
+which will thoroughly see
+your dependency tree
+through for...wow, lots of problems, oh my.</p></div><div class="bespoke-marp-note" data-index="78" tabindex="0"><p>Clippy users who at first sense
+they're constantly making amends
+To make their code &quot;good&quot;
+(as they probably should)
+will later become lifelong friends.</p></div><div class="bespoke-marp-note" data-index="79" tabindex="0"><p>cargo clippy now has dash-dash-fix
+which changes your code's subpar schticks
+to improve it's style
+and perf, and meanwhile
+it has got up it's sleeve some more tricks.</p></div><div class="bespoke-marp-note" data-index="80" tabindex="0"><p>The clippy workshop went great
+most people stayed with us late
+with good work, much respect,
+clippy lints to correct
+and also new lints to create</p></div><div class="bespoke-marp-note" data-index="81" tabindex="0"><p>cargo semverver will check
+if your current crate version is back-
+ wards compatible and
+warn if change is on hand
+that gives users a pain in the neck.</p></div><div class="bespoke-marp-note" data-index="82" tabindex="0"><p>Your performance desire to quench
+you can put your code on the bench
+but to make it complete
+a criterion you need
+lest measurement errors avenge.</p></div><div class="bespoke-marp-note" data-index="83" tabindex="0"><p>A helix of Rust can be made
+to work on the code you create.
+Between entering code
+you switch to command mode
+with complete &amp; assists, it is great!</p></div><div class="bespoke-marp-note" data-index="84" tabindex="0"><p>With the crypto winter afoot,
+Rust jobs are now mostly good
+in search, cloud, UI
+embedded, AI,
+if you haven't applied yet, you should.</p></div><div class="bespoke-marp-note" data-index="85" tabindex="0"><p>Should I buy an aquarium, my wish
+is to fill it with Rust turbofish
+One fro, one reverse
+(to complete this verse)
+&amp; a TV with satellite dish.</p></div><div class="bespoke-marp-note" data-index="86" tabindex="0"><p>Festive Ferris the Crab crossed the street
+a bunch of gophers to meet,
+and pythons and others
+all FFI brothers
+to get something to drink and to eat.</p></div><div class="bespoke-marp-note" data-index="87" tabindex="0"><p>If you tell people that they must
+from now on write all code in Rust
+you will earn some 'aw, shucks',
+for your lobbying sucks.
+Good luck on regaining their trust.</p></div><div class="bespoke-marp-note" data-index="88" tabindex="0"><p>If your thirst for rhymes isn't quenched
+and your love of Rust is entrenched
+you'll find more of my verse
+on Twitter -- or worse
+if that service is tabled -- or benched.</p></div><div class="bespoke-marp-note" data-index="89" tabindex="0"><p>An ML model showed it could rhyme
+about Rust in a fraction of time
+it does take me to write
+a poem, I won't fight
+it 'cause having more rhymes is sublime.
+
+Well, tickle me pink! I admire,
+this work, for now I can retire
+and sit on a beach
+a stiff drink in my reach.
+Why should this AI draw my ire?</p></div><div class="bespoke-marp-note" data-index="90" tabindex="0"><p>Farewell now my friends, time to go
+I hope you're enjoying the show
+and thank you so much
+for you being such
+a great audience! Cheerio!</p></div><script>/*!! License: https://unpkg.com/@marp-team/marp-cli@2.4.0/lib/bespoke.js.LICENSE.txt */
+!function(){"use strict";const e=document.body,t=(...e)=>history.replaceState(...e),n="presenter",r="next",o=["",n,r],i="bespoke-marp-",a=`data-${i}`,s=(e,{protocol:t,host:n,pathname:r,hash:o}=location)=>{const i=e.toString();return`${t}//${n}${r}${i?"?":""}${i}${o}`},l=()=>e.dataset.bespokeView,d=e=>new URLSearchParams(location.search).get(e),c=(e,n={})=>{var r;const o={location,setter:t,...n},i=new URLSearchParams(o.location.search);for(const t of Object.keys(e)){const n=e[t];"string"==typeof n?i.set(t,n):i.delete(t)}try{o.setter({...null!==(r=window.history.state)&&void 0!==r?r:{}},"",s(i,o.location))}catch(e){console.error(e)}},u=(()=>{const e="bespoke-marp";try{return localStorage.setItem(e,e),localStorage.removeItem(e),!0}catch(e){return!1}})(),f=e=>{try{return localStorage.getItem(e)}catch(e){return null}},m=(e,t)=>{try{return localStorage.setItem(e,t),!0}catch(e){return!1}},g=e=>{try{return localStorage.removeItem(e),!0}catch(e){return!1}},p=(e,t)=>{const n="aria-hidden";t?e.setAttribute(n,"true"):e.removeAttribute(n)},v=e=>{e.parent.classList.add(`${i}parent`),e.slides.forEach((e=>e.classList.add(`${i}slide`))),e.on("activate",(t=>{const n=`${i}active`,r=t.slide,o=r.classList,a=!o.contains(n);if(e.slides.forEach((e=>{e.classList.remove(n),p(e,!0)})),o.add(n),p(r,!1),a){const e=`${n}-ready`;o.add(e),document.body.clientHeight,o.remove(e)}}))},h=e=>{let t=0,n=0;Object.defineProperty(e,"fragments",{enumerable:!0,value:e.slides.map((e=>[null,...e.querySelectorAll("[data-marpit-fragment]")]))});const r=r=>void 0!==e.fragments[t][n+r],o=(r,o)=>{t=r,n=o,e.fragments.forEach(((e,t)=>{e.forEach(((e,n)=>{if(null==e)return;const i=t<r||t===r&&n<=o;e.setAttribute(`${a}fragment`,(i?"":"in")+"active");const s=`${a}current-fragment`;t===r&&n===o?e.setAttribute(s,"current"):e.removeAttribute(s)}))})),e.fragmentIndex=o;const i={slide:e.slides[r],index:r,fragments:e.fragments[r],fragmentIndex:o};e.fire("fragment",i)};e.on("next",(({fragment:i=!0})=>{if(i){if(r(1))return o(t,n+1),!1;const i=t+1;e.fragments[i]&&o(i,0)}else{const r=e.fragments[t].length;if(n+1<r)return o(t,r-1),!1;const i=e.fragments[t+1];i&&o(t+1,i.length-1)}})),e.on("prev",(({fragment:i=!0})=>{if(r(-1)&&i)return o(t,n-1),!1;const a=t-1;e.fragments[a]&&o(a,e.fragments[a].length-1)})),e.on("slide",(({index:t,fragment:n})=>{let r=0;if(void 0!==n){const o=e.fragments[t];if(o){const{length:e}=o;r=-1===n?e-1:Math.min(Math.max(n,0),e-1)}}o(t,r)})),o(0,0)},y=document,b=()=>!(!y.fullscreenEnabled&&!y.webkitFullscreenEnabled),w=()=>!(!y.fullscreenElement&&!y.webkitFullscreenElement),x=e=>{e.fullscreen=()=>{b()&&(async()=>{return w()?null===(e=y.exitFullscreen||y.webkitExitFullscreen)||void 0===e?void 0:e.call(y):((e=y.body)=>{var t;return null===(t=e.requestFullscreen||e.webkitRequestFullscreen)||void 0===t?void 0:t.call(e)})();var e})()},document.addEventListener("keydown",(t=>{"f"!==t.key&&"F11"!==t.key||t.altKey||t.ctrlKey||t.metaKey||!b()||(e.fullscreen(),t.preventDefault())}))},k=`${i}inactive`,$=(e=2e3)=>({parent:t,fire:n})=>{const r=t.classList,o=e=>n(`marp-${e?"":"in"}active`);let i;const a=()=>{i&&clearTimeout(i),i=setTimeout((()=>{r.add(k),o()}),e),r.contains(k)&&(r.remove(k),o(!0))};for(const e of["mousedown","mousemove","touchend"])document.addEventListener(e,a);setTimeout(a,0)},E=["AUDIO","BUTTON","INPUT","SELECT","TEXTAREA","VIDEO"],L=e=>{e.parent.addEventListener("keydown",(e=>{if(!e.target)return;const t=e.target;(E.includes(t.nodeName)||"true"===t.contentEditable)&&e.stopPropagation()}))},S=e=>{window.addEventListener("load",(()=>{for(const t of e.slides){const e=t.querySelector("marp-auto-scaling, [data-auto-scaling], [data-marp-fitting]");t.setAttribute(`${a}load`,e?"":"hideable")}}))},P=({interval:e=250}={})=>t=>{document.addEventListener("keydown",(e=>{if(" "===e.key&&e.shiftKey)t.prev();else if("ArrowLeft"===e.key||"ArrowUp"===e.key||"PageUp"===e.key)t.prev({fragment:!e.shiftKey});else if(" "!==e.key||e.shiftKey)if("ArrowRight"===e.key||"ArrowDown"===e.key||"PageDown"===e.key)t.next({fragment:!e.shiftKey});else if("End"===e.key)t.slide(t.slides.length-1,{fragment:-1});else{if("Home"!==e.key)return;t.slide(0)}else t.next();e.preventDefault()}));let n,r,o=0;t.parent.addEventListener("wheel",(i=>{let a=!1;const s=(e,t)=>{e&&(a=a||((e,t)=>((e,t)=>{const n="X"===t?"Width":"Height";return e[`client${n}`]<e[`scroll${n}`]})(e,t)&&((e,t)=>{const{overflow:n}=e,r=e[`overflow${t}`];return"auto"===n||"scroll"===n||"auto"===r||"scroll"===r})(getComputedStyle(e),t))(e,t)),(null==e?void 0:e.parentElement)&&s(e.parentElement,t)};if(0!==i.deltaX&&s(i.target,"X"),0!==i.deltaY&&s(i.target,"Y"),a)return;i.preventDefault();const l=Math.sqrt(i.deltaX**2+i.deltaY**2);if(void 0!==i.wheelDelta){if(void 0===i.webkitForce&&Math.abs(i.wheelDelta)<40)return;if(i.deltaMode===i.DOM_DELTA_PIXEL&&l<4)return}else if(i.deltaMode===i.DOM_DELTA_PIXEL&&l<12)return;r&&clearTimeout(r),r=setTimeout((()=>{n=0}),e);const d=Date.now()-o<e,c=l<=n;if(n=l,d||c)return;let u;(i.deltaX>0||i.deltaY>0)&&(u="next"),(i.deltaX<0||i.deltaY<0)&&(u="prev"),u&&(t[u](),o=Date.now())}))},T=(e=`.${i}osc`)=>{const t=document.querySelector(e);if(!t)return()=>{};const n=(e,n)=>{t.querySelectorAll(`[${a}osc=${JSON.stringify(e)}]`).forEach(n)};return b()||n("fullscreen",(e=>e.style.display="none")),u||n("presenter",(e=>{e.disabled=!0,e.title="Presenter view is disabled due to restricted localStorage."})),e=>{t.addEventListener("click",(t=>{if(t.target instanceof HTMLElement){const{bespokeMarpOsc:n}=t.target.dataset;n&&t.target.blur();const r={fragment:!t.shiftKey};"next"===n?e.next(r):"prev"===n?e.prev(r):"fullscreen"===n?null==e||e.fullscreen():"presenter"===n&&e.openPresenterView()}})),e.parent.appendChild(t),e.on("activate",(({index:t})=>{n("page",(n=>n.textContent=`Page ${t+1} of ${e.slides.length}`))})),e.on("fragment",(({index:t,fragments:r,fragmentIndex:o})=>{n("prev",(e=>e.disabled=0===t&&0===o)),n("next",(n=>n.disabled=t===e.slides.length-1&&o===r.length-1))})),e.on("marp-active",(()=>p(t,!1))),e.on("marp-inactive",(()=>p(t,!0))),b()&&(e=>{for(const t of["","webkit"])y.addEventListener(t+"fullscreenchange",e)})((()=>n("fullscreen",(e=>e.classList.toggle("exit",b()&&w())))))}},_=e=>{window.addEventListener("message",(t=>{if(t.origin!==window.origin)return;const[n,r]=t.data.split(":");if("navigate"===n){const[t,n]=r.split(",");let o=Number.parseInt(t,10),i=Number.parseInt(n,10)+1;i>=e.fragments[o].length&&(o+=1,i=0),e.slide(o,{fragment:i})}}))};var I=["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"];let M=e=>String(e).replace(/[&<>"']/g,(e=>`&${A[e]};`)),A={"&":"amp","<":"lt",">":"gt",'"':"quot","'":"apos"},D="dangerouslySetInnerHTML",O={className:"class",htmlFor:"for"},C={};function N(e,t){let n=[],r="";t=t||{};for(let e=arguments.length;e-- >2;)n.push(arguments[e]);if("function"==typeof e)return t.children=n.reverse(),e(t);if(e){if(r+="<"+e,t)for(let e in t)!1!==t[e]&&null!=t[e]&&e!==D&&(r+=` ${O[e]?O[e]:M(e)}="${M(t[e])}"`);r+=">"}if(-1===I.indexOf(e)){if(t[D])r+=t[D].__html;else for(;n.length;){let e=n.pop();if(e)if(e.pop)for(let t=e.length;t--;)n.push(e[t]);else r+=!0===C[e]?e:M(e)}r+=e?`</${e}>`:""}return C[r]=!0,r}const B=({children:e})=>N(null,null,...e),q=`${i}presenter-`,K={container:`${q}container`,dragbar:`${q}dragbar-container`,next:`${q}next`,nextContainer:`${q}next-container`,noteContainer:`${q}note-container`,noteWrapper:`${q}note-wrapper`,noteButtons:`${q}note-buttons`,infoContainer:`${q}info-container`,infoPage:`${q}info-page`,infoPageText:`${q}info-page-text`,infoPagePrev:`${q}info-page-prev`,infoPageNext:`${q}info-page-next`,noteButtonsBigger:`${q}note-bigger`,noteButtonsSmaller:`${q}note-smaller`,infoTime:`${q}info-time`,infoTimer:`${q}info-timer`},F=e=>{const{title:t}=document;document.title="[Presenter view]"+(t?` - ${t}`:"");const n={},r=e=>(n[e]=n[e]||document.querySelector(`.${e}`),n[e]);document.body.appendChild((e=>{const t=document.createElement("div");return t.className=K.container,t.appendChild(e),t.insertAdjacentHTML("beforeend",N(B,null,N("div",{class:K.nextContainer},N("iframe",{class:K.next,src:"?view=next"})),N("div",{class:K.dragbar}),N("div",{class:K.noteContainer},N("div",{class:K.noteWrapper}),N("div",{class:K.noteButtons},N("button",{class:K.noteButtonsSmaller,tabindex:"-1",title:"Smaller notes font size"},"Smaller notes font size"),N("button",{class:K.noteButtonsBigger,tabindex:"-1",title:"Bigger notes font size"},"Bigger notes font size"))),N("div",{class:K.infoContainer},N("div",{class:K.infoPage},N("button",{class:K.infoPagePrev,tabindex:"-1",title:"Previous"},"Previous"),N("span",{class:K.infoPageText}),N("button",{class:K.infoPageNext,tabindex:"-1",title:"Next"},"Next")),N("time",{class:K.infoTime,title:"Current time"}),N("time",{class:K.infoTimer,title:"Timer"})))),t})(e.parent)),(e=>{let t=!1;r(K.dragbar).addEventListener("mousedown",(()=>{t=!0,r(K.dragbar).classList.add("active")})),window.addEventListener("mouseup",(()=>{t=!1,r(K.dragbar).classList.remove("active")})),window.addEventListener("mousemove",(e=>{if(!t)return;const n=e.clientX/document.documentElement.clientWidth*100;r(K.container).style.setProperty("--bespoke-marp-presenter-split-ratio",`${Math.max(0,Math.min(100,n))}%`)})),r(K.nextContainer).addEventListener("click",(()=>e.next()));const n=r(K.next),o=(i=n,(e,t)=>{var n;return null===(n=i.contentWindow)||void 0===n?void 0:n.postMessage(`navigate:${e},${t}`,"null"===window.origin?"*":window.origin)});var i;n.addEventListener("load",(()=>{r(K.nextContainer).classList.add("active"),o(e.slide(),e.fragmentIndex),e.on("fragment",(({index:e,fragmentIndex:t})=>o(e,t)))}));const a=document.querySelectorAll(".bespoke-marp-note");a.forEach((e=>{e.addEventListener("keydown",(e=>e.stopPropagation())),r(K.noteWrapper).appendChild(e)})),e.on("activate",(()=>a.forEach((t=>t.classList.toggle("active",t.dataset.index==e.slide())))));let s=0;const l=e=>{s=Math.max(-5,s+e),r(K.noteContainer).style.setProperty("--bespoke-marp-note-font-scale",(1.2**s).toFixed(4))},d=()=>l(1),c=()=>l(-1),u=r(K.noteButtonsBigger),f=r(K.noteButtonsSmaller);u.addEventListener("click",(()=>{u.blur(),d()})),f.addEventListener("click",(()=>{f.blur(),c()})),document.addEventListener("keydown",(e=>{"+"===e.key&&d(),"-"===e.key&&c()}),!0),e.on("activate",(({index:t})=>{r(K.infoPageText).textContent=`${t+1} / ${e.slides.length}`}));const m=r(K.infoPagePrev),g=r(K.infoPageNext);m.addEventListener("click",(t=>{m.blur(),e.prev({fragment:!t.shiftKey})})),g.addEventListener("click",(t=>{g.blur(),e.next({fragment:!t.shiftKey})})),e.on("fragment",(({index:t,fragments:n,fragmentIndex:r})=>{m.disabled=0===t&&0===r,g.disabled=t===e.slides.length-1&&r===n.length-1}));let p=new Date;const v=()=>{const e=new Date,t=e=>`${Math.floor(e)}`.padStart(2,"0"),n=e.getTime()-p.getTime(),o=t(n/1e3%60),i=t(n/1e3/60%60),a=t(n/36e5%24);r(K.infoTime).textContent=e.toLocaleTimeString(),r(K.infoTimer).textContent=`${a}:${i}:${o}`};v(),setInterval(v,250),r(K.infoTimer).addEventListener("click",(()=>{p=new Date}))})(e)},j=e=>{if(!(e=>e.syncKey&&"string"==typeof e.syncKey)(e))throw new Error("The current instance of Bespoke.js is invalid for Marp bespoke presenter plugin.");Object.defineProperties(e,{openPresenterView:{enumerable:!0,value:V},presenterUrl:{enumerable:!0,get:U}}),u&&document.addEventListener("keydown",(t=>{"p"!==t.key||t.altKey||t.ctrlKey||t.metaKey||(t.preventDefault(),e.openPresenterView())}))};function V(){const{max:e,floor:t}=Math,n=e(t(.85*window.innerWidth),640),r=e(t(.85*window.innerHeight),360);return window.open(this.presenterUrl,q+this.syncKey,`width=${n},height=${r},menubar=no,toolbar=no`)}function U(){const e=new URLSearchParams(location.search);return e.set("view","presenter"),e.set("sync",this.syncKey),s(e)}const X=e=>{const t=l();return t===r&&e.appendChild(document.createElement("span")),{"":j,[n]:F,[r]:_}[t]},H=e=>{e.on("activate",(t=>{document.querySelectorAll(".bespoke-progress-parent > .bespoke-progress-bar").forEach((n=>{n.style.flexBasis=100*t.index/(e.slides.length-1)+"%"}))}))},R=e=>{const t=Number.parseInt(e,10);return Number.isNaN(t)?null:t},W=(e={})=>{const t={history:!0,...e};return e=>{let n=!0;const r=e=>{const t=n;try{return n=!0,e()}finally{n=t}},o=(t={fragment:!0})=>{((t,n)=>{const{min:r,max:o}=Math,{fragments:i,slides:a}=e,s=o(0,r(t,a.length-1)),l=o(0,r(n||0,i[s].length-1));s===e.slide()&&l===e.fragmentIndex||e.slide(s,{fragment:l})})((R(location.hash.slice(1))||1)-1,t.fragment?R(d("f")||""):null)};e.on("fragment",(({index:e,fragmentIndex:r})=>{n||c({f:0===r||r.toString()},{location:{...location,hash:`#${e+1}`},setter:(...e)=>t.history?history.pushState(...e):history.replaceState(...e)})})),setTimeout((()=>{o(),window.addEventListener("hashchange",(()=>r((()=>{o({fragment:!1}),c({f:void 0})})))),window.addEventListener("popstate",(()=>{n||r((()=>o()))})),n=!1}),0)}},J=(e={})=>{var n;const r=e.key||(null===(n=window.history.state)||void 0===n?void 0:n.marpBespokeSyncKey)||Math.random().toString(36).slice(2),o=`bespoke-marp-sync-${r}`;var i;i={marpBespokeSyncKey:r},c({},{setter:(e,...n)=>t({...e,...i},...n)});const a=()=>{const e=f(o);return e?JSON.parse(e):Object.create(null)},s=e=>{const t=a(),n={...t,...e(t)};return m(o,JSON.stringify(n)),n},l=()=>{window.removeEventListener("pageshow",l),s((e=>({reference:(e.reference||0)+1})))};return e=>{l(),Object.defineProperty(e,"syncKey",{value:r,enumerable:!0});let t=!0;setTimeout((()=>{e.on("fragment",(e=>{t&&s((()=>({index:e.index,fragmentIndex:e.fragmentIndex})))}))}),0),window.addEventListener("storage",(n=>{if(n.key===o&&n.oldValue&&n.newValue){const r=JSON.parse(n.oldValue),o=JSON.parse(n.newValue);if(r.index!==o.index||r.fragmentIndex!==o.fragmentIndex)try{t=!1,e.slide(o.index,{fragment:o.fragmentIndex,forSync:!0})}finally{t=!0}}}));const n=()=>{const{reference:e}=a();void 0===e||e<=1?g(o):s((()=>({reference:e-1})))};window.addEventListener("pagehide",(e=>{e.persisted&&window.addEventListener("pageshow",l),n()})),e.on("destroy",n)}},{PI:Y,abs:z,sqrt:G,atan2:Q}=Math,Z={passive:!0},ee=({slope:e=-.7,swipeThreshold:t=30}={})=>n=>{let r;const o=n.parent,i=e=>{const t=o.getBoundingClientRect();return{x:e.pageX-(t.left+t.right)/2,y:e.pageY-(t.top+t.bottom)/2}};o.addEventListener("touchstart",(({touches:e})=>{r=1===e.length?i(e[0]):void 0}),Z),o.addEventListener("touchmove",(e=>{if(r)if(1===e.touches.length){e.preventDefault();const t=i(e.touches[0]),n=t.x-r.x,o=t.y-r.y;r.delta=G(z(n)**2+z(o)**2),r.radian=Q(n,o)}else r=void 0})),o.addEventListener("touchend",(o=>{if(r){if(r.delta&&r.delta>=t&&r.radian){const t=(r.radian-e+Y)%(2*Y)-Y;n[t<0?"next":"prev"](),o.stopPropagation()}r=void 0}}),Z)},te=new Map;te.clear(),te.set("none",{backward:{both:void 0,incoming:void 0,outgoing:void 0},forward:{both:void 0,incoming:void 0,outgoing:void 0}});const ne={both:"",outgoing:"outgoing-",incoming:"incoming-"},re={forward:"",backward:"-backward"},oe=e=>`--marp-bespoke-transition-animation-${e}`,ie=e=>`--marp-transition-${e}`,ae=oe("name"),se=oe("duration"),le=e=>new Promise((t=>{const n={},r=document.createElement("div"),o=e=>{r.remove(),t(e)};r.addEventListener("animationstart",(()=>o(n))),Object.assign(r.style,{animationName:e,animationDuration:"1s",animationFillMode:"both",animationPlayState:"paused",position:"absolute",pointerEvents:"none"}),document.body.appendChild(r);const i=getComputedStyle(r).getPropertyValue(ie("duration"));i&&(n.defaultDuration=i),((e,t)=>{requestAnimationFrame((()=>{e.style.animationPlayState="running",requestAnimationFrame((()=>t(void 0)))}))})(r,o)})),de=async e=>te.has(e)?te.get(e):(e=>{const t={},n=[];for(const[r,o]of Object.entries(ne))for(const[i,a]of Object.entries(re)){const s=`marp-${o}transition${a}-${e}`;n.push(le(s).then((e=>{t[i]=t[i]||{},t[i][r]=e?{...e,name:s}:void 0})))}return Promise.all(n).then((()=>t))})(e).then((t=>(te.set(e,t),t))),ce=e=>Object.values(e).flatMap(Object.values).every((e=>!e)),ue=(e,{type:t,backward:n})=>{const r=e[n?"backward":"forward"],o=(()=>{const e=r[t],n=e=>({[ae]:e.name});if(e)return n(e);if(r.both){const e=n(r.both);return"incoming"===t&&(e[oe("direction")]="reverse"),e}})();return!o&&n?ue(e,{type:t,backward:!1}):o||{[ae]:"__bespoke_marp_transition_no_animation__"}},fe=e=>{if(e)try{const t=JSON.parse(e);if((e=>{if("object"!=typeof e)return!1;const t=e;return"string"==typeof t.name&&(void 0===t.duration||"string"==typeof t.duration)})(t))return t}catch(e){}},me="_tSId",ge="_tA",pe="bespoke-marp-transition-warming-up",ve=window.matchMedia("(prefers-reduced-motion: reduce)"),he="__bespoke_marp_transition_reduced_outgoing__",ye="__bespoke_marp_transition_reduced_incoming__",be={forward:{both:void 0,incoming:{name:ye},outgoing:{name:he}},backward:{both:void 0,incoming:{name:ye},outgoing:{name:he}}},we=e=>{if(!document.startViewTransition)return;const t=t=>(void 0!==t&&(e._tD=t),e._tD);let n;t(!1),((...e)=>{const t=[...new Set(e).values()];return Promise.all(t.map((e=>de(e)))).then()})(...Array.from(document.querySelectorAll("section[data-transition], section[data-transition-back]")).flatMap((e=>[e.dataset.transition,e.dataset.transitionBack].flatMap((e=>{const t=fe(e);return[null==t?void 0:t.name,(null==t?void 0:t.builtinFallback)?`__builtin__${t.name}`:void 0]})).filter((e=>!!e))))).then((()=>{document.querySelectorAll("style").forEach((e=>{e.innerHTML=e.innerHTML.replace(/--marp-transition-duration:[^;}]*[;}]/g,(e=>e.slice(0,-1)+"!important"+e.slice(-1)))}))}));const r=(n,{back:r,cond:o})=>i=>{var a;const s=t();if(s)return!!i[ge]||!("object"!=typeof s||(s.skipTransition(),!i.forSync));if(!o(i))return!0;const l=e.slides[e.slide()],d=()=>{var e;return null!==(e=i.back)&&void 0!==e?e:r},c="data-transition"+(d()?"-back":""),u=l.querySelector(`section[${c}]`);if(!u)return!0;const f=fe(null!==(a=u.getAttribute(c))&&void 0!==a?a:void 0);return!f||((async(e,{builtinFallback:t=!0}={})=>{let n=await de(e);if(ce(n)){if(!t)return;return n=await de(`__builtin__${e}`),ce(n)?void 0:n}return n})(f.name,{builtinFallback:f.builtinFallback}).then((e=>{if(!e){t(!0);try{n(i)}finally{t(!1)}return}let r=e;ve.matches&&(console.warn("Use a constant animation to transition because preferring reduced motion by viewer has detected."),r=be);const o=document.getElementById(me);o&&o.remove();const a=document.createElement("style");a.id=me,document.head.appendChild(a),((e,t)=>{const n=[`:root{${ie("direction")}:${t.backward?-1:1};}`,":root:has(.bespoke-marp-inactive){cursor:none;}"],r=t=>{var n,o,i;const a=(null===(n=e[t].both)||void 0===n?void 0:n.defaultDuration)||(null===(o=e[t].outgoing)||void 0===o?void 0:o.defaultDuration)||(null===(i=e[t].incoming)||void 0===i?void 0:i.defaultDuration);return"forward"===t?a:a||r("forward")},o=t.duration||r(t.backward?"backward":"forward");void 0!==o&&n.push(`::view-transition-group(*){${se}:${o};}`);const i=e=>Object.entries(e).map((([e,t])=>`${e}:${t};`)).join("");return n.push(`::view-transition-old(root){${i(ue(e,{...t,type:"outgoing"}))}}`,`::view-transition-new(root){${i(ue(e,{...t,type:"incoming"}))}}`),n})(r,{backward:d(),duration:f.duration}).forEach((e=>{var t;return null===(t=a.sheet)||void 0===t?void 0:t.insertRule(e)}));const s=document.documentElement.classList;s.add(pe);let l=!1;const c=()=>{l||(n(i),l=!0,s.remove(pe))},u=()=>{t(!1),a.remove(),s.remove(pe)};try{t(!0);const e=document.startViewTransition(c);t(e),e.finished.finally(u)}catch(e){console.error(e),c(),u()}})),!1)};e.on("prev",r((t=>e.prev({...t,[ge]:!0})),{back:!0,cond:e=>{var t;return e.index>0&&!((null===(t=e.fragment)||void 0===t||t)&&n.fragmentIndex>0)}})),e.on("next",r((t=>e.next({...t,[ge]:!0})),{cond:t=>t.index+1<e.slides.length&&!(n.fragmentIndex+1<n.fragments.length)})),setTimeout((()=>{e.on("slide",r((t=>e.slide(t.index,{...t,[ge]:!0})),{cond:t=>{const n=e.slide();return t.index!==n&&(t.back=t.index<n,!0)}}))}),0),e.on("fragment",(e=>{n=e}))};let xe;const ke=()=>(void 0===xe&&(xe="wakeLock"in navigator&&navigator.wakeLock),xe),$e=async()=>{const e=ke();if(e)try{return await e.request("screen")}catch(e){console.warn(e)}return null},Ee=async()=>{if(!ke())return;let e;const t=()=>{e&&"visible"===document.visibilityState&&$e()};for(const e of["visibilitychange","fullscreenchange"])document.addEventListener(e,t);return e=await $e(),e};((t=document.getElementById("p"))=>{(()=>{const t=d("view");e.dataset.bespokeView=t===r||t===n?t:""})();const i=(e=>{const t=d(e);return c({[e]:void 0}),t})("sync")||void 0;var a,s,u,f,m,g,p,y,b,w,k,E;a=t,s=((...e)=>{const t=o.findIndex((e=>l()===e));return e.map((([e,n])=>e[t]&&n)).filter((e=>e))})([[1,1,0],J({key:i})],[[1,1,1],X(t)],[[1,1,0],L],[[1,1,1],v],[[1,0,0],$()],[[1,1,1],S],[[1,1,1],W({history:!1})],[[1,1,0],P()],[[1,1,0],x],[[1,0,0],H],[[1,1,0],ee()],[[1,0,0],T()],[[1,0,0],we],[[1,1,1],h],[[1,1,0],Ee]),f=1===(a.parent||a).nodeType?a.parent||a:document.querySelector(a.parent||a),m=[].filter.call("string"==typeof a.slides?f.querySelectorAll(a.slides):a.slides||f.children,(function(e){return"SCRIPT"!==e.nodeName})),g={},p=function(e,t){return(t=t||{}).index=m.indexOf(e),t.slide=e,t},w=function(e,t){m[e]&&(u&&b("deactivate",p(u,t)),u=m[e],b("activate",p(u,t)))},k=function(e,t){var n=m.indexOf(u)+e;b(e>0?"next":"prev",p(u,t))&&w(n,t)},E={off:y=function(e,t){g[e]=(g[e]||[]).filter((function(e){return e!==t}))},on:function(e,t){return(g[e]||(g[e]=[])).push(t),y.bind(null,e,t)},fire:b=function(e,t){return(g[e]||[]).reduce((function(e,n){return e&&!1!==n(t)}),!0)},slide:function(e,t){if(!arguments.length)return m.indexOf(u);b("slide",p(m[e],t))&&w(e,t)},next:k.bind(null,1),prev:k.bind(null,-1),parent:f,slides:m,destroy:function(e){b("destroy",p(u,e)),g={}}},(s||[]).forEach((function(e){e(E)})),u||w(0)})()}();</script></body></html>
