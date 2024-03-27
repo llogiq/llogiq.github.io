@@ -5,7 +5,6 @@ title: Easy Mode Rust
 description: Don't Learn Rust, Just Be Productive.
 class: invert
 ---
-<!-- TODO: copy fond and background image -->
 <style>
 @font-face {
 	font-family:"Formula Condensed";
